@@ -8,7 +8,12 @@ import hashlib
 # --- DATENBANK SETUP ---
 def init_db():
     # Verwende Supabase Connection Pooling für stabilere Verbindung
-    conn = connect("postgresql://postgres.xsssssdmoqcxyxvvfzev:Hannover1896!Pixel@aws-1-eu-west-1.pooler.supabase.com:6543/postgres")
+    conn = 
+
+PLATZHALTER
+
+
+
     c = conn.cursor()
     # Tabellen mit user_id Erweiterung
     c.execute('''CREATE TABLE IF NOT EXISTS users
