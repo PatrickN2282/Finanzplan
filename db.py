@@ -7,7 +7,13 @@ import hashlib
 
 # --- DATENBANK SETUP ---
 def init_db():
-    conn = connect(st.secrets["DATABASE_URL"])
+    conn = connect(
+        host="db.xsssssdmoqcxyxvvfzev.supabase.co",
+        port=5432,
+        dbname="postgres",
+        user="postgres",
+        password="Hannover1896!Pixel"
+    )
     c = conn.cursor()
     # Tabellen mit user_id Erweiterung
     c.execute('''CREATE TABLE IF NOT EXISTS users
