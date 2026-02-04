@@ -87,12 +87,12 @@ def eintrag_dialog(conn, u_id, edit_id=None):
             k_id = int(konten_df[konten_df['name'] == k_auswahl]['id'].iloc[0])
             final_start, final_end = start_d.isoformat(), (end_d.isoformat() if end_d else None)
             if existing is not None:
-                conn.execute('''UPDATE eintraege SET art=?, konto_id=?, kategorie=?, zweck=?, betrag=?, betrag_typ=?, typ=?, intervall=?,
-                                start_datum=?, end_datum=?, kuendigung_tage=? WHERE id=? AND user_id=?''',
+                conn.execute('''UPDATE eintraege SET art=%s, konto_id=%s, kategorie=%s, zweck=%s, betrag=%s, betrag_typ=%s, typ=%s, intervall=%s,
+                                start_datum=%s, end_datum=%s, kuendigung_tage=%s WHERE id=%s AND user_id=%s''',
                              (art_val, k_id, kategorie, zweck, betrag, betrag_typ, typ, intervall, final_start, final_end, kuend, int(existing['id']), u_id))
             else:
                 conn.execute('''INSERT INTO eintraege (user_id, art, konto_id, kategorie, zweck, betrag, betrag_typ, typ, intervall, start_datum, end_datum, kuendigung_tage)
-                                VALUES (?,?,?,?,?,?,?,?,?,?,?,?)''',
+                                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''',
                              (u_id, art_val, k_id, kategorie, zweck, betrag, betrag_typ, typ, intervall, final_start, final_end, kuend))
             conn.commit(); st.rerun()
 
@@ -124,9 +124,9 @@ def konto_dialog(conn, u_id, edit_id=None):
         if st.form_submit_button("Speichern"):
             parent_id = int(konten_df[konten_df['name'] == parent]['id'].iloc[0]) if parent else None
             if existing is not None:
-                conn.execute("UPDATE konten SET name=?, iban=?, typ=?, parent_id=? WHERE id=? AND user_id=?", (name, iban, typ, parent_id, int(existing['id']), u_id))
+                conn.execute("UPDATE konten SET name=%s, iban=%s, typ=%s, parent_id=%s WHERE id=%s AND user_id=%s", (name, iban, typ, parent_id, int(existing['id']), u_id))
             else:
-                conn.execute("INSERT INTO konten (user_id, name, iban, typ, parent_id) VALUES (?, ?, ?, ?, ?)", (u_id, name, iban, typ, parent_id))
+                conn.execute("INSERT INTO konten (user_id, name, iban, typ, parent_id) VALUES (%s, %s, %s, %s, %s)", (u_id, name, iban, typ, parent_id))
             conn.commit(); st.rerun()
 
 @st.dialog("Kategorie bearbeiten / neu")
@@ -141,9 +141,9 @@ def kategorie_dialog(conn, u_id, edit_id=None):
         name = st.text_input("Name", value=existing['name'] if existing is not None else "")
         if st.form_submit_button("Speichern"):
             if existing is not None:
-                conn.execute("UPDATE kategorien SET name=? WHERE id=? AND user_id=?", (name, int(existing['id']), u_id))
+                conn.execute("UPDATE kategorien SET name=%s WHERE id=%s AND user_id=%s", (name, int(existing['id']), u_id))
             else:
-                conn.execute("INSERT INTO kategorien (user_id, name) VALUES (?, ?)", (u_id, name))
+                conn.execute("INSERT INTO kategorien (user_id, name) VALUES (%s, %s)", (u_id, name))
             conn.commit(); st.rerun()
 
 def dashboard_page(conn, u_id):
@@ -225,7 +225,7 @@ def entries_page(conn, u_id):
                             eintrag_dialog(conn, u_id, selected_row['id'])
                     with col2:
                         if st.button("🗑️ Löschen", key=f"delete_{gruppe.lower()}"):
-                            conn.execute(f"DELETE FROM eintraege WHERE id={selected_row['id']} AND user_id={u_id}")
+                            conn.execute("DELETE FROM eintraege WHERE id=%s AND user_id=%s", (selected_row['id'], u_id))
                             conn.commit()
                             st.rerun()
         
@@ -269,7 +269,7 @@ def settings_page(conn, u_id):
                     konto_dialog(conn, u_id, selected_konto['id'])
             with col2:
                 if st.button("🗑️ Löschen", key="delete_konto"):
-                    conn.execute("DELETE FROM konten WHERE id=? AND user_id=?", (int(selected_konto['id']), u_id))
+                    conn.execute("DELETE FROM konten WHERE id=%s AND user_id=%s", (int(selected_konto['id']), u_id))
                     conn.commit()
                     st.rerun()
         
@@ -292,7 +292,7 @@ def settings_page(conn, u_id):
                     kategorie_dialog(conn, u_id, selected_kat['id'])
             with col2:
                 if st.button("🗑️ Löschen", key="delete_kategorie"):
-                    conn.execute("DELETE FROM kategorien WHERE id=? AND user_id=?", (int(selected_kat['id']), u_id))
+                    conn.execute("DELETE FROM kategorien WHERE id=%s AND user_id=%s", (int(selected_kat['id']), u_id))
                     conn.commit()
                     st.rerun()
         
