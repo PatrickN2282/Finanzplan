@@ -14,7 +14,7 @@ def calculate_months(start_date, end_date):
 
 # --- FORECAST LOGIK (Gefiltert auf User) ---
 def get_forecast_detailed(conn, u_id, months):
-    df = pd.read_sql_query(f"SELECT e.*, k.name as konto_name FROM eintraege e JOIN konten k ON e.konto_id = k.id WHERE e.user_id={u_id}", conn)
+    df = pd.read_sql_query("SELECT e.*, k.name as konto_name FROM eintraege e JOIN konten k ON e.konto_id = k.id WHERE e.user_id=%s", conn, params=(u_id,))
     chart_data, table_data = [], []
     mapping = {"Monatlich": 1, "Quartalsweise": 1/3, "Jährlich": 1/12}
     current_date = datetime.now().replace(day=1)

@@ -15,7 +15,7 @@ def auth_page():
             u = st.text_input("Benutzername")
             p = st.text_input("Passwort", type="password")
             if st.form_submit_button("Anmelden", width='stretch'):
-                user = pd.read_sql_query("SELECT * FROM users WHERE username=? AND password=?",
+                user = pd.read_sql_query("SELECT * FROM users WHERE username=%s AND password=%s",
                                          st.session_state.conn, params=(u, hash_pw(p)))
                 if not user.empty:
                     st.session_state.logged_in = True

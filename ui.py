@@ -22,7 +22,7 @@ def eintrag_dialog(conn, u_id, edit_id=None):
     turnus_optionen = ["Monatlich", "Quartalsweise", "Jährlich"]
     existing = None
     if edit_id:
-        df = pd.read_sql_query(f"SELECT * FROM eintraege WHERE id={edit_id} AND user_id={u_id}", conn)
+        df = pd.read_sql_query("SELECT * FROM eintraege WHERE id=%s AND user_id=%s", conn, params=(edit_id, u_id))
         if not df.empty:
             existing = df.iloc[0]
     art_default = existing['art'] if existing is not None else "Buchung"
@@ -34,8 +34,8 @@ def eintrag_dialog(conn, u_id, edit_id=None):
     else:
         betrag_typ = "Monatlich"
 
-    konten_df = pd.read_sql_query(f"SELECT * FROM konten WHERE user_id={u_id}", conn)
-    kats_df = pd.read_sql_query(f"SELECT * FROM kategorien WHERE user_id={u_id}", conn)
+    konten_df = pd.read_sql_query("SELECT * FROM konten WHERE user_id=%s", conn, params=(u_id,))
+    kats_df = pd.read_sql_query("SELECT * FROM kategorien WHERE user_id=%s", conn, params=(u_id,))
 
     if konten_df.empty:
         st.warning("Bitte lege erst ein Konto in den Einstellungen an!"); return
@@ -100,7 +100,7 @@ def eintrag_dialog(conn, u_id, edit_id=None):
 def konto_dialog(conn, u_id, edit_id=None):
     existing = None
     if edit_id:
-        df = pd.read_sql_query(f"SELECT * FROM konten WHERE id={edit_id} AND user_id={u_id}", conn)
+        df = pd.read_sql_query("SELECT * FROM konten WHERE id=%s AND user_id=%s", conn, params=(edit_id, u_id))
         if not df.empty:
             existing = df.iloc[0]
     
@@ -112,7 +112,7 @@ def konto_dialog(conn, u_id, edit_id=None):
             iban = st.text_input("IBAN", value=existing['iban'] if existing is not None else "")
         parent = None
         if typ == "Zahldienstleister":
-            konten_df = pd.read_sql_query(f"SELECT * FROM konten WHERE user_id={u_id} AND typ='Bankkonto'", conn)
+            konten_df = pd.read_sql_query("SELECT * FROM konten WHERE user_id=%s AND typ='Bankkonto'", conn, params=(u_id,))
             if not konten_df.empty:
                 bankkonten = konten_df['name'].tolist()
                 current_parent = konten_df[konten_df['id'] == existing['parent_id']]['name'].iloc[0] if existing is not None and existing['parent_id'] else None
@@ -133,7 +133,7 @@ def konto_dialog(conn, u_id, edit_id=None):
 def kategorie_dialog(conn, u_id, edit_id=None):
     existing = None
     if edit_id:
-        df = pd.read_sql_query(f"SELECT * FROM kategorien WHERE id={edit_id} AND user_id={u_id}", conn)
+        df = pd.read_sql_query("SELECT * FROM kategorien WHERE id=%s AND user_id=%s", conn, params=(edit_id, u_id))
         if not df.empty:
             existing = df.iloc[0]
     
@@ -189,7 +189,7 @@ def dashboard_page(conn, u_id):
 
 def entries_page(conn, u_id):
     st.header("📝 Deine Einträge")
-    df_entries = pd.read_sql_query(f"SELECT e.*, k.name as konto_name FROM eintraege e JOIN konten k ON e.konto_id = k.id WHERE e.user_id={u_id}", conn)
+    df_entries = pd.read_sql_query("SELECT e.*, k.name as konto_name FROM eintraege e JOIN konten k ON e.konto_id = k.id WHERE e.user_id=%s", conn, params=(u_id,))
     if not df_entries.empty:
         for gruppe in ["Buchung", "Abo", "Finanzierung"]:
             subset = df_entries[df_entries['art'] == gruppe].copy()
@@ -255,7 +255,7 @@ def settings_page(conn, u_id):
     col_k, col_cat = st.columns(2)
     with col_k:
         st.subheader("🏦 Deine Konten")
-        kd = pd.read_sql_query(f"SELECT * FROM konten WHERE user_id={u_id}", conn)
+        kd = pd.read_sql_query("SELECT * FROM konten WHERE user_id=%s", conn, params=(u_id,))
         kd['verbundenes_konto'] = kd.apply(lambda row: kd[kd['id'] == row['parent_id']]['name'].iloc[0] if pd.notna(row['parent_id']) else '', axis=1)
         display_kd = kd[['name', 'iban', 'typ', 'verbundenes_konto']].copy()
         display_kd = display_kd.rename(columns={'name': 'Name', 'iban': 'IBAN', 'typ': 'Typ', 'verbundenes_konto': 'Verbundenes Konto'})
@@ -279,7 +279,7 @@ def settings_page(conn, u_id):
     
     with col_cat:
         st.subheader("📂 Deine Kategorien")
-        ctd = pd.read_sql_query(f"SELECT * FROM kategorien WHERE user_id={u_id}", conn)
+        ctd = pd.read_sql_query("SELECT * FROM kategorien WHERE user_id=%s", conn, params=(u_id,))
         display_ctd = ctd[['name']].copy()
         display_ctd = display_ctd.rename(columns={'name': 'Name'})
         sct = st.dataframe(display_ctd, width='stretch', hide_index=True, on_select="rerun", selection_mode="single-row")
