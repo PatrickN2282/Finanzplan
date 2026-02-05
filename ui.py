@@ -16,58 +16,124 @@ def get_emoji(art, typ):
         return "🏦"
     return "❓"
 
+
 # --- DIALOGE ---
 @st.dialog("Eintrag bearbeiten / neu")
 def eintrag_dialog(conn, u_id, edit_id=None):
     turnus_optionen = ["Monatlich", "Quartalsweise", "Jährlich"]
     existing = None
-    if edit_id:
-        df = pd.read_sql_query("SELECT * FROM eintraege WHERE id=%s AND user_id=%s", conn, params=(edit_id, u_id))
+
+    # 🔒 WICHTIG: IDs explizit auf Python-int casten
+    if u_id is not None:
+        u_id = int(u_id)
+    if edit_id is not None:
+        edit_id = int(edit_id)
+
+        df = pd.read_sql_query(
+            "SELECT * FROM eintraege WHERE id=%s AND user_id=%s",
+            conn,
+            params=(edit_id, u_id)
+        )
         if not df.empty:
             existing = df.iloc[0]
+
     art_default = existing['art'] if existing is not None else "Buchung"
-    art_val = st.segmented_control("Typ", ["Buchung", "Abo", "Finanzierung"], default=art_default)
+    art_val = st.segmented_control(
+        "Typ",
+        ["Buchung", "Abo", "Finanzierung"],
+        default=art_default
+    )
 
     betrag_typ = "Monatlich"
     if art_val == "Finanzierung":
-        betrag_typ = st.selectbox("Betrag Typ", ["Gesamtbetrag", "Monatliche Rate"], index=0 if (existing is None or existing['betrag_typ'] == "Gesamtbetrag") else 1)
-    else:
-        betrag_typ = "Monatlich"
+        betrag_typ = st.selectbox(
+            "Betrag Typ",
+            ["Gesamtbetrag", "Monatliche Rate"],
+            index=0 if (existing is None or existing['betrag_typ'] == "Gesamtbetrag") else 1
+        )
 
-    konten_df = pd.read_sql_query("SELECT * FROM konten WHERE user_id=%s", conn, params=(u_id,))
-    kats_df = pd.read_sql_query("SELECT * FROM kategorien WHERE user_id=%s", conn, params=(u_id,))
+    konten_df = pd.read_sql_query(
+        "SELECT * FROM konten WHERE user_id=%s",
+        conn,
+        params=(u_id,)
+    )
+    kats_df = pd.read_sql_query(
+        "SELECT * FROM kategorien WHERE user_id=%s",
+        conn,
+        params=(u_id,)
+    )
 
     if konten_df.empty:
-        st.warning("Bitte lege erst ein Konto in den Einstellungen an!"); return
+        st.warning("Bitte lege erst ein Konto in den Einstellungen an!")
+        return
 
     with st.form("eintrag_form"):
         c1, c2 = st.columns(2)
+
         with c1:
             k_list = konten_df['name'].tolist()
             k_idx = 0
             if existing is not None:
-                current_k_name = konten_df[konten_df['id'] == existing['konto_id']]['name'].iloc[0]
+                current_k_name = konten_df[
+                    konten_df['id'] == int(existing['konto_id'])
+                ]['name'].iloc[0]
                 k_idx = k_list.index(current_k_name) if current_k_name in k_list else 0
+
             k_auswahl = st.selectbox("Konto", k_list, index=k_idx)
+
             kat_list = kats_df['name'].tolist()
-            kat_idx = kat_list.index(existing['kategorie']) if existing is not None and existing['kategorie'] in kat_list else 0
+            kat_idx = (
+                kat_list.index(existing['kategorie'])
+                if existing is not None and existing['kategorie'] in kat_list
+                else 0
+            )
             kategorie = st.selectbox("Kategorie", kat_list, index=kat_idx)
-            zweck = st.text_input("Zweck", value=existing['zweck'] if existing is not None else "")
+
+            zweck = st.text_input(
+                "Zweck",
+                value=existing['zweck'] if existing is not None else ""
+            )
+
         with c2:
-            betrag_label = "Betrag (€)" if art_val != "Finanzierung" else ("Gesamtbetrag (€)" if betrag_typ == "Gesamtbetrag" else "Monatliche Rate (€)")
-            betrag = st.number_input(betrag_label, min_value=0.0, step=0.01, value=float(existing['betrag']) if existing is not None else 0.0)
-            typ = st.selectbox("Typ", ["Einnahme", "Ausgabe"], index=0 if (existing is None or existing['typ'] == "Einnahme") else 1)
+            betrag_label = (
+                "Betrag (€)"
+                if art_val != "Finanzierung"
+                else ("Gesamtbetrag (€)" if betrag_typ == "Gesamtbetrag" else "Monatliche Rate (€)")
+            )
+            betrag = st.number_input(
+                betrag_label,
+                min_value=0.0,
+                step=0.01,
+                value=float(existing['betrag']) if existing is not None else 0.0
+            )
+
+            typ = st.selectbox(
+                "Typ",
+                ["Einnahme", "Ausgabe"],
+                index=0 if (existing is None or existing['typ'] == "Einnahme") else 1
+            )
+
             curr_int = existing['intervall'] if existing is not None else "Monatlich"
             int_idx = turnus_optionen.index(curr_int) if curr_int in turnus_optionen else 0
             intervall = st.selectbox("Turnus", turnus_optionen, index=int_idx)
 
         st.divider()
+
         col_d1, col_d2 = st.columns(2)
         with col_d1:
-            s_date_val = datetime.fromisoformat(existing['start_datum']).date() if existing is not None else datetime.now().date()
+            s_date_val = (
+                datetime.fromisoformat(existing['start_datum']).date()
+                if existing is not None
+                else datetime.now().date()
+            )
             start_d = st.date_input("Startdatum", value=s_date_val)
+
         with col_d2:
-            e_date_val = datetime.fromisoformat(existing['end_datum']).date() if (existing is not None and existing['end_datum']) else None
+            e_date_val = (
+                datetime.fromisoformat(existing['end_datum']).date()
+                if existing is not None and existing['end_datum']
+                else None
+            )
             end_d = st.date_input("Enddatum (Optional)", value=e_date_val)
 
         if art_val == "Finanzierung" and end_d:
@@ -81,23 +147,85 @@ def eintrag_dialog(conn, u_id, edit_id=None):
 
         kuend = None
         if art_val == "Abo":
-            kuend = st.number_input("Kündigungsfrist (Tage)", value=int(existing['kuendigung_tage']) if existing is not None and existing['kuendigung_tage'] else 30)
+            kuend = st.number_input(
+                "Kündigungsfrist (Tage)",
+                value=int(existing['kuendigung_tage'])
+                if existing is not None and existing['kuendigung_tage']
+                else 30
+            )
 
         if st.form_submit_button("Speichern"):
-            k_id = int(konten_df[konten_df['name'] == k_auswahl]['id'].iloc[0])
-            final_start, final_end = start_d.isoformat(), (end_d.isoformat() if end_d else None)
+            k_id = int(
+                konten_df[konten_df['name'] == k_auswahl]['id'].iloc[0]
+            )
+
+            final_start = start_d.isoformat()
+            final_end = end_d.isoformat() if end_d else None
+
             c = conn.cursor()
             try:
                 if existing is not None:
-                    c.execute('''UPDATE eintraege SET art=%s, konto_id=%s, kategorie=%s, zweck=%s, betrag=%s, betrag_typ=%s, typ=%s, intervall=%s,
-                                    start_datum=%s, end_datum=%s, kuendigung_tage=%s WHERE id=%s AND user_id=%s''',
-                                 (art_val, k_id, kategorie, zweck, betrag, betrag_typ, typ, intervall, final_start, final_end, kuend, int(existing['id']), u_id))
+                    c.execute(
+                        '''
+                        UPDATE eintraege SET
+                            art=%s,
+                            konto_id=%s,
+                            kategorie=%s,
+                            zweck=%s,
+                            betrag=%s,
+                            betrag_typ=%s,
+                            typ=%s,
+                            intervall=%s,
+                            start_datum=%s,
+                            end_datum=%s,
+                            kuendigung_tage=%s
+                        WHERE id=%s AND user_id=%s
+                        ''',
+                        (
+                            art_val,
+                            k_id,
+                            kategorie,
+                            zweck,
+                            betrag,
+                            betrag_typ,
+                            typ,
+                            intervall,
+                            final_start,
+                            final_end,
+                            kuend,
+                            int(existing['id']),
+                            u_id
+                        )
+                    )
                 else:
-                    c.execute('''INSERT INTO eintraege (user_id, art, konto_id, kategorie, zweck, betrag, betrag_typ, typ, intervall, start_datum, end_datum, kuendigung_tage)
-                                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''',
-                                 (u_id, art_val, k_id, kategorie, zweck, betrag, betrag_typ, typ, intervall, final_start, final_end, kuend))
+                    c.execute(
+                        '''
+                        INSERT INTO eintraege (
+                            user_id, art, konto_id, kategorie, zweck,
+                            betrag, betrag_typ, typ, intervall,
+                            start_datum, end_datum, kuendigung_tage
+                        )
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                        ''',
+                        (
+                            u_id,
+                            art_val,
+                            k_id,
+                            kategorie,
+                            zweck,
+                            betrag,
+                            betrag_typ,
+                            typ,
+                            intervall,
+                            final_start,
+                            final_end,
+                            kuend
+                        )
+                    )
+
                 conn.commit()
                 st.rerun()
+
             finally:
                 c.close()
 
