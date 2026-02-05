@@ -7,13 +7,9 @@ import hashlib
 
 # --- DATENBANK SETUP ---
 def init_db():
-    # Verwende Supabase Connection Pooling für stabilere Verbindung
-    conn = 
-
-PLATZHALTER
-
-
-
+    # Verwende Supabase Connection Pooling - Credentials aus Streamlit Secrets
+    db_url = st.secrets["database"]["connection_url"]
+    conn = connect(db_url)
     c = conn.cursor()
     # Tabellen mit user_id Erweiterung
     c.execute('''CREATE TABLE IF NOT EXISTS users
