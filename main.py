@@ -34,7 +34,7 @@ st.markdown("""
 }
 
 html, body, [class*="css"] {
-    font-family: 'DM Sans', sans-serif !important;
+    font-family: 'Oswald', sans-serif !important;
     background: var(--bg) !important;
 }
 
