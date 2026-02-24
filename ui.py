@@ -130,8 +130,7 @@ def eintrag_dialog(conn, u_id, edit_id=None):
     if u_id is not None: u_id = int(u_id)
     if edit_id is not None:
         edit_id = int(edit_id)
-        df = pd.read_sql_query("SELECT * FROM eintraege WHERE id=%s AND user_id=%s",
-                               conn, params=(edit_id, u_id))
+        _c=conn.cursor();_c.execute("SELECT * FROM eintraege WHERE id=%s AND user_id=%s",(edit_id,u_id));_r=_c.fetchall();df=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
         if not df.empty: existing = df.iloc[0]
 
     art_val = st.segmented_control(
@@ -143,8 +142,8 @@ def eintrag_dialog(conn, u_id, edit_id=None):
         betrag_typ = st.selectbox("Betrag-Typ", ["Gesamtbetrag", "Monatliche Rate"],
             index=0 if (existing is None or existing.get('betrag_typ') == "Gesamtbetrag") else 1)
 
-    konten_df = pd.read_sql_query("SELECT * FROM konten WHERE user_id=%s", conn, params=(u_id,))
-    kats_df   = pd.read_sql_query("SELECT * FROM kategorien WHERE user_id=%s", conn, params=(u_id,))
+    _c=conn.cursor();_c.execute("SELECT * FROM konten WHERE user_id=%s",(u_id,));_r=_c.fetchall();konten_df=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
+    _c=conn.cursor();_c.execute("SELECT * FROM kategorien WHERE user_id=%s",(u_id,));_r=_c.fetchall();kats_df=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
 
     if konten_df.empty:
         st.warning("Bitte lege erst ein Konto in der Verwaltung an!")
@@ -208,8 +207,8 @@ def eintrag_dialog(conn, u_id, edit_id=None):
                 value=int(existing['kuendigung_tage']) if existing is not None and existing['kuendigung_tage'] else 30)
 
         cs, cc = st.columns([3, 1])
-        with cs: save = st.form_submit_button("Speichern", use_container_width=True, type="primary")
-        with cc: st.form_submit_button("Abbrechen", use_container_width=True)
+        with cs: save = st.form_submit_button("Speichern", width='stretch', type="primary")
+        with cc: st.form_submit_button("Abbrechen", width='stretch')
 
         if save:
             if not zweck:   st.error("Bitte Zweck eingeben."); return
@@ -244,8 +243,7 @@ def konto_dialog(conn, u_id, edit_id=None):
     existing  = None
     konten_df = pd.DataFrame()
     if edit_id:
-        df = pd.read_sql_query("SELECT * FROM konten WHERE id=%s AND user_id=%s",
-                               conn, params=(edit_id, u_id))
+        _c=conn.cursor();_c.execute("SELECT * FROM konten WHERE id=%s AND user_id=%s",(edit_id,u_id));_r=_c.fetchall();df=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
         if not df.empty: existing = df.iloc[0]
 
     with st.form("konto_form"):
@@ -259,8 +257,7 @@ def konto_dialog(conn, u_id, edit_id=None):
                                  value=existing['iban'] if existing is not None else "")
         parent = None
         if typ == "Zahldienstleister":
-            konten_df = pd.read_sql_query(
-                "SELECT * FROM konten WHERE user_id=%s AND typ='Bankkonto'", conn, params=(u_id,))
+            _c=conn.cursor();_c.execute("SELECT * FROM konten WHERE user_id=%s AND typ='Bankkonto'",(u_id,));_r=_c.fetchall();konten_df=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
             if not konten_df.empty:
                 bl = konten_df['name'].tolist()
                 cp = None
@@ -272,7 +269,7 @@ def konto_dialog(conn, u_id, edit_id=None):
             else:
                 st.warning("Lege zuerst ein Bankkonto an.")
 
-        if st.form_submit_button("Speichern", use_container_width=True, type="primary"):
+        if st.form_submit_button("Speichern", width='stretch', type="primary"):
             if not name: st.error("Name erforderlich."); return
             parent_id = None
             if parent and not konten_df.empty:
@@ -296,15 +293,14 @@ def konto_dialog(conn, u_id, edit_id=None):
 def kategorie_dialog(conn, u_id, edit_id=None):
     existing = None
     if edit_id:
-        df = pd.read_sql_query("SELECT * FROM kategorien WHERE id=%s AND user_id=%s",
-                               conn, params=(edit_id, u_id))
+        _c=conn.cursor();_c.execute("SELECT * FROM kategorien WHERE id=%s AND user_id=%s",(edit_id,u_id));_r=_c.fetchall();df=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
         if not df.empty: existing = df.iloc[0]
 
     with st.form("kat_form"):
         name = st.text_input("Kategoriename",
                              value=existing['name'] if existing is not None else "",
                              placeholder="z.B. Sport, Streaming, Haushalt…")
-        if st.form_submit_button("Speichern", use_container_width=True, type="primary"):
+        if st.form_submit_button("Speichern", width='stretch', type="primary"):
             if not name: st.error("Name erforderlich."); return
             c = conn.cursor()
             try:
@@ -338,7 +334,7 @@ def dashboard_page(conn, u_id):
         _empty_state("Lege zuerst ein Konto und Einträge an.")
         cols = st.columns([1, 2, 1])
         with cols[1]:
-            if st.button("＋ Ersten Eintrag anlegen", use_container_width=True, type="primary"):
+            if st.button("＋ Ersten Eintrag anlegen", width='stretch', type="primary"):
                 eintrag_dialog(conn, u_id)
         return
 
@@ -388,7 +384,7 @@ def dashboard_page(conn, u_id):
                                       x=0.5, y=0.5, font_size=12, showarrow=False,
                                       font=dict(color='#4A5270', family='Outfit'))]
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width='stretch')
 
         with co2:
             fig2 = go.Figure()
@@ -420,7 +416,7 @@ def dashboard_page(conn, u_id):
                            font=dict(family='Outfit', size=13, color='#1A1F2E'), x=0.02),
                 barmode='group', bargap=0.22, bargroupgap=0.06,
             )
-            st.plotly_chart(fig2, use_container_width=True)
+            st.plotly_chart(fig2, width='stretch')
 
     st.divider()
 
@@ -602,10 +598,10 @@ def _entry_row_list(conn, u_id, subset, key, color):
         _selection_bar(get_emoji(row['art'], row['typ']), row['zweck'], color)
         c1, c2, c3 = st.columns([2, 2, 6])
         with c1:
-            if st.button("✏️ Bearbeiten", key=f"ed_{key}", use_container_width=True):
+            if st.button("✏️ Bearbeiten", key=f"ed_{key}", width='stretch'):
                 eintrag_dialog(conn, u_id, row['id'])
         with c2:
-            if st.button("🗑️ Löschen", key=f"dl_{key}", use_container_width=True):
+            if st.button("🗑️ Löschen", key=f"dl_{key}", width='stretch'):
                 c = conn.cursor()
                 try:
                     c.execute("DELETE FROM eintraege WHERE id=%s AND user_id=%s",
@@ -620,12 +616,7 @@ def _entry_row_list(conn, u_id, subset, key, color):
 def entries_page(conn, u_id):
     _page_header("Einträge", "Buchungen, Abos und Finanzierungen")
 
-    df_all = pd.read_sql_query(
-        """SELECT e.*, k.name as konto_name
-           FROM eintraege e JOIN konten k ON e.konto_id=k.id
-           WHERE e.user_id=%s ORDER BY e.start_datum DESC""",
-        conn, params=(u_id,)
-    )
+    _c=conn.cursor();_c.execute("SELECT e.*, k.name as konto_name FROM eintraege e JOIN konten k ON e.konto_id=k.id WHERE e.user_id=%s ORDER BY e.start_datum DESC",(u_id,));_r=_c.fetchall();df_all=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
     if df_all.empty:
         _empty_state()
         if st.button("＋ Ersten Eintrag anlegen", type="primary"):
@@ -662,7 +653,7 @@ def entries_page(conn, u_id):
                     abg_display[['zweck','konto_name','betrag','intervall','start_datum','end_datum']].rename(columns={
                         'zweck':'Zweck','konto_name':'Konto','betrag':'Betrag',
                         'intervall':'Turnus','start_datum':'Start','end_datum':'Ende'}),
-                    use_container_width=True, hide_index=True
+                    width='stretch', hide_index=True
                 )
 
         st.markdown("<div style='height:0.8rem'></div>", unsafe_allow_html=True)
@@ -676,7 +667,7 @@ def settings_page(conn, u_id):
     # ── KONTEN ──
     with col_k:
         _section_label("Konten", color=_MARINE)
-        kd = pd.read_sql_query("SELECT * FROM konten WHERE user_id=%s", conn, params=(u_id,))
+        _c=conn.cursor();_c.execute("SELECT * FROM konten WHERE user_id=%s",(u_id,));_r=_c.fetchall();kd=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
 
         if not kd.empty:
             kd['verbundenes_konto'] = kd.apply(
@@ -687,7 +678,7 @@ def settings_page(conn, u_id):
             sk = st.dataframe(
                 kd[['name','iban','typ','verbundenes_konto']].rename(columns={
                     'name':'Name','iban':'IBAN','typ':'Typ','verbundenes_konto':'Verknüpft'}),
-                use_container_width=True, hide_index=True,
+                width='stretch', hide_index=True,
                 on_select="rerun", selection_mode="single-row"
             )
             if sk.selection.rows:
@@ -695,10 +686,10 @@ def settings_page(conn, u_id):
                 _selection_bar("🏦", sel['name'], _MARINE)
                 c1, c2 = st.columns(2)
                 with c1:
-                    if st.button("✏️ Bearbeiten", key="ek", use_container_width=True):
+                    if st.button("✏️ Bearbeiten", key="ek", width='stretch'):
                         konto_dialog(conn, u_id, sel['id'])
                 with c2:
-                    if st.button("🗑️ Löschen", key="dk", use_container_width=True):
+                    if st.button("🗑️ Löschen", key="dk", width='stretch'):
                         c = conn.cursor()
                         try:
                             c.execute("DELETE FROM konten WHERE id=%s AND user_id=%s",
@@ -712,19 +703,18 @@ def settings_page(conn, u_id):
             _empty_state("Noch keine Konten vorhanden.")
 
         st.markdown("<div style='height:0.3rem'></div>", unsafe_allow_html=True)
-        if st.button("＋ Konto hinzufügen", key="ak", use_container_width=True, type="primary"):
+        if st.button("＋ Konto hinzufügen", key="ak", width='stretch', type="primary"):
             konto_dialog(conn, u_id)
 
     # ── KATEGORIEN ──
     with col_cat:
         _section_label("Kategorien", color=_ORANGE)
-        ctd = pd.read_sql_query(
-            "SELECT * FROM kategorien WHERE user_id=%s ORDER BY name", conn, params=(u_id,))
+        _c=conn.cursor();_c.execute("SELECT * FROM kategorien WHERE user_id=%s ORDER BY name",(u_id,));_r=_c.fetchall();ctd=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
 
         if not ctd.empty:
             sct = st.dataframe(
                 ctd[['name']].rename(columns={'name':'Name'}),
-                use_container_width=True, hide_index=True,
+                width='stretch', hide_index=True,
                 on_select="rerun", selection_mode="single-row"
             )
             if sct.selection.rows:
@@ -732,10 +722,10 @@ def settings_page(conn, u_id):
                 _selection_bar("📂", sel_k['name'], _ORANGE)
                 c1, c2 = st.columns(2)
                 with c1:
-                    if st.button("✏️ Bearbeiten", key="ekat", use_container_width=True):
+                    if st.button("✏️ Bearbeiten", key="ekat", width='stretch'):
                         kategorie_dialog(conn, u_id, sel_k['id'])
                 with c2:
-                    if st.button("🗑️ Löschen", key="dkat", use_container_width=True):
+                    if st.button("🗑️ Löschen", key="dkat", width='stretch'):
                         c = conn.cursor()
                         try:
                             c.execute("DELETE FROM kategorien WHERE id=%s AND user_id=%s",
@@ -749,5 +739,5 @@ def settings_page(conn, u_id):
             _empty_state("Noch keine Kategorien vorhanden.")
 
         st.markdown("<div style='height:0.3rem'></div>", unsafe_allow_html=True)
-        if st.button("＋ Kategorie hinzufügen", key="akat", use_container_width=True, type="primary"):
+        if st.button("＋ Kategorie hinzufügen", key="akat", width='stretch', type="primary"):
             kategorie_dialog(conn, u_id)
