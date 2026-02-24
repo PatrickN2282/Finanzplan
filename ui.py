@@ -424,8 +424,8 @@ def dashboard_page(conn, u_id):
 
     st.divider()
 
-    # ── MONATS-DETAIL ──
-    _section_label("Detailübersicht", color=_MARINE)
+    # ── OPTION 3: TIMELINE-ANSICHT ────────────────────────────────
+    _section_label("Cashflow-Timeline", color=_MARINE)
 
     for i, monat in enumerate(t_df['Monat'].unique()):
         m_sub   = t_df[t_df['Monat'] == monat].sort_values(
@@ -433,23 +433,188 @@ def dashboard_page(conn, u_id):
         ein_s   = m_sub[m_sub['Typ_Internal']=='Einnahme']['Betrag (fällig)'].sum()
         aus_s   = m_sub[m_sub['Typ_Internal']=='Ausgabe']['Betrag (fällig)'].sum()
         saldo_m = ein_s - aus_s
-        s_col   = _GREEN if saldo_m >= 0 else _RED
+        s_color = _GREEN if saldo_m >= 0 else _RED
         s_sign  = "+" if saldo_m > 0 else ""
 
-        label = (
-            f"📅 **{monat}**"
-            f"  ·  Saldo: {s_sign}{format_euro(saldo_m)}"
-            f"  ·  💰 {format_euro(ein_s)}"
-            f"  ·  💸 {format_euro(aus_s)}"
-        )
-        with st.expander(label, expanded=(i == 0)):
-            dcols = [" ","Konto","Zweck","Kategorie","Betrag (fällig)","Anteilig p.M.","Turnus"]
-            styled = (
-                m_sub.style
-                .apply(_row_style, axis=1)
-                .format({"Betrag (fällig)": format_euro, "Anteilig p.M.": format_euro})
-            )
-            st.dataframe(styled, use_container_width=True, hide_index=True, column_order=dcols)
+        # Monatstrenner
+        st.markdown(f"""
+        <div style="display:flex;align-items:center;gap:0.8rem;margin:{'1.4rem' if i>0 else '0.4rem'} 0 0.6rem;">
+            <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:0.95rem;
+                        color:var(--text,#1A1F2E);letter-spacing:-0.01em;white-space:nowrap;">
+                📅 {monat}
+            </div>
+            <div style="flex:1;height:1px;background:var(--border,rgba(27,58,107,0.11));"></div>
+            <div style="display:flex;gap:0.5rem;align-items:center;flex-shrink:0;">
+                <span style="font-size:0.78rem;color:{_GREEN};font-weight:600;">
+                    +{format_euro(ein_s)}
+                </span>
+                <span style="color:var(--text-3,#7A84A0);font-size:0.75rem;">·</span>
+                <span style="font-size:0.78rem;color:{_RED};font-weight:600;">
+                    -{format_euro(aus_s)}
+                </span>
+                <span style="color:var(--text-3,#7A84A0);font-size:0.75rem;">·</span>
+                <span style="font-size:0.82rem;color:{s_color};font-weight:700;">
+                    {s_sign}{format_euro(saldo_m)}
+                </span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # Einträge als Zeilen
+        rows_html = ""
+        for _, row in m_sub.iterrows():
+            is_ein   = row['Typ_Internal'] == 'Einnahme'
+            fällig   = row['Ist_Fällig']
+            betrag   = row['Betrag (fällig)']
+            anteilig = row['Anteilig p.M.']
+            color_b  = _GREEN if is_ein else _RED
+            opacity  = "1" if fällig else "0.45"
+            turnus_badge = ""
+            if row['Turnus'] != "Monatlich":
+                turnus_badge = f'<span style="background:rgba(240,120,0,0.12);color:{_ORANGE};border:1px solid rgba(240,120,0,0.25);border-radius:10px;padding:1px 7px;font-size:0.7rem;font-weight:600;margin-left:0.4rem;">{row["Turnus"]}</span>'
+            nicht_faellig = "" if fällig else '<span style="font-size:0.7rem;color:var(--text-3,#7A84A0);margin-left:0.4rem;font-style:italic;">anteilig</span>'
+
+            rows_html += f"""
+            <div style="display:flex;align-items:center;padding:0.5rem 0.9rem;
+                        border-bottom:1px solid var(--border,rgba(27,58,107,0.08));
+                        opacity:{opacity};transition:background 0.12s;"
+                 onmouseover="this.style.background='rgba(27,58,107,0.04)'"
+                 onmouseout="this.style.background='transparent'">
+                <span style="font-size:1rem;width:1.6rem;flex-shrink:0;">{row[" "]}</span>
+                <div style="flex:1;min-width:0;margin:0 0.6rem;">
+                    <div style="font-weight:600;font-size:0.88rem;
+                                color:var(--text,#1A1F2E);
+                                white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                        {row['Zweck']}{turnus_badge}{nicht_faellig}
+                    </div>
+                    <div style="font-size:0.75rem;color:var(--text-3,#7A84A0);margin-top:1px;">
+                        {row['Konto']} · {row['Kategorie']}
+                    </div>
+                </div>
+                <div style="text-align:right;flex-shrink:0;">
+                    <div style="font-family:'Outfit',sans-serif;font-weight:700;
+                                font-size:0.92rem;color:{color_b};">
+                        {'+'if is_ein else '-'}{format_euro(betrag)}
+                    </div>
+                    <div style="font-size:0.7rem;color:var(--text-3,#7A84A0);">
+                        {format_euro(anteilig)}/M
+                    </div>
+                </div>
+            </div>"""
+
+        st.markdown(f"""
+        <div style="background:var(--surface,#F4F5F9);border:1px solid var(--border,rgba(27,58,107,0.11));
+                    border-radius:12px;overflow:hidden;margin-bottom:0.3rem;">
+            {rows_html}
+        </div>""", unsafe_allow_html=True)
+
+
+def _entry_row_list(conn, u_id, subset, key, color):
+    """Option 2: Banking-Style Zeilenliste mit Klick-Auswahl."""
+    if subset.empty:
+        st.markdown("<p style='color:var(--text-3,#7A84A0);font-size:0.84rem;"
+                    "margin:0.2rem 0 0.7rem 1rem;'>Keine aktiven Einträge.</p>",
+                    unsafe_allow_html=True)
+        return
+
+    # Session-State für ausgewählte Zeile
+    sel_key = f"sel_{key}"
+    if sel_key not in st.session_state:
+        st.session_state[sel_key] = None
+
+    rows_html = ""
+    for idx, row in subset.iterrows():
+        is_ein    = row['typ'] == 'Einnahme'
+        col_b     = _GREEN if is_ein else _RED
+        sign      = "+" if is_ein else "−"
+        art_icon  = get_emoji(row['art'], row['typ'])
+        is_sel    = st.session_state[sel_key] == idx
+        sel_bg    = f"background:rgba({','.join(str(int(color.lstrip('#')[i:i+2],16)) for i in (0,2,4))},0.08);" if is_sel else ""
+
+        # Turnus-Badge
+        t_badge = ""
+        if row['intervall'] != "Monatlich":
+            t_badge = (f'<span style="background:rgba(240,120,0,0.1);color:{_ORANGE};'
+                       f'border:1px solid rgba(240,120,0,0.22);border-radius:8px;'
+                       f'padding:1px 6px;font-size:0.68rem;font-weight:600;'
+                       f'margin-left:0.35rem;">{row["intervall"]}</span>')
+
+        # Datum
+        try:
+            d_str = pd.to_datetime(row['start_datum']).strftime('%d.%m.%Y')
+        except:
+            d_str = row['start_datum'] or ""
+
+        end_str = ""
+        if row['end_datum']:
+            try:
+                end_str = f' – {pd.to_datetime(row["end_datum"]).strftime("%d.%m.%Y")}'
+            except:
+                pass
+
+        rows_html += f"""
+        <div data-idx="{idx}"
+             style="display:flex;align-items:center;padding:0.65rem 1rem;
+                    border-bottom:1px solid var(--border,rgba(27,58,107,0.08));
+                    cursor:pointer;transition:background 0.12s;{sel_bg}"
+             onmouseover="if(!this.classList.contains('sel'))this.style.background='rgba(27,58,107,0.04)'"
+             onmouseout="if(!this.classList.contains('sel'))this.style.background='{sel_bg[11:-1] if sel_bg else 'transparent'}'">
+            <span style="font-size:1.1rem;width:1.8rem;flex-shrink:0;">{art_icon}</span>
+            <div style="flex:1;min-width:0;margin:0 0.75rem;">
+                <div style="font-weight:600;font-size:0.9rem;
+                            color:var(--text,#1A1F2E);
+                            white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                    {row['zweck']}{t_badge}
+                </div>
+                <div style="font-size:0.75rem;color:var(--text-3,#7A84A0);margin-top:1px;">
+                    {row['konto_name']} · {row['kategorie']} · {d_str}{end_str}
+                </div>
+            </div>
+            <div style="text-align:right;flex-shrink:0;">
+                <div style="font-family:'Outfit',sans-serif;font-weight:700;
+                            font-size:0.95rem;color:{col_b};">
+                    {sign} {format_euro(row['betrag'])}
+                </div>
+                <div style="font-size:0.7rem;color:var(--text-3,#7A84A0);">
+                    {row['intervall']}
+                </div>
+            </div>
+        </div>"""
+
+    st.markdown(f"""
+    <div style="background:var(--surface,#F4F5F9);
+                border:1px solid var(--border,rgba(27,58,107,0.11));
+                border-radius:12px;overflow:hidden;">
+        {rows_html}
+    </div>""", unsafe_allow_html=True)
+
+    # Auswahlleiste via Selectbox (unsichtbar label)
+    names = [f"{get_emoji(r['art'],r['typ'])}  {r['zweck']}  –  {format_euro(r['betrag'])}"
+             for _, r in subset.iterrows()]
+    names_full = ["— Eintrag auswählen —"] + names
+
+    chosen = st.selectbox("Eintrag auswählen", names_full,
+                          index=0, key=f"pick_{key}", label_visibility="collapsed")
+
+    if chosen != "— Eintrag auswählen —":
+        chosen_idx = names.index(chosen)
+        row = subset.iloc[chosen_idx]
+        _selection_bar(get_emoji(row['art'], row['typ']), row['zweck'], color)
+        c1, c2, c3 = st.columns([2, 2, 6])
+        with c1:
+            if st.button("✏️ Bearbeiten", key=f"ed_{key}", use_container_width=True):
+                eintrag_dialog(conn, u_id, row['id'])
+        with c2:
+            if st.button("🗑️ Löschen", key=f"dl_{key}", use_container_width=True):
+                c = conn.cursor()
+                try:
+                    c.execute("DELETE FROM eintraege WHERE id=%s AND user_id=%s",
+                              (int(row['id']), u_id))
+                    conn.commit(); st.rerun()
+                except Exception as e:
+                    conn.rollback(); st.error(f"Fehler: {e}")
+                finally:
+                    c.close()
 
 
 def entries_page(conn, u_id):
@@ -467,23 +632,10 @@ def entries_page(conn, u_id):
             eintrag_dialog(conn, u_id)
         return
 
-    def fmt_df(subset):
-        d = subset[['zweck','konto_name','kategorie','betrag','betrag_typ',
-                    'typ','intervall','start_datum','end_datum']].copy()
-        d['betrag']      = d['betrag'].apply(format_euro)
-        d['start_datum'] = pd.to_datetime(d['start_datum']).dt.strftime('%d.%m.%Y')
-        d['end_datum']   = d['end_datum'].apply(
-            lambda x: pd.to_datetime(x).strftime('%d.%m.%Y') if pd.notna(x) and x else 'Offen')
-        return d.rename(columns={
-            'zweck':'Zweck','konto_name':'Konto','kategorie':'Kategorie',
-            'betrag':'Betrag','betrag_typ':'Betrag-Typ','typ':'Typ',
-            'intervall':'Turnus','start_datum':'Start','end_datum':'Ende'
-        })
-
     gruppen = [
         ("Buchung",     "Buchungen",     "bk", _MARINE),
         ("Abo",         "Abos",          "ab", _ORANGE),
-        ("Finanzierung","Finanzierungen","fn", "#8B5CF6"),
+        ("Finanzierung","Finanzierungen","fn", "#7C4FD4"),
     ]
 
     for art, label, key, color in gruppen:
@@ -497,37 +649,23 @@ def entries_page(conn, u_id):
             aktiv, abg = subset[~mask], subset[mask]
 
         _section_label(label, color=color, count=len(aktiv))
-
-        if aktiv.empty:
-            st.markdown(f"<p style='color:#8892AA;font-size:0.84rem;margin:0.2rem 0 0.7rem 1rem;'>"
-                        f"Keine aktiven Einträge.</p>", unsafe_allow_html=True)
-        else:
-            se = st.dataframe(fmt_df(aktiv), use_container_width=True, hide_index=True,
-                              on_select="rerun", selection_mode="single-row", key=f"tbl_{key}")
-            if se.selection.rows:
-                row = aktiv.iloc[se.selection.rows[0]]
-                _selection_bar(get_emoji(row['art'], row['typ']), row['zweck'], color)
-                c1, c2, c3 = st.columns([2, 2, 6])
-                with c1:
-                    if st.button("✏️ Bearbeiten", key=f"ed_{key}", use_container_width=True):
-                        eintrag_dialog(conn, u_id, row['id'])
-                with c2:
-                    if st.button("🗑️ Löschen", key=f"dl_{key}", use_container_width=True):
-                        c = conn.cursor()
-                        try:
-                            c.execute("DELETE FROM eintraege WHERE id=%s AND user_id=%s",
-                                      (int(row['id']), u_id))
-                            conn.commit(); st.rerun()
-                        except Exception as e:
-                            conn.rollback(); st.error(f"Fehler: {e}")
-                        finally:
-                            c.close()
+        _entry_row_list(conn, u_id, aktiv.reset_index(drop=True), key, color)
 
         if not abg.empty:
             with st.expander(f"Abgeschlossene Finanzierungen ({len(abg)})"):
-                st.dataframe(fmt_df(abg), use_container_width=True, hide_index=True)
+                abg_display = abg.copy()
+                abg_display['betrag'] = abg_display['betrag'].apply(format_euro)
+                abg_display['start_datum'] = pd.to_datetime(abg_display['start_datum']).dt.strftime('%d.%m.%Y')
+                abg_display['end_datum'] = abg_display['end_datum'].apply(
+                    lambda x: pd.to_datetime(x).strftime('%d.%m.%Y') if pd.notna(x) and x else '')
+                st.dataframe(
+                    abg_display[['zweck','konto_name','betrag','intervall','start_datum','end_datum']].rename(columns={
+                        'zweck':'Zweck','konto_name':'Konto','betrag':'Betrag',
+                        'intervall':'Turnus','start_datum':'Start','end_datum':'Ende'}),
+                    use_container_width=True, hide_index=True
+                )
 
-        st.markdown("<div style='height:0.5rem'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='height:0.8rem'></div>", unsafe_allow_html=True)
 
 
 def settings_page(conn, u_id):
