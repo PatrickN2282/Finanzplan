@@ -726,7 +726,7 @@ else:
         st.markdown("<div style='height:0.5rem'></div>", unsafe_allow_html=True)
         st.divider()
 
-        if st.button("＋  Neuer Eintrag", use_container_width=True, type="primary"):
+        if st.button("＋  Neuer Eintrag", width='stretch', type="primary"):
             eintrag_dialog(conn, u_id)
 
         st.markdown("<div style='height:0.4rem'></div>", unsafe_allow_html=True)
@@ -734,13 +734,13 @@ else:
         # Theme Toggle
         dark = st.session_state.dark_mode
         toggle_label = "☀️  Hell-Modus" if dark else "🌙  Dunkel-Modus"
-        if st.button(toggle_label, use_container_width=True):
+        if st.button(toggle_label, width='stretch'):
             st.session_state.dark_mode = not st.session_state.dark_mode
             st.rerun()
 
         st.markdown("<div style='height:0.3rem'></div>", unsafe_allow_html=True)
 
-        if st.button("↩  Abmelden", use_container_width=True):
+        if st.button("↩  Abmelden", width='stretch'):
             for key in ['logged_in', 'user_id', 'username', 'vorname', 'conn']:
                 st.session_state.pop(key, None)
             st.rerun()
