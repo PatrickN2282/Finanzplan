@@ -15,10 +15,15 @@ def calculate_months(start_date, end_date):
 
 
 def get_forecast_detailed(conn, u_id, months):
-    df = pd.read_sql_query(
+    cur = conn.cursor()
+    cur.execute(
         "SELECT e.*, k.name as konto_name FROM eintraege e JOIN konten k ON e.konto_id = k.id WHERE e.user_id=%s",
-        conn, params=(u_id,)
+        (u_id,)
     )
+    rows = cur.fetchall()
+    cols = [d[0] for d in cur.description] if cur.description else []
+    df   = pd.DataFrame(rows, columns=cols)
+    cur.close()
     chart_data, table_data = [], []
     turnus_faktor = {"Monatlich": 1, "Quartalsweise": 1/3, "Jährlich": 1/12}
     current_date = datetime.now().replace(day=1)
