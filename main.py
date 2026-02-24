@@ -660,11 +660,29 @@ hr {
 </style>
 """, unsafe_allow_html=True)
 
+# --- THEME INJECTOR ---
+# Setzt data-theme Attribut auf stApp-Container basierend auf session_state
+def _inject_theme(dark: bool):
+    theme_val = "dark" if dark else "light"
+    st.markdown(f"""
+    <script>
+        (function() {{
+            const app = window.parent.document.querySelector('[data-testid="stAppViewContainer"]');
+            const body = window.parent.document.querySelector('body');
+            if (app) app.setAttribute('data-theme', '{theme_val}');
+            if (body) body.setAttribute('data-theme', '{theme_val}');
+        }})();
+    </script>
+    """, unsafe_allow_html=True)
+
 # --- SESSION STATE ---
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
+if 'dark_mode' not in st.session_state:
+    st.session_state.dark_mode = False
 
 # --- ROUTING ---
+_inject_theme(st.session_state.dark_mode)
 if not st.session_state.logged_in:
     auth_page()
 else:
@@ -673,6 +691,8 @@ else:
     username     = st.session_state.get('username', 'User')
     vorname      = st.session_state.get('vorname', '')
     display_name = vorname if vorname else username
+
+    _inject_theme(st.session_state.dark_mode)
 
     with st.sidebar:
         # User-Badge
@@ -710,6 +730,15 @@ else:
             eintrag_dialog(conn, u_id)
 
         st.markdown("<div style='height:0.4rem'></div>", unsafe_allow_html=True)
+
+        # Theme Toggle
+        dark = st.session_state.dark_mode
+        toggle_label = "☀️  Hell-Modus" if dark else "🌙  Dunkel-Modus"
+        if st.button(toggle_label, use_container_width=True):
+            st.session_state.dark_mode = not st.session_state.dark_mode
+            st.rerun()
+
+        st.markdown("<div style='height:0.3rem'></div>", unsafe_allow_html=True)
 
         if st.button("↩  Abmelden", use_container_width=True):
             for key in ['logged_in', 'user_id', 'username', 'vorname', 'conn']:
