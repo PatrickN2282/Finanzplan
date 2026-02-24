@@ -22,20 +22,26 @@ def auth_page():
                 u = st.text_input("Benutzername", placeholder="Dein Benutzername")
                 p = st.text_input("Passwort", type="password", placeholder="••••••••")
                 submitted = st.form_submit_button("Anmelden", use_container_width=True, type="primary")
+                
                 if submitted:
                     if not u or not p:
                         st.error("Bitte Benutzername und Passwort eingeben.")
                     else:
                         conn = get_conn()
-                        user = pd.read_sql_query(
-                            "SELECT * FROM users WHERE username=%s AND password=%s",
-                            conn, params=(u, hash_pw(p))
+                        # Lösung der Warning: Nutzung von Cursor statt pd.read_sql_query
+                        c = conn.cursor()
+                        c.execute(
+                            "SELECT id, username, vorname FROM users WHERE username=%s AND password=%s",
+                            (u, hash_pw(p))
                         )
-                        if not user.empty:
+                        user_data = c.fetchone()
+                        c.close()
+
+                        if user_data:
                             st.session_state.logged_in = True
-                            st.session_state.user_id = int(user.iloc[0]['id'])
-                            st.session_state.username = user.iloc[0]['username']
-                            st.session_state.vorname = user.iloc[0].get('vorname', '')
+                            st.session_state.user_id = int(user_data[0])
+                            st.session_state.username = user_data[1]
+                            st.session_state.vorname = user_data[2] if user_data[2] else ""
                             st.rerun()
                         else:
                             st.error("Benutzername oder Passwort falsch.")
@@ -68,9 +74,11 @@ def auth_page():
                                 (new_u, hash_pw(new_p), new_vorname, new_nachname)
                             )
                             u_id_new = c.fetchone()[0]
+                            
                             # Standard-Kategorien
                             for kat in ["Gehalt", "Miete", "Lebensmittel", "Auto", "Versicherung", "Freizeit"]:
                                 c.execute("INSERT INTO kategorien (user_id, name) VALUES (%s,%s)", (u_id_new, kat))
+                            
                             # Standard-Konto
                             c.execute(
                                 "INSERT INTO konten (user_id, name, iban, typ) VALUES (%s,%s,%s,%s)",
