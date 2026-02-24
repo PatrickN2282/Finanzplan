@@ -29,7 +29,7 @@ def auth_page():
             with st.form("login_form"):
                 u = st.text_input("Benutzername", placeholder="Dein Benutzername")
                 p = st.text_input("Passwort", type="password", placeholder="••••••••")
-                submitted = st.form_submit_button("Anmelden", use_container_width=True, type="primary")
+                submitted = st.form_submit_button("Anmelden", width='stretch', type="primary")
                 if submitted:
                     if not u or not p:
                         st.error("Bitte alle Felder ausfüllen.")
@@ -63,7 +63,7 @@ def auth_page():
                 new_p  = st.text_input("Passwort", type="password", placeholder="Mindestens 6 Zeichen")
                 new_p2 = st.text_input("Passwort bestätigen", type="password", placeholder="••••••••")
 
-                if st.form_submit_button("Account erstellen", use_container_width=True, type="primary"):
+                if st.form_submit_button("Account erstellen", width='stretch', type="primary"):
                     if not new_u or not new_p:
                         st.error("Benutzername und Passwort sind Pflichtfelder.")
                     elif len(new_p) < 6:
