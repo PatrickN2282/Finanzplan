@@ -157,6 +157,37 @@ html, body, [class*="css"] {
     background: rgba(255,255,255,0.2) !important;
 }
 
+/* ── SIDEBAR TOGGLE (hell+dunkel sichtbar) ── */
+[data-testid="stSidebarCollapseButton"] button,
+[data-testid="collapsedControl"] button,
+button[aria-label="Close sidebar"],
+button[aria-label="Open sidebar"] {
+    background: rgba(255,255,255,0.18) !important;
+    border: 1px solid rgba(255,255,255,0.3) !important;
+    border-radius: 8px !important;
+    color: white !important;
+}
+[data-testid="stSidebarCollapseButton"] button svg,
+[data-testid="collapsedControl"] button svg,
+button[aria-label="Close sidebar"] svg,
+button[aria-label="Open sidebar"] svg {
+    fill: white !important;
+    stroke: white !important;
+    opacity: 1 !important;
+}
+/* Toggle-Pfeil im hellen Modus (außerhalb Sidebar) */
+[data-testid="collapsedControl"] {
+    background: var(--marine) !important;
+    border-radius: 0 8px 8px 0 !important;
+    border: 1px solid rgba(27,58,107,0.2) !important;
+    box-shadow: 2px 0 8px rgba(27,58,107,0.15) !important;
+}
+[data-testid="collapsedControl"] button svg {
+    fill: white !important;
+    stroke: white !important;
+}
+
+
 /* ── METRIKEN ─────────────────────────────── */
 [data-testid="metric-container"] {
     background: var(--surface) !important;
@@ -208,15 +239,22 @@ html, body, [class*="css"] {
     box-shadow: 0 1px 4px var(--shadow) !important;
 }
 [data-testid="stDataFrame"] thead th {
-    background: var(--surface2) !important;
-    color: var(--text-3) !important;
+    background: #EEF0F5 !important;
+    color: #50597A !important;
     font-family: 'Outfit', sans-serif !important;
     font-size: 0.7rem !important;
     font-weight: 600 !important;
     letter-spacing: 0.09em !important;
     text-transform: uppercase !important;
-    border-bottom: 1px solid var(--border-s) !important;
+    border-bottom: 1px solid rgba(27,58,107,0.12) !important;
     padding: 0.65rem 1rem !important;
+}
+[data-testid="stDataFrame"] tbody td {
+    background: #FFFFFF !important;
+    color: #1E2440 !important;
+}
+[data-testid="stDataFrame"] tbody tr:nth-child(even) td {
+    background: #F8F9FC !important;
 }
 [data-testid="stDataFrame"] tbody tr {
     border-bottom: 1px solid var(--border) !important;
@@ -228,7 +266,7 @@ html, body, [class*="css"] {
 [data-testid="stDataFrame"] tbody td {
     font-family: 'Outfit', sans-serif !important;
     font-size: 0.875rem !important;
-    color: var(--text) !important;
+    color: #1E2440 !important;
     padding: 0.55rem 1rem !important;
 }
 
@@ -340,14 +378,26 @@ html, body, [class*="css"] {
 [data-testid="stTextInput"] input,
 [data-testid="stNumberInput"] input,
 [data-testid="stDateInput"] input {
-    background: var(--surface) !important;
-    border: 1px solid var(--border-s) !important;
+    background: #FFFFFF !important;
+    border: 1px solid rgba(27,58,107,0.18) !important;
     border-radius: var(--r-s) !important;
-    color: var(--text) !important;
+    color: #1E2440 !important;
     font-family: 'Outfit', sans-serif !important;
     font-size: 0.9rem !important;
     transition: border-color 0.18s, box-shadow 0.18s !important;
-    box-shadow: 0 1px 3px var(--shadow) !important;
+    box-shadow: 0 1px 3px rgba(27,58,107,0.06) !important;
+}
+/* Sicherstellen dass Placeholder auch sichtbar */
+[data-testid="stTextInput"] input::placeholder,
+[data-testid="stNumberInput"] input::placeholder {
+    color: #9AA0BA !important;
+    opacity: 1 !important;
+}
+/* Number-Input Buttons */
+[data-testid="stNumberInput"] button {
+    background: #F3F4F8 !important;
+    border-color: rgba(27,58,107,0.15) !important;
+    color: #50597A !important;
 }
 [data-testid="stTextInput"] input:focus,
 [data-testid="stNumberInput"] input:focus {
@@ -437,12 +487,24 @@ hr {
 
 /* ── SELECTBOX ────────────────────────────── */
 [data-testid="stSelectbox"] > div > div {
-    background: var(--surface) !important;
-    border: 1px solid var(--border-s) !important;
+    background: #FFFFFF !important;
+    border: 1px solid rgba(27,58,107,0.18) !important;
     border-radius: var(--r-s) !important;
     font-family: 'Outfit', sans-serif !important;
     font-size: 0.9rem !important;
+    color: #1E2440 !important;
 }
+/* Selectbox dropdown options */
+[data-testid="stSelectbox"] li {
+    color: #1E2440 !important;
+    font-family: 'Outfit', sans-serif !important;
+}
+/* Date input specific */
+[data-testid="stDateInput"] input {
+    background: #FFFFFF !important;
+    color: #1E2440 !important;
+}
+/* Remove duplicate tbody td from earlier rule */
 </style>
 """, unsafe_allow_html=True)
 
