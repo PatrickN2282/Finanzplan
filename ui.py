@@ -456,54 +456,63 @@ def dashboard_page(conn, u_id):
         </div>
         """, unsafe_allow_html=True)
 
-        # Einträge als Zeilen
-        rows_html = ""
+        # Einträge – einzelne st.markdown pro Zeile (kein JS-Event, kein f-string-Konflikt)
+        st.markdown(
+            "<div style='background:var(--surface,#F4F5F9);"
+            "border:1px solid var(--border,rgba(27,58,107,0.11));"
+            "border-radius:12px;overflow:hidden;margin-bottom:0.3rem;'>",
+            unsafe_allow_html=True)
+
         for _, row in m_sub.iterrows():
             is_ein   = row['Typ_Internal'] == 'Einnahme'
-            fällig   = row['Ist_Fällig']
+            faellig  = row['Ist_Fällig']
             betrag   = row['Betrag (fällig)']
             anteilig = row['Anteilig p.M.']
             color_b  = _GREEN if is_ein else _RED
-            opacity  = "1" if fällig else "0.45"
-            turnus_badge = ""
+            opacity  = "1" if faellig else "0.45"
+            sign     = "+" if is_ein else chr(8722)
+            icon     = str(row[' '])
+            zweck    = str(row['Zweck']).replace('<','&lt;').replace('>','&gt;')
+            konto    = str(row['Konto']).replace('<','&lt;').replace('>','&gt;')
+            kat      = str(row['Kategorie']).replace('<','&lt;').replace('>','&gt;')
+
+            t_badge = ""
             if row['Turnus'] != "Monatlich":
-                turnus_badge = f'<span style="background:rgba(240,120,0,0.12);color:{_ORANGE};border:1px solid rgba(240,120,0,0.25);border-radius:10px;padding:1px 7px;font-size:0.7rem;font-weight:600;margin-left:0.4rem;">{row["Turnus"]}</span>'
-            nicht_faellig = "" if fällig else '<span style="font-size:0.7rem;color:var(--text-3,#7A84A0);margin-left:0.4rem;font-style:italic;">anteilig</span>'
+                t_badge = (
+                    "<span style='background:rgba(240,120,0,0.12);color:#F07800;"
+                    "border:1px solid rgba(240,120,0,0.25);border-radius:10px;"
+                    "padding:1px 7px;font-size:0.7rem;font-weight:600;"
+                    "margin-left:0.4rem;'>" + str(row['Turnus']) + "</span>"
+                )
+            not_due = "" if faellig else (
+                "<span style='font-size:0.7rem;color:var(--text-3,#7A84A0);"
+                "margin-left:0.4rem;font-style:italic;'>anteilig</span>"
+            )
 
-            rows_html += f"""
-            <div style="display:flex;align-items:center;padding:0.5rem 0.9rem;
-                        border-bottom:1px solid var(--border,rgba(27,58,107,0.08));
-                        opacity:{opacity};transition:background 0.12s;"
-                 onmouseover="this.style.background='rgba(27,58,107,0.04)'"
-                 onmouseout="this.style.background='transparent'">
-                <span style="font-size:1rem;width:1.6rem;flex-shrink:0;">{row[" "]}</span>
-                <div style="flex:1;min-width:0;margin:0 0.6rem;">
-                    <div style="font-weight:600;font-size:0.88rem;
-                                color:var(--text,#1A1F2E);
-                                white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                        {row['Zweck']}{turnus_badge}{nicht_faellig}
-                    </div>
-                    <div style="font-size:0.75rem;color:var(--text-3,#7A84A0);margin-top:1px;">
-                        {row['Konto']} · {row['Kategorie']}
-                    </div>
-                </div>
-                <div style="text-align:right;flex-shrink:0;">
-                    <div style="font-family:'Outfit',sans-serif;font-weight:700;
-                                font-size:0.92rem;color:{color_b};">
-                        {'+'if is_ein else '-'}{format_euro(betrag)}
-                    </div>
-                    <div style="font-size:0.7rem;color:var(--text-3,#7A84A0);">
-                        {format_euro(anteilig)}/M
-                    </div>
-                </div>
-            </div>"""
+            row_html = (
+                "<div style='display:flex;align-items:center;padding:0.5rem 0.9rem;"
+                "border-bottom:1px solid var(--border,rgba(27,58,107,0.08));"
+                "opacity:" + opacity + ";'>"
+                "<span style='font-size:1rem;width:1.6rem;flex-shrink:0;'>"
+                + icon + "</span>"
+                "<div style='flex:1;min-width:0;margin:0 0.6rem;'>"
+                "<div style='font-weight:600;font-size:0.88rem;"
+                "color:var(--text,#1A1F2E);"
+                "white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>"
+                + zweck + t_badge + not_due + "</div>"
+                "<div style='font-size:0.75rem;color:var(--text-3,#7A84A0);margin-top:1px;'>"
+                + konto + " &middot; " + kat + "</div>"
+                "</div>"
+                "<div style='text-align:right;flex-shrink:0;'>"
+                "<div style='font-weight:700;font-size:0.92rem;color:" + color_b + ";'>"
+                + sign + format_euro(betrag) + "</div>"
+                "<div style='font-size:0.7rem;color:var(--text-3,#7A84A0);'>"
+                + format_euro(anteilig) + "/M</div>"
+                "</div></div>"
+            )
+            st.markdown(row_html, unsafe_allow_html=True)
 
-        st.markdown(f"""
-        <div style="background:var(--surface,#F4F5F9);border:1px solid var(--border,rgba(27,58,107,0.11));
-                    border-radius:12px;overflow:hidden;margin-bottom:0.3rem;">
-            {rows_html}
-        </div>""", unsafe_allow_html=True)
-
+        st.markdown("</div>", unsafe_allow_html=True)
 
 def _entry_row_list(conn, u_id, subset, key, color):
     """Option 2: Banking-Style Zeilenliste."""
