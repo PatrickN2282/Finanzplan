@@ -64,6 +64,32 @@ st.markdown("""
     --r-s:         8px;
 }
 
+/* ── DARK MODE – warme, nicht tiefschwarze Töne ── */
+[data-theme="dark"] {
+    /* Hintergründe: Schieferblau-Grau statt Schwarz */
+    --bg:         #1E2132;   /* App-BG: dunkles Blaugrau, kein Pechschwarz  */
+    --surface:    #262B40;   /* Karten: mittleres Blaugrau                  */
+    --surface2:   #2D3348;   /* Tabellen-Header: etwas dunkler               */
+    --dialog-bg:  #2A2F45;   /* Popup-BG: warm-schieferblau                  */
+
+    /* Ränder */
+    --border:     rgba(255,255,255,0.09);
+    --border-s:   rgba(255,255,255,0.16);
+
+    /* Text – hoher Kontrast, kein reines Weiß */
+    --text:       #DDE2F0;   /* Haupttext: weiches Eisblau                   */
+    --text-2:     #9AA3BC;   /* Sekundär: mittleres Grau-Blau                */
+    --text-3:     #5E6780;   /* Hilfstexte, Labels: gedämpftes Grau-Blau     */
+
+    /* Akzente leicht aufgehellt für Dunkel-BG */
+    --marine:     #3A6FBF;   /* Marine etwas heller – besser sichtbar        */
+    --marine-l:   #4E87D6;
+    --marine-dim: rgba(58,111,191,0.18);
+    --marine-dim2:rgba(58,111,191,0.10);
+
+    --shadow:     rgba(0,0,0,0.25);
+}
+
 /* ── BASE ─────────────────────────────────── */
 html, body, [class*="css"] {
     font-family: 'Outfit', sans-serif !important;
@@ -428,7 +454,7 @@ div[class*="instructionsContainer"] {
 [data-testid="stModal"] [data-testid="stNumberInput"] input,
 [data-testid="stModal"] [data-testid="stDateInput"] input,
 [data-testid="stModal"] [data-testid="stSelectbox"] > div > div {
-    background: #F6F7FA !important;
+    background: var(--surface) !important;
     color: var(--text) !important;
 }
 [data-testid="stModal"] [data-testid="stTextInput"] input::placeholder,
@@ -507,6 +533,130 @@ hr {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-s); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--marine); }
+
+/* ── DARK MODE – explizite Overrides für Inputs & Tabellen ── */
+[data-theme="dark"] [data-testid="stTextInput"] input,
+[data-theme="dark"] [data-testid="stNumberInput"] input,
+[data-theme="dark"] [data-testid="stDateInput"] input {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+    border-color: var(--border-s) !important;
+}
+[data-theme="dark"] [data-testid="stTextInput"] input::placeholder,
+[data-theme="dark"] [data-testid="stNumberInput"] input::placeholder {
+    color: var(--text-3) !important;
+}
+[data-theme="dark"] [data-testid="stSelectbox"] > div > div {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+    border-color: var(--border-s) !important;
+}
+[data-theme="dark"] [data-testid="stSelectbox"] li {
+    color: var(--text) !important;
+    background: var(--surface2) !important;
+}
+[data-theme="dark"] [data-testid="stNumberInput"] button {
+    background: var(--surface2) !important;
+    color: var(--text-2) !important;
+    border-color: var(--border) !important;
+}
+/* Modal in Dark */
+[data-theme="dark"] [data-testid="stModal"] > div {
+    background: var(--dialog-bg) !important;
+    border-color: var(--border-s) !important;
+}
+[data-theme="dark"] [data-testid="stModal"] [data-testid="stTextInput"] input,
+[data-theme="dark"] [data-testid="stModal"] [data-testid="stNumberInput"] input,
+[data-theme="dark"] [data-testid="stModal"] [data-testid="stDateInput"] input,
+[data-theme="dark"] [data-testid="stModal"] [data-testid="stSelectbox"] > div > div {
+    background: var(--surface2) !important;
+    color: var(--text) !important;
+    border-color: var(--border-s) !important;
+}
+/* Tabellen in Dark – kein Schwarz */
+[data-theme="dark"] [data-testid="stDataFrame"] thead th {
+    background: var(--surface2) !important;
+    color: var(--text-2) !important;
+    border-bottom-color: var(--border-s) !important;
+}
+[data-theme="dark"] [data-testid="stDataFrame"] tbody tr:nth-child(odd) td {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+}
+[data-theme="dark"] [data-testid="stDataFrame"] tbody tr:nth-child(even) td {
+    background: var(--surface2) !important;
+    color: var(--text) !important;
+}
+[data-theme="dark"] [data-testid="stDataFrame"] tbody tr:hover td {
+    background: var(--marine-dim) !important;
+}
+/* Metric Cards in Dark */
+[data-theme="dark"] [data-testid="metric-container"] {
+    background: var(--surface) !important;
+    border-color: var(--border) !important;
+}
+[data-theme="dark"] [data-testid="stMetricValue"] {
+    color: var(--text) !important;
+}
+[data-theme="dark"] [data-testid="stMetricLabel"] {
+    color: var(--text-3) !important;
+}
+/* Expander in Dark */
+[data-theme="dark"] [data-testid="stExpander"] {
+    background: var(--surface) !important;
+    border-color: var(--border) !important;
+}
+[data-theme="dark"] [data-testid="stExpander"] summary {
+    color: var(--text) !important;
+}
+/* Buttons in Dark */
+[data-theme="dark"] .stButton > button {
+    background: var(--surface) !important;
+    color: var(--text-2) !important;
+    border-color: var(--border-s) !important;
+}
+[data-theme="dark"] .stButton > button[kind="primary"] {
+    background: var(--marine) !important;
+    border-color: var(--marine) !important;
+    color: white !important;
+}
+/* InputInstructions / Helper Text in Dark */
+[data-theme="dark"] [data-testid="InputInstructions"],
+[data-theme="dark"] [class*="InputInstructions"],
+[data-theme="dark"] div[class*="instructionsContainer"] {
+    color: var(--text-3) !important;
+}
+/* Alerts in Dark */
+[data-theme="dark"] [data-testid="stInfo"] {
+    background: rgba(58,111,191,0.12) !important;
+    color: #7FA8E0 !important;
+}
+[data-theme="dark"] [data-testid="stSuccess"] {
+    background: rgba(57,211,83,0.1) !important;
+}
+[data-theme="dark"] [data-testid="stError"] {
+    background: rgba(214,59,59,0.1) !important;
+}
+[data-theme="dark"] [data-testid="stWarning"] {
+    background: rgba(240,120,0,0.1) !important;
+}
+/* Segmented control & Tabs in Dark */
+[data-theme="dark"] [data-testid="stSegmentedControl"] {
+    background: var(--surface2) !important;
+    border-color: var(--border) !important;
+}
+[data-theme="dark"] [data-testid="stSegmentedControl"] button[aria-checked="true"] {
+    background: var(--surface) !important;
+    color: var(--marine) !important;
+}
+[data-theme="dark"] .stTabs [data-baseweb="tab-list"] {
+    background: var(--surface2) !important;
+    border-color: var(--border) !important;
+}
+[data-theme="dark"] .stTabs [aria-selected="true"] {
+    background: var(--surface) !important;
+    color: var(--marine) !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
