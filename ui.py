@@ -506,112 +506,111 @@ def dashboard_page(conn, u_id):
 
 
 def _entry_row_list(conn, u_id, subset, key, color):
-    """Option 2: Banking-Style Zeilenliste mit Klick-Auswahl."""
+    """Option 2: Banking-Style Zeilenliste."""
     if subset.empty:
-        st.markdown("<p style='color:var(--text-3,#7A84A0);font-size:0.84rem;"
-                    "margin:0.2rem 0 0.7rem 1rem;'>Keine aktiven Einträge.</p>",
-                    unsafe_allow_html=True)
+        st.markdown(
+            "<p style='color:var(--text-3,#7A84A0);font-size:0.84rem;"
+            "margin:0.2rem 0 0.7rem 1rem;'>Keine aktiven Einträge.</p>",
+            unsafe_allow_html=True)
         return
 
-    # Session-State für ausgewählte Zeile
-    sel_key = f"sel_{key}"
-    if sel_key not in st.session_state:
-        st.session_state[sel_key] = None
+    # Container-Start
+    st.markdown(
+        "<div style='background:var(--surface,#F4F5F9);"
+        "border:1px solid var(--border,rgba(27,58,107,0.11));"
+        "border-radius:12px;overflow:hidden;margin-bottom:0.2rem;'>",
+        unsafe_allow_html=True)
 
-    rows_html = ""
-    for idx, row in subset.iterrows():
-        is_ein    = row['typ'] == 'Einnahme'
-        col_b     = _GREEN if is_ein else _RED
-        sign      = "+" if is_ein else "−"
-        art_icon  = get_emoji(row['art'], row['typ'])
-        is_sel    = st.session_state[sel_key] == idx
-        sel_bg    = f"background:rgba({','.join(str(int(color.lstrip('#')[i:i+2],16)) for i in (0,2,4))},0.08);" if is_sel else ""
+    for _, row in subset.iterrows():
+        is_ein   = row['typ'] == 'Einnahme'
+        col_b    = _GREEN if is_ein else _RED
+        sign     = "+" if is_ein else chr(8722)   # minus sign
+        art_icon = get_emoji(row['art'], row['typ'])
 
-        # Turnus-Badge
         t_badge = ""
         if row['intervall'] != "Monatlich":
-            t_badge = (f'<span style="background:rgba(240,120,0,0.1);color:{_ORANGE};'
-                       f'border:1px solid rgba(240,120,0,0.22);border-radius:8px;'
-                       f'padding:1px 6px;font-size:0.68rem;font-weight:600;'
-                       f'margin-left:0.35rem;">{row["intervall"]}</span>')
+            t_badge = (
+                "<span style='background:rgba(240,120,0,0.1);color:#F07800;"
+                "border:1px solid rgba(240,120,0,0.22);border-radius:8px;"
+                "padding:1px 6px;font-size:0.68rem;font-weight:600;"
+                "margin-left:0.35rem;'>" + row['intervall'] + "</span>"
+            )
 
-        # Datum
         try:
             d_str = pd.to_datetime(row['start_datum']).strftime('%d.%m.%Y')
-        except:
-            d_str = row['start_datum'] or ""
+        except Exception:
+            d_str = str(row['start_datum']) if row['start_datum'] else ""
 
         end_str = ""
         if row['end_datum']:
             try:
-                end_str = f' – {pd.to_datetime(row["end_datum"]).strftime("%d.%m.%Y")}'
-            except:
+                end_str = " – " + pd.to_datetime(row['end_datum']).strftime('%d.%m.%Y')
+            except Exception:
                 pass
 
-        rows_html += f"""
-        <div data-idx="{idx}"
-             style="display:flex;align-items:center;padding:0.65rem 1rem;
-                    border-bottom:1px solid var(--border,rgba(27,58,107,0.08));
-                    cursor:pointer;transition:background 0.12s;{sel_bg}"
-             onmouseover="if(!this.classList.contains('sel'))this.style.background='rgba(27,58,107,0.04)'"
-             onmouseout="if(!this.classList.contains('sel'))this.style.background='{sel_bg[11:-1] if sel_bg else 'transparent'}'">
-            <span style="font-size:1.1rem;width:1.8rem;flex-shrink:0;">{art_icon}</span>
-            <div style="flex:1;min-width:0;margin:0 0.75rem;">
-                <div style="font-weight:600;font-size:0.9rem;
-                            color:var(--text,#1A1F2E);
-                            white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                    {row['zweck']}{t_badge}
-                </div>
-                <div style="font-size:0.75rem;color:var(--text-3,#7A84A0);margin-top:1px;">
-                    {row['konto_name']} · {row['kategorie']} · {d_str}{end_str}
-                </div>
-            </div>
-            <div style="text-align:right;flex-shrink:0;">
-                <div style="font-family:'Outfit',sans-serif;font-weight:700;
-                            font-size:0.95rem;color:{col_b};">
-                    {sign} {format_euro(row['betrag'])}
-                </div>
-                <div style="font-size:0.7rem;color:var(--text-3,#7A84A0);">
-                    {row['intervall']}
-                </div>
-            </div>
-        </div>"""
+        betrag_fmt = format_euro(row['betrag'])
+        zweck_esc  = str(row['zweck']).replace('<', '&lt;').replace('>', '&gt;')
+        konto_esc  = str(row['konto_name']).replace('<', '&lt;').replace('>', '&gt;')
+        kat_esc    = str(row['kategorie']).replace('<', '&lt;').replace('>', '&gt;')
+        intervall  = str(row['intervall'])
 
-    st.markdown(f"""
-    <div style="background:var(--surface,#F4F5F9);
-                border:1px solid var(--border,rgba(27,58,107,0.11));
-                border-radius:12px;overflow:hidden;">
-        {rows_html}
-    </div>""", unsafe_allow_html=True)
+        html = (
+            "<div style='display:flex;align-items:center;padding:0.65rem 1rem;"
+            "border-bottom:1px solid var(--border,rgba(27,58,107,0.08));'>"
 
-    # Auswahlleiste via Selectbox (unsichtbar label)
-    names = [f"{get_emoji(r['art'],r['typ'])}  {r['zweck']}  –  {format_euro(r['betrag'])}"
-             for _, r in subset.iterrows()]
-    names_full = ["— Eintrag auswählen —"] + names
+            "<span style='font-size:1.1rem;width:1.8rem;flex-shrink:0;'>"
+            + art_icon + "</span>"
 
-    chosen = st.selectbox("Eintrag auswählen", names_full,
-                          index=0, key=f"pick_{key}", label_visibility="collapsed")
+            "<div style='flex:1;min-width:0;margin:0 0.75rem;'>"
+            "<div style='font-weight:600;font-size:0.9rem;"
+            "color:var(--text,#1A1F2E);"
+            "white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>"
+            + zweck_esc + t_badge + "</div>"
+            "<div style='font-size:0.75rem;color:var(--text-3,#7A84A0);margin-top:1px;'>"
+            + konto_esc + " &middot; " + kat_esc + " &middot; " + d_str + end_str
+            + "</div></div>"
+
+            "<div style='text-align:right;flex-shrink:0;'>"
+            "<div style='font-weight:700;font-size:0.95rem;color:" + col_b + ";'>"
+            + sign + " " + betrag_fmt + "</div>"
+            "<div style='font-size:0.7rem;color:var(--text-3,#7A84A0);'>"
+            + intervall + "</div></div></div>"
+        )
+        st.markdown(html, unsafe_allow_html=True)
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # Auswahl per Selectbox
+    names = [
+        get_emoji(r['art'], r['typ']) + "  " + r['zweck'] + "  –  " + format_euro(r['betrag'])
+        for _, r in subset.iterrows()
+    ]
+    chosen = st.selectbox(
+        "Eintrag auswählen",
+        ["— Eintrag auswählen —"] + names,
+        index=0, key="pick_" + key, label_visibility="collapsed"
+    )
 
     if chosen != "— Eintrag auswählen —":
-        chosen_idx = names.index(chosen)
-        row = subset.iloc[chosen_idx]
+        row = subset.iloc[names.index(chosen)]
         _selection_bar(get_emoji(row['art'], row['typ']), row['zweck'], color)
         c1, c2, c3 = st.columns([2, 2, 6])
         with c1:
-            if st.button("✏️ Bearbeiten", key=f"ed_{key}", width='stretch'):
+            if st.button("✏️ Bearbeiten", key="ed_" + key, width='stretch'):
                 eintrag_dialog(conn, u_id, row['id'])
         with c2:
-            if st.button("🗑️ Löschen", key=f"dl_{key}", width='stretch'):
-                c = conn.cursor()
+            if st.button("🗑️ Löschen", key="dl_" + key, width='stretch'):
+                cur = conn.cursor()
                 try:
-                    c.execute("DELETE FROM eintraege WHERE id=%s AND user_id=%s",
-                              (int(row['id']), u_id))
-                    conn.commit(); st.rerun()
+                    cur.execute("DELETE FROM eintraege WHERE id=%s AND user_id=%s",
+                                (int(row['id']), u_id))
+                    conn.commit()
+                    st.rerun()
                 except Exception as e:
-                    conn.rollback(); st.error(f"Fehler: {e}")
+                    conn.rollback()
+                    st.error("Fehler: " + str(e))
                 finally:
-                    c.close()
-
+                    cur.close()
 
 def entries_page(conn, u_id):
     _page_header("Einträge", "Buchungen, Abos und Finanzierungen")
