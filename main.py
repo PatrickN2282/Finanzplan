@@ -508,7 +508,7 @@ hr {
 ::-webkit-scrollbar-thumb { background: var(--border-s); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--marine); }
 </style>
-"""), unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 # --- SESSION STATE ---
 if 'logged_in' not in st.session_state:
