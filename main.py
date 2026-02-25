@@ -18,35 +18,64 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    /* ── BASIS FARBEN ── */
     --c-primary:    #1B3A6B; 
     --c-bg:         #F8F9FA; 
     --c-surface:    #FFFFFF; 
     --c-text:       #1E293B; 
-    
     --c-list-text:  #2D3748; 
 
-    /* Akzentfarben */
     --value-pos:    #2BB34F; 
     --value-neg:    #F44336; 
     --value-warn:   #FF9800; 
     --value-neon:   #39D353; 
 
-    /* Ableitungen */
     --c-surface2:   #F1F3F5;
     --text-2:       rgba(30, 41, 59, 0.85);
-    --text-3:       rgba(30, 41, 59, 0.6);
     --border:       rgba(27, 58, 107, 0.08);
-    
-    --r:   12px;
-    --r-s:  8px;
+    --r: 12px; --r-s: 8px;
 }
 
-/* BASE STYLE */
+/* BASE */
 html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
 [data-testid="stAppViewContainer"] { background: var(--c-bg) !important; }
-[data-testid="stHeader"] { background: transparent !important; }
-.main .block-container { padding: 1.8rem 2.8rem 3rem !important; max-width: 1500px !important; }
+
+/* FIX FÜR EXPANDER (Grafiken & Statistiken) */
+.stExpander {
+    border: 1px solid var(--border) !important;
+    border-radius: var(--r) !important;
+    background: var(--c-surface) !important;
+    overflow: hidden !important;
+}
+
+/* Expander Header (Eingeklappt & Ausgeklappt) */
+.stExpander summary {
+    background-color: #2D3748 !important; /* Dunkles Marine-Grau */
+    color: white !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: var(--r-s) !important;
+    transition: all 0.3s ease !important;
+}
+
+.stExpander summary:hover {
+    background-color: var(--c-primary) !important;
+}
+
+/* Icon (Pfeil) im Expander weiß färben */
+.stExpander svg {
+    fill: white !important;
+}
+
+/* Inhalt des Expanders */
+.stExpander div[data-testid="stExpanderDetails"] {
+    background-color: var(--c-surface) !important;
+    padding: 1.5rem !important;
+    color: var(--c-text) !important;
+}
+
+/* TEXT-LOGIK (Balance-Werte schützen) */
+div[data-testid="stVerticalBlock"] .stMarkdown p:not(:has(span[style*="color"])) {
+    color: var(--c-list-text) !important;
+}
 
 /* SIDEBAR */
 [data-testid="stSidebar"] { background: var(--c-primary) !important; border-right: none !important; }
@@ -57,41 +86,13 @@ html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
     font-weight: 700 !important;
 }
 
-/* TEXT-KORREKTUR: Zwingt Texte dunkel, aber lässt farbige Spans (Balance) in Ruhe */
-div[data-testid="stVerticalBlock"] .stMarkdown p:not(:has(span[style*="color"])) {
-    color: var(--c-list-text) !important;
-}
-
-/* Spezifischer Schutz für farbige Werte (Grün/Rot) in der Timeline */
-span[style*="color: rgb(28, 158, 58)"], 
-span[style*="color: #1C9E3A"],
-span[style*="color: green"] { 
-    color: var(--value-pos) !important; 
-}
-
-span[style*="color: rgb(214, 59, 59)"], 
-span[style*="color: #D63B3B"],
-span[style*="color: red"] { 
-    color: var(--value-neg) !important; 
-}
-
-/* Unterzeilen */
-div[data-testid="stVerticalBlock"] .stMarkdown span:not([style*="color"]) {
-    color: var(--text-2) !important;
-}
-
-/* METRIKEN & TABELLEN */
+/* METRIKEN */
 [data-testid="metric-container"] { background: var(--c-surface) !important; border: 1px solid var(--border) !important; border-radius: var(--r) !important; }
 [data-testid="stMetricValue"] { color: var(--c-text) !important; font-weight: 800 !important; }
-[data-testid="stDataFrame"] { border: 1px solid var(--border) !important; border-radius: var(--r) !important; background-color: var(--c-surface) !important; }
-
-/* SCROLLBAR */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-thumb { background: var(--value-warn); border-radius: 10px; }
 </style>
 """, unsafe_allow_html=True)
 
-# --- ROUTING (Rest bleibt identisch) ---
+# --- ROUTING (unverändert) ---
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 
@@ -123,13 +124,6 @@ else:
             for key in ['logged_in', 'user_id', 'username', 'vorname']:
                 st.session_state.pop(key, None)
             st.rerun()
-
-        st.markdown("""
-        <div style="position:absolute;bottom:1rem;left:0;right:0;text-align:center;">
-            <span style="font-size:0.65rem;color:rgba(255,255,255,0.15);letter-spacing:0.08em;">
-                FINANZ-MASTER v1.3.3
-            </span>
-        </div>""", unsafe_allow_html=True)
 
     if page == "📊 Dashboard":
         dashboard_page(conn, u_id)
