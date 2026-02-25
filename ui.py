@@ -130,7 +130,7 @@ def eintrag_dialog(conn, u_id, edit_id=None):
     if u_id is not None: u_id = int(u_id)
     if edit_id is not None:
         edit_id = int(edit_id)
-        _c=conn.cursor();_c.execute("SELECT * FROM eintraege WHERE id=%s AND user_id=%s",(edit_id,u_id));_r=_c.fetchall();df=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
+        _c=conn.cursor();_c.execute("SELECT * FROM eintraege WHERE id=%s AND user_id=%s",(int(edit_id),int(u_id)));_r=_c.fetchall();df=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
         if not df.empty: existing = df.iloc[0]
 
     art_val = st.segmented_control(
@@ -243,7 +243,7 @@ def konto_dialog(conn, u_id, edit_id=None):
     existing  = None
     konten_df = pd.DataFrame()
     if edit_id:
-        _c=conn.cursor();_c.execute("SELECT * FROM konten WHERE id=%s AND user_id=%s",(edit_id,u_id));_r=_c.fetchall();df=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
+        _c=conn.cursor();_c.execute("SELECT * FROM konten WHERE id=%s AND user_id=%s",(int(edit_id),int(u_id)));_r=_c.fetchall();df=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
         if not df.empty: existing = df.iloc[0]
 
     with st.form("konto_form"):
@@ -293,7 +293,7 @@ def konto_dialog(conn, u_id, edit_id=None):
 def kategorie_dialog(conn, u_id, edit_id=None):
     existing = None
     if edit_id:
-        _c=conn.cursor();_c.execute("SELECT * FROM kategorien WHERE id=%s AND user_id=%s",(edit_id,u_id));_r=_c.fetchall();df=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
+        _c=conn.cursor();_c.execute("SELECT * FROM kategorien WHERE id=%s AND user_id=%s",(int(edit_id),int(u_id)));_r=_c.fetchall();df=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
         if not df.empty: existing = df.iloc[0]
 
     with st.form("kat_form"):
