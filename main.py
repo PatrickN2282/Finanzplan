@@ -22,7 +22,8 @@ st.markdown("""
     --c-bg:         #ffffff; 
     --c-surface:    #FFFFFF; 
     --c-text:       #1E293B; 
-    --c-list-text:  #2D3748; 
+    --c-list-text:  #2D3748;
+    --c-expander-bg: #1b3a6b;
 
     --value-pos:    #2BB34F; 
     --value-neg:    #F44336; 
@@ -70,7 +71,7 @@ svg text {
 .stExpander {
     border: 1px solid var(--border);
     border-radius: var(--r);
-    background: var(--c-surface);
+    background: var(--c-expander-bg);
     margin-bottom: 1rem;
 }
 
