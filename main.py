@@ -56,8 +56,8 @@ st.markdown("""
         
         --c-surface2:  #333747;
         --c-dialog:    #252833;
-        --text-2:      #94A3B8;
-        --text-3:      #64748B;
+        --text-2:      #E2E8F0;
+        --text-3:      #CBD5E1;
         --border:      rgba(255, 255, 255, 0.05);
         --border-s:    rgba(255, 255, 255, 0.12);
         --shadow:      rgba(0, 0, 0, 0.2);
