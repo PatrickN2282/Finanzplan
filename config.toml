@@ -21,3 +21,9 @@ enableXsrfProtection = true
 
 [browser]
 gatherUsageStats = false
+
+[theme.dark]
+primaryColor = "#3A6FBF"
+backgroundColor = "#1E2132"
+secondaryBackgroundColor = "#262B40"
+textColor = "#DDE2F0"
