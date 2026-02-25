@@ -667,6 +667,82 @@ def entries_page(conn, u_id):
         st.markdown("<div style='height:0.8rem'></div>", unsafe_allow_html=True)
 
 
+def _render_konto_list(kd):
+    """Konten als Zeilenliste im Banking-Stil."""
+    if kd.empty:
+        return
+    st.markdown(
+        "<div style='background:var(--surface,#F4F5F9);"
+        "border:1px solid var(--border,rgba(27,58,107,0.11));"
+        "border-radius:12px;overflow:hidden;'>",
+        unsafe_allow_html=True)
+
+    for _, row in kd.iterrows():
+        typ        = str(row['typ'])
+        name       = str(row['name']).replace('<','&lt;').replace('>','&gt;')
+        iban       = str(row['iban']) if row['iban'] else ""
+        verknuepft = str(row['verbundenes_konto']) if row['verbundenes_konto'] else ""
+        icon       = "🏦" if typ == "Bankkonto" else "💳"
+        typ_color  = _MARINE if typ == "Bankkonto" else _ORANGE
+        typ_bg     = "rgba(27,58,107,0.1)" if typ == "Bankkonto" else "rgba(240,120,0,0.1)"
+        typ_border = "rgba(27,58,107,0.2)" if typ == "Bankkonto" else "rgba(240,120,0,0.22)"
+
+        sub_parts = []
+        if iban:
+            sub_parts.append("IBAN: " + iban[:22] + ("…" if len(iban) > 22 else ""))
+        if verknuepft:
+            sub_parts.append("&#8594; " + verknuepft)
+        sub_line = " &middot; ".join(sub_parts)
+
+        typ_badge = (
+            "<span style='background:" + typ_bg + ";color:" + typ_color + ";"
+            "border:1px solid " + typ_border + ";border-radius:8px;"
+            "padding:1px 7px;font-size:0.68rem;font-weight:600;margin-left:0.4rem;'>"
+            + typ + "</span>"
+        )
+        sub_html = (
+            "<div style='font-size:0.75rem;color:var(--text-3,#7A84A0);margin-top:1px;'>"
+            + sub_line + "</div>"
+        ) if sub_line else ""
+
+        html = (
+            "<div style='display:flex;align-items:center;padding:0.6rem 1rem;"
+            "border-bottom:1px solid var(--border,rgba(27,58,107,0.08));'>"
+            "<span style='font-size:1.1rem;width:1.8rem;flex-shrink:0;'>" + icon + "</span>"
+            "<div style='flex:1;min-width:0;margin:0 0.6rem;'>"
+            "<div style='font-weight:600;font-size:0.9rem;color:var(--text,#1A1F2E);'>"
+            + name + typ_badge + "</div>"
+            + sub_html + "</div></div>"
+        )
+        st.markdown(html, unsafe_allow_html=True)
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
+def _render_kategorie_list(ctd):
+    """Kategorien als Zeilenliste."""
+    if ctd.empty:
+        return
+    st.markdown(
+        "<div style='background:var(--surface,#F4F5F9);"
+        "border:1px solid var(--border,rgba(27,58,107,0.11));"
+        "border-radius:12px;overflow:hidden;'>",
+        unsafe_allow_html=True)
+
+    for _, row in ctd.iterrows():
+        name = str(row['name']).replace('<','&lt;').replace('>','&gt;')
+        html = (
+            "<div style='display:flex;align-items:center;padding:0.6rem 1rem;"
+            "border-bottom:1px solid var(--border,rgba(27,58,107,0.08));'>"
+            "<span style='font-size:1rem;width:1.8rem;flex-shrink:0;'>📂</span>"
+            "<div style='font-weight:500;font-size:0.9rem;color:var(--text,#1A1F2E);'>"
+            + name + "</div></div>"
+        )
+        st.markdown(html, unsafe_allow_html=True)
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
 def settings_page(conn, u_id):
     _page_header("Verwaltung", "Konten und Kategorien konfigurieren")
 
@@ -675,7 +751,11 @@ def settings_page(conn, u_id):
     # ── KONTEN ──
     with col_k:
         _section_label("Konten", color=_MARINE)
-        _c=conn.cursor();_c.execute("SELECT * FROM konten WHERE user_id=%s",(u_id,));_r=_c.fetchall();kd=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
+        _c = conn.cursor()
+        _c.execute("SELECT * FROM konten WHERE user_id=%s", (u_id,))
+        _r = _c.fetchall()
+        kd = pd.DataFrame(_r, columns=[d[0] for d in _c.description] if _c.description else [])
+        _c.close()
 
         if not kd.empty:
             kd['verbundenes_konto'] = kd.apply(
@@ -683,14 +763,14 @@ def settings_page(conn, u_id):
                           if pd.notna(r['parent_id']) and not kd[kd['id'] == r['parent_id']].empty
                           else '', axis=1
             )
-            sk = st.dataframe(
-                kd[['name','iban','typ','verbundenes_konto']].rename(columns={
-                    'name':'Name','iban':'IBAN','typ':'Typ','verbundenes_konto':'Verknüpft'}),
-                width='stretch', hide_index=True,
-                on_select="rerun", selection_mode="single-row"
-            )
-            if sk.selection.rows:
-                sel = kd.iloc[sk.selection.rows[0]]
+            _render_konto_list(kd)
+
+            names = [("🏦 " if r['typ'] == "Bankkonto" else "💳 ") + r['name']
+                     for _, r in kd.iterrows()]
+            chosen = st.selectbox("Konto auswählen", ["— Konto auswählen —"] + names,
+                                  index=0, key="pick_k", label_visibility="collapsed")
+            if chosen != "— Konto auswählen —":
+                sel = kd.iloc[names.index(chosen)]
                 _selection_bar("🏦", sel['name'], _MARINE)
                 c1, c2 = st.columns(2)
                 with c1:
@@ -698,15 +778,17 @@ def settings_page(conn, u_id):
                         konto_dialog(conn, u_id, sel['id'])
                 with c2:
                     if st.button("🗑️ Löschen", key="dk", width='stretch'):
-                        c = conn.cursor()
+                        cur = conn.cursor()
                         try:
-                            c.execute("DELETE FROM konten WHERE id=%s AND user_id=%s",
-                                      (int(sel['id']), u_id))
-                            conn.commit(); st.rerun()
+                            cur.execute("DELETE FROM konten WHERE id=%s AND user_id=%s",
+                                        (int(sel['id']), u_id))
+                            conn.commit()
+                            st.rerun()
                         except Exception as e:
-                            conn.rollback(); st.error(f"Fehler: {e}")
+                            conn.rollback()
+                            st.error("Fehler: " + str(e))
                         finally:
-                            c.close()
+                            cur.close()
         else:
             _empty_state("Noch keine Konten vorhanden.")
 
@@ -717,16 +799,20 @@ def settings_page(conn, u_id):
     # ── KATEGORIEN ──
     with col_cat:
         _section_label("Kategorien", color=_ORANGE)
-        _c=conn.cursor();_c.execute("SELECT * FROM kategorien WHERE user_id=%s ORDER BY name",(u_id,));_r=_c.fetchall();ctd=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
+        _c = conn.cursor()
+        _c.execute("SELECT * FROM kategorien WHERE user_id=%s ORDER BY name", (u_id,))
+        _r = _c.fetchall()
+        ctd = pd.DataFrame(_r, columns=[d[0] for d in _c.description] if _c.description else [])
+        _c.close()
 
         if not ctd.empty:
-            sct = st.dataframe(
-                ctd[['name']].rename(columns={'name':'Name'}),
-                width='stretch', hide_index=True,
-                on_select="rerun", selection_mode="single-row"
-            )
-            if sct.selection.rows:
-                sel_k = ctd.iloc[sct.selection.rows[0]]
+            _render_kategorie_list(ctd)
+
+            names_k = ["📂 " + r['name'] for _, r in ctd.iterrows()]
+            chosen_k = st.selectbox("Kategorie auswählen", ["— Kategorie auswählen —"] + names_k,
+                                    index=0, key="pick_kat", label_visibility="collapsed")
+            if chosen_k != "— Kategorie auswählen —":
+                sel_k = ctd.iloc[names_k.index(chosen_k)]
                 _selection_bar("📂", sel_k['name'], _ORANGE)
                 c1, c2 = st.columns(2)
                 with c1:
@@ -734,15 +820,17 @@ def settings_page(conn, u_id):
                         kategorie_dialog(conn, u_id, sel_k['id'])
                 with c2:
                     if st.button("🗑️ Löschen", key="dkat", width='stretch'):
-                        c = conn.cursor()
+                        cur = conn.cursor()
                         try:
-                            c.execute("DELETE FROM kategorien WHERE id=%s AND user_id=%s",
-                                      (int(sel_k['id']), u_id))
-                            conn.commit(); st.rerun()
+                            cur.execute("DELETE FROM kategorien WHERE id=%s AND user_id=%s",
+                                        (int(sel_k['id']), u_id))
+                            conn.commit()
+                            st.rerun()
                         except Exception as e:
-                            conn.rollback(); st.error(f"Fehler: {e}")
+                            conn.rollback()
+                            st.error("Fehler: " + str(e))
                         finally:
-                            c.close()
+                            cur.close()
         else:
             _empty_state("Noch keine Kategorien vorhanden.")
 
