@@ -25,42 +25,62 @@ st.markdown("""
     --c-text:     var(--text-color, #1E293B);
 
     /* Akzentfarben */
-    --value-pos:   #2BB34F; /* Neongrün (sanft) */
+    --value-pos:   #2BB34F; /* Neongrün */
     --value-neg:   #F44336; /* Rot */
     --value-warn:  #FF9800; /* Orange Akzent */
-    --value-neon:  #39D353; /* Knalliges Neongrün für Buttons */
+    --value-neon:  #39D353; /* Knall-Neon für Buttons */
 
-    /* Ableitungen */
+    /* Ableitungen Light Mode */
     --c-surface2:  color-mix(in srgb, var(--c-surface) 90%, var(--c-bg) 10%);
     --c-dialog:    #FFFFFF;
-    --border:      rgba(27, 58, 107, 0.08);
-    --border-s:    rgba(27, 58, 107, 0.15);
-    --text-2:      rgba(30, 41, 59, 0.8);
-    --text-3:      rgba(30, 41, 59, 0.5);
+    --border:      rgba(27, 58, 107, 0.1);
+    --border-s:    rgba(27, 58, 107, 0.2);
+    --text-2:      rgba(30, 41, 59, 0.85);
+    --text-3:      rgba(30, 41, 59, 0.6);
     --shadow:      rgba(27, 58, 107, 0.05);
     
     --r:   12px;
     --r-s:  8px;
 }
 
-/* ── DARK MODE OVERRIDE (Pastel Midnight) ── */
+/* ── DARK MODE OVERRIDE (Pastel Midnight Fix) ── */
 @media (prefers-color-scheme: dark) {
     :root {
-        --c-primary:  #7DA7D9; /* Pastell-Marine */
-        --c-bg:       #20222C; /* Weiches Anthrazit */
-        --c-surface:  #2A2D3A; /* Pastell-Slate */
-        --c-text:     #E2E8F0; /* Off-White */
+        --c-primary:  #7DA7D9; 
+        --c-bg:       #1A1C24; /* Tiefes Dunkelgrau */
+        --c-surface:  #252833; /* Etwas helleres Grau für Karten */
+        --c-text:     #F8FAFC; /* Maximale Helligkeit für Text */
         
-        --value-pos:   #81C784; /* Pastell-Grün */
-        --value-warn:  #FFB74D; /* Pastell-Orange */
+        --value-pos:   #81C784; 
+        --value-warn:  #FFB74D; 
         
-        --c-surface2:  #333747;
-        --c-dialog:    #252833;
-        --text-2:      #E2E8F0;
-        --text-3:      #CBD5E1;
-        --border:      rgba(255, 255, 255, 0.05);
-        --border-s:    rgba(255, 255, 255, 0.12);
-        --shadow:      rgba(0, 0, 0, 0.2);
+        --c-surface2:  #2D313F;
+        --c-dialog:    #1F222B;
+        
+        /* FIX: Diese Werte müssen im Dark Mode deutlich heller sein! */
+        --text-2:      #E2E8F0 !important; /* Für Namen wie 'Tiguan' */
+        --text-3:      #CBD5E1 !important; /* Für Details wie 'Hauptkonto' */
+        
+        --border:      rgba(255, 255, 255, 0.1);
+        --border-s:    rgba(255, 255, 255, 0.2);
+        --shadow:      rgba(0, 0, 0, 0.4);
+    }
+
+    /* GLOBALER FIX FÜR TEXT-SICHTBARKEIT IM DARK MODE */
+    [data-testid="stMarkdownContainer"] p, 
+    [data-testid="stMarkdownContainer"] span,
+    [data-testid="stMarkdownContainer"] small,
+    [data-testid="stText"] {
+        color: var(--text-2) !important;
+    }
+    
+    h1, h2, h3, h4, b, strong {
+        color: var(--c-text) !important;
+    }
+
+    /* Fix für die Timeline-Icons/Texte */
+    [data-testid="stVerticalBlock"] div {
+        color: var(--text-2);
     }
 }
 
@@ -70,32 +90,29 @@ html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
 [data-testid="stHeader"] { background: transparent !important; }
 .main .block-container { padding: 1.8rem 2.8rem 3rem !important; max-width: 1500px !important; }
 
-/* SIDEBAR - Marineblaues Original */
-[data-testid="stSidebar"] { 
-    background: #1B3A6B !important; 
-    border-right: none !important; 
-}
-[data-testid="stSidebar"] * { color: rgba(255,255,255,0.85) !important; }
+/* SIDEBAR */
+[data-testid="stSidebar"] { background: #1B3A6B !important; border-right: none !important; }
+[data-testid="stSidebar"] * { color: rgba(255,255,255,0.9) !important; }
 [data-testid="stSidebar"] .stButton > button {
-    background: rgba(255,255,255,0.06) !important;
-    border: 1px solid rgba(255,255,255,0.1) !important;
+    background: rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
     border-radius: var(--r-s) !important;
     color: white !important;
     transition: all 0.2s ease !important;
 }
 [data-testid="stSidebar"] .stButton > button:hover {
-    background: rgba(255,255,255,0.12) !important;
-    border-color: var(--value-warn) !important; /* Orange-Hover-Effekt */
+    background: rgba(255,255,255,0.15) !important;
+    border-color: var(--value-warn) !important;
 }
 [data-testid="stSidebar"] .stButton > button[kind="primary"] {
-    background: var(--value-neon) !important; /* Neongrün */
+    background: var(--value-neon) !important;
     border-color: var(--value-neon) !important;
     color: #0A1F0D !important;
     font-weight: 700 !important;
 }
 [data-testid="stSidebar"] .stRadio label:has(input:checked) {
-    background: rgba(255,255,255,0.1) !important;
-    border-left: 3px solid var(--value-warn) !important; /* Orange-Akzent */
+    background: rgba(255,255,255,0.12) !important;
+    border-left: 3px solid var(--value-warn) !important;
     color: white !important;
 }
 
@@ -106,7 +123,7 @@ html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
     border-radius: var(--r) !important;
     box-shadow: 0 4px 12px var(--shadow) !important;
 }
-[data-testid="stMetricLabel"] { color: var(--text-3) !important; font-size: 0.75rem !important; font-weight: 600 !important;}
+[data-testid="stMetricLabel"] { color: var(--text-3) !important; font-size: 0.75rem !important; text-transform: uppercase !important; }
 [data-testid="stMetricValue"] { color: var(--c-text) !important; font-weight: 800 !important; }
 
 /* TABELLEN */
@@ -116,19 +133,13 @@ html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
     background-color: var(--c-surface) !important;
 }
 [data-testid="stDataFrame"] * { color: var(--c-text) !important; }
-[data-testid="stDataFrame"] thead th { 
-    background: var(--c-surface2) !important; 
-    color: var(--text-2) !important;
-}
+[data-testid="stDataFrame"] thead th { background: var(--c-surface2) !important; }
 
 /* INPUTS */
 [data-testid="stTextInput"] input, [data-testid="stNumberInput"] input {
     background: var(--c-surface) !important;
     border: 1px solid var(--border-s) !important;
-    border-radius: var(--r-s) !important;
-}
-[data-testid="stTextInput"] input:focus {
-    border-color: var(--value-warn) !important; /* Orange Focus */
+    color: var(--c-text) !important;
 }
 
 /* MODAL */
@@ -137,13 +148,9 @@ html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
     border-radius: 16px !important;
 }
 
-/* TITEL & TEXT */
-h1, h2, h3 { color: var(--c-text) !important; letter-spacing: -0.02em !important; }
-p, span, label { color: var(--text-2) !important; }
-
 /* SCROLLBAR */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-thumb { background: var(--value-warn); border-radius: 10px; opacity: 0.5; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: var(--value-warn); border-radius: 10px; }
 </style>
 """, unsafe_allow_html=True)
 
