@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 # ═══════════════════════════════════════════════════════════════
-# PRECISION FINANCE – Fixed Light Design (v1.3.3)
+# PRECISION FINANCE – Fixed High Contrast Design (v1.3.3)
 # ═══════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
@@ -30,55 +30,55 @@ st.markdown("""
     --value-neon:   #39D353; 
 
     --c-surface2:   #F1F3F5;
-    --text-2:       rgba(30, 41, 59, 0.85);
+    --text-2:       #475569; /* Deutlich dunkleres Grau für Unterzeilen */
+    --text-3:       #64748B; /* Für kleine Labels */
     --border:       rgba(27, 58, 107, 0.08);
     --r: 12px; --r-s: 8px;
 }
 
-/* BASE */
-html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
+/* BASE STYLE */
+html, body, [class*="css"] { 
+    font-family: 'Outfit', sans-serif !important; 
+    color: var(--c-text) !important; 
+}
 [data-testid="stAppViewContainer"] { background: var(--c-bg) !important; }
 
-/* FIX FÜR EXPANDER (Grafiken & Statistiken) */
+/* FIX FÜR UNLESBARE ÜBERSCHRIFTEN & LABELS */
+/* Erzwingt dunkle Farbe für Metrik-Labels, Captions und kleine Texte */
+[data-testid="stMetricLabel"], 
+.stCaptionContainer, 
+small, 
+label, 
+[data-testid="stText"] {
+    color: var(--text-2) !important;
+    font-weight: 600 !important;
+    opacity: 1 !important;
+}
+
+/* FIX FÜR EXPANDER */
 .stExpander {
     border: 1px solid var(--border) !important;
     border-radius: var(--r) !important;
     background: var(--c-surface) !important;
-    overflow: hidden !important;
+    margin-bottom: 1rem !important;
 }
-
-/* Expander Header (Eingeklappt & Ausgeklappt) */
 .stExpander summary {
-    background-color: #2D3748 !important; /* Dunkles Marine-Grau */
+    background-color: #2D3748 !important;
     color: white !important;
-    padding: 0.5rem 1rem !important;
     border-radius: var(--r-s) !important;
-    transition: all 0.3s ease !important;
 }
+.stExpander svg { fill: white !important; }
 
-.stExpander summary:hover {
-    background-color: var(--c-primary) !important;
-}
-
-/* Icon (Pfeil) im Expander weiß färben */
-.stExpander svg {
-    fill: white !important;
-}
-
-/* Inhalt des Expanders */
-.stExpander div[data-testid="stExpanderDetails"] {
-    background-color: var(--c-surface) !important;
-    padding: 1.5rem !important;
-    color: var(--c-text) !important;
-}
-
-/* TEXT-LOGIK (Balance-Werte schützen) */
+/* TEXT-LOGIK IN LISTEN */
 div[data-testid="stVerticalBlock"] .stMarkdown p:not(:has(span[style*="color"])) {
     color: var(--c-list-text) !important;
 }
+div[data-testid="stVerticalBlock"] .stMarkdown span:not([style*="color"]) {
+    color: var(--text-2) !important;
+}
 
 /* SIDEBAR */
-[data-testid="stSidebar"] { background: var(--c-primary) !important; border-right: none !important; }
+[data-testid="stSidebar"] { background: var(--c-primary) !important; }
 [data-testid="stSidebar"] * { color: rgba(255,255,255,0.9) !important; }
 [data-testid="stSidebar"] .stButton > button[kind="primary"] {
     background: var(--value-neon) !important;
@@ -86,13 +86,16 @@ div[data-testid="stVerticalBlock"] .stMarkdown p:not(:has(span[style*="color"]))
     font-weight: 700 !important;
 }
 
-/* METRIKEN */
-[data-testid="metric-container"] { background: var(--c-surface) !important; border: 1px solid var(--border) !important; border-radius: var(--r) !important; }
+/* METRIKEN & TABELLEN */
+[data-testid="metric-container"] { 
+    background: var(--c-surface) !important; 
+    border: 1px solid var(--border) !important; 
+}
 [data-testid="stMetricValue"] { color: var(--c-text) !important; font-weight: 800 !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# --- ROUTING (unverändert) ---
+# --- ROUTING ---
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 
