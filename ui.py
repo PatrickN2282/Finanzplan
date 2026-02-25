@@ -8,23 +8,43 @@ import plotly.express as px
 from db import format_euro, get_conn
 from forecast import calculate_months
 
-# ── Palette (muss mit CSS :root übereinstimmen) ──────────────────
+# ══════════════════════════════════════════════════════════════════
+# FARB-PALETTE – muss mit den CSS :root-Variablen in main.py übereinstimmen
+# Diese Werte werden für Plotly-Charts und dynamische inline-HTML-Farben
+# verwendet, da Plotly keine CSS-Variablen lesen kann.
+# Wenn du eine Farbe in main.py änderst → hier ebenfalls anpassen!
+# ══════════════════════════════════════════════════════════════════
+
+# Hauptakzentfarbe (--c-primary)
 _MARINE  = "#1B3A6B"
+
+# CTA / Neon-Grün (--value-neon) – für Saldo-Linie im Chart
 _NEON    = "#39D353"
+
+# Akzent Orange (--value-warn) – für Abos, Turnus-Badges
 _ORANGE  = "#F07800"
+
+# Statusfarben (--value-neg / --value-pos)
 _RED     = "#D63B3B"
 _GREEN   = "#1C9E3A"
 
-# Plotly-Layout-Basis (neutral, funktioniert hell+dunkel)
+# Sekundäre Textfarbe für Chart-Achsen (--c-text-muted)
+_CHART_TEXT = "#4A5270"
+
+# Gitterlinien-Farbe in Charts
+_CHART_GRID = "rgba(0,0,0,0.06)"
+
+# ── Plotly-Layout-Basis ──────────────────────────────────────────
+# paper_bgcolor / plot_bgcolor transparent → App-Hintergrund scheint durch
 _PLOT_LAYOUT = dict(
     paper_bgcolor='rgba(0,0,0,0)',
     plot_bgcolor='rgba(0,0,0,0)',
-    font=dict(family='Outfit, sans-serif', color='#4A5270', size=12),
+    font=dict(family='Outfit, sans-serif', color=_CHART_TEXT, size=12),
     margin=dict(t=44, b=52, l=8, r=8),
     legend=dict(orientation="h", yanchor="bottom", y=-0.32,
                 font=dict(size=11)),
-    xaxis=dict(gridcolor='rgba(0,0,0,0.06)', tickfont=dict(size=11)),
-    yaxis=dict(gridcolor='rgba(0,0,0,0.06)', tickfont=dict(size=11), tickformat=',.0f'),
+    xaxis=dict(gridcolor=_CHART_GRID, tickfont=dict(size=11)),
+    yaxis=dict(gridcolor=_CHART_GRID, tickfont=dict(size=11), tickformat=',.0f'),
 )
 
 
@@ -36,84 +56,111 @@ def get_emoji(art, typ):
 
 
 def _row_style(row):
-    """Zeilen-Hintergrundfarbe: grün für Einnahmen, rot für Ausgaben (dezent)."""
+    """Zeilen-Hintergrundfarbe für st.dataframe:
+       Einnahmen → dezentes Grün  (--value-pos mit Transparenz)
+       Ausgaben  → dezentes Rot   (--value-neg mit Transparenz)
+       Nicht fällig → ausgegraut  (--c-text-muted)
+    """
     if row['Typ_Internal'] == 'Einnahme':
-        bg = 'background-color:rgba(28,158,58,0.06)'
+        bg = 'background-color:rgba(43,179,79,0.06)'   # --value-pos
     else:
-        bg = 'background-color:rgba(214,59,59,0.05)'
+        bg = 'background-color:rgba(244,67,54,0.05)'   # --value-neg
     txt = 'font-weight:500' if row['Ist_Fällig'] else 'color:#94A3B8;font-style:italic'
     return [f'{bg};{txt}'] * len(row)
 
 
 def _page_header(title: str, subtitle: str = ""):
-    """Einheitlicher Seitenkopf."""
-    sub_html = f'<p style="color:#8892AA;margin:0.15rem 0 0;font-size:0.85rem;font-weight:400;">{subtitle}</p>' if subtitle else ""
+    """Einheitlicher Seitenkopf mit Titel und optionalem Untertitel.
+       Farben: --c-heading, --c-subheading, --c-page-header-border
+    """
+    sub_html = (
+        f'<p style="color:var(--c-subheading);margin:0.15rem 0 0;'
+        f'font-size:var(--font-size-sm);font-weight:400;">{subtitle}</p>'
+    ) if subtitle else ""
     st.markdown(f"""
     <div style="margin-bottom:1.4rem;padding-bottom:1rem;
-                border-bottom:1px solid rgba(27,58,107,0.12);">
-        <h1 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:1.75rem;
-                   letter-spacing:-0.03em;margin:0;color:#1A1F2E;">{title}</h1>
+                border-bottom:1px solid var(--c-page-header-border);">
+        <h1 style="font-family:var(--font);font-weight:800;font-size:1.75rem;
+                   letter-spacing:-0.03em;margin:0;color:var(--c-heading);">{title}</h1>
         {sub_html}
     </div>""", unsafe_allow_html=True)
 
 
 def _section_label(text: str, color: str = _MARINE, count: int = None):
-    """Kleine Section-Überschrift mit Farbpunkt und optionalem Badge."""
+    """Kleine Section-Überschrift mit Farbpunkt und optionalem Zähl-Badge.
+       Farbpunkt-Farbe: wird per Parameter übergeben (Standard: --c-primary / _MARINE)
+       Badge: --c-badge-count-bg / --c-badge-count-text
+       Überschriften-Text: --c-heading
+    """
     badge = ""
     if count is not None:
         r, g, b = int(color[1:3],16), int(color[3:5],16), int(color[5:7],16)
-        badge = (f'<span style="background:rgba({r},{g},{b},0.12);color:{color};'
-                 f'border:1px solid rgba({r},{g},{b},0.25);border-radius:20px;'
-                 f'padding:1px 9px;font-size:0.72rem;font-weight:700;margin-left:0.5rem;">'
-                 f'{count}</span>')
+        badge = (
+            f'<span style="background:var(--c-badge-count-bg);'
+            f'color:var(--c-badge-count-text);'
+            f'border:1px solid rgba({r},{g},{b},0.25);border-radius:20px;'
+            f'padding:1px 9px;font-size:var(--font-size-xs);font-weight:700;margin-left:0.5rem;">'
+            f'{count}</span>'
+        )
     st.markdown(f"""
     <div style="display:flex;align-items:center;gap:0.5rem;margin:1.1rem 0 0.55rem;">
         <span style="display:inline-block;width:8px;height:8px;border-radius:50%;
                      background:{color};flex-shrink:0;"></span>
-        <span style="font-family:'Outfit',sans-serif;font-weight:700;font-size:0.9rem;
-                     color:#1A1F2E;letter-spacing:-0.005em;">{text}</span>
+        <span style="font-family:var(--font);font-weight:700;font-size:var(--font-size-base);
+                     color:var(--c-heading);letter-spacing:-0.005em;">{text}</span>
         {badge}
     </div>""", unsafe_allow_html=True)
 
 
 def _value_pill(label: str, value: float, positive_good: bool = True):
-    """Kleines Wert-Pill: grün wenn gut, rot wenn schlecht."""
+    """Inline Wert-Pill (z.B. auf dem Dashboard).
+       Positiv → --c-pill-pos-bg / --value-pos
+       Negativ → --c-pill-neg-bg / --value-neg
+    """
     is_good = (value >= 0) if positive_good else (value <= 0)
-    color   = _GREEN if is_good else _RED
-    bg      = "rgba(28,158,58,0.1)" if is_good else "rgba(214,59,59,0.1)"
-    border  = "rgba(28,158,58,0.25)" if is_good else "rgba(214,59,59,0.2)"
-    sign    = "+" if value > 0 else ""
+    color  = _GREEN if is_good else _RED
+    bg     = "var(--c-pill-pos-bg)"   if is_good else "var(--c-pill-neg-bg)"
+    border = "var(--c-pill-pos-border)" if is_good else "var(--c-pill-neg-border)"
+    sign   = "+" if value > 0 else ""
     st.markdown(f"""
     <div style="display:inline-flex;align-items:center;gap:0.4rem;
                 background:{bg};border:1px solid {border};border-radius:20px;
-                padding:0.3rem 0.75rem;font-size:0.82rem;font-weight:600;color:{color};
-                font-family:'Outfit',sans-serif;">
+                padding:0.3rem 0.75rem;font-size:var(--font-size-sm);
+                font-weight:600;color:{color};font-family:var(--font);">
         {label}: {sign}{format_euro(value)}
     </div>""", unsafe_allow_html=True)
 
 
 def _empty_state(msg="Noch keine Einträge vorhanden."):
+    """Platzhalter-Box wenn keine Daten vorhanden.
+       Farben: --c-empty-bg, --c-empty-border, --c-empty-text
+    """
     st.markdown(f"""
     <div style="text-align:center;padding:2.5rem 1rem;
-                background:rgba(27,58,107,0.04);
-                border:1px dashed rgba(27,58,107,0.18);
-                border-radius:12px;margin:0.5rem 0 1rem;">
+                background:var(--c-empty-bg);
+                border:1px dashed var(--c-empty-border);
+                border-radius:var(--r);margin:0.5rem 0 1rem;">
         <div style="font-size:2rem;margin-bottom:0.6rem;">📭</div>
-        <div style="font-family:'Outfit',sans-serif;font-weight:600;
-                    font-size:0.95rem;color:#4A5270;">{msg}</div>
+        <div style="font-family:var(--font);font-weight:600;
+                    font-size:var(--font-size-base);color:var(--c-empty-text);">{msg}</div>
     </div>""", unsafe_allow_html=True)
 
 
 def _selection_bar(emoji: str, name: str, color: str = _MARINE):
+    """Balken der anzeigt, welches Element aktuell ausgewählt ist.
+       Hintergrund / Rahmen: dynamisch aus übergebenem color-Parameter berechnet
+       "Ausgewählt"-Label: --c-selection-text
+    """
     r, g, b = int(color[1:3],16), int(color[3:5],16), int(color[5:7],16)
     st.markdown(f"""
     <div style="display:flex;align-items:center;gap:0.6rem;
                 background:rgba({r},{g},{b},0.06);
                 border:1px solid rgba({r},{g},{b},0.18);
-                border-radius:8px;padding:0.5rem 0.9rem;margin:0.35rem 0;
-                font-size:0.87rem;color:rgba({r},{g},{b},0.8);">
+                border-radius:var(--r-s);padding:0.5rem 0.9rem;margin:0.35rem 0;
+                font-size:var(--font-size-sm);color:rgba({r},{g},{b},0.8);">
         {emoji} <strong style="color:{color};">{name}</strong>
-        <span style="margin-left:auto;font-size:0.75rem;color:#8892AA;font-weight:500;">
+        <span style="margin-left:auto;font-size:var(--font-size-xs);
+                     color:var(--c-selection-text);font-weight:500;">
             Ausgewählt
         </span>
     </div>""", unsafe_allow_html=True)
@@ -391,10 +438,10 @@ def dashboard_page(conn, u_id):
                 fig.update_layout(
                     **_PLOT_LAYOUT,
                     title=dict(text="Ausgaben nach Kategorie",
-                               font=dict(family='Outfit', size=13, color='#1A1F2E'), x=0.02),
+                               font=dict(family='Outfit', size=13, color=_CHART_TEXT), x=0.02),
                     annotations=[dict(text=f"<b>{format_euro(total_aus)}</b>",
                                       x=0.5, y=0.5, font_size=12, showarrow=False,
-                                      font=dict(color='#4A5270', family='Outfit'))]
+                                      font=dict(color=_CHART_TEXT, family='Outfit'))]
                 )
                 st.plotly_chart(fig, width='stretch')
 
@@ -425,7 +472,7 @@ def dashboard_page(conn, u_id):
             fig2.update_layout(
                 **_PLOT_LAYOUT,
                 title=dict(text=f"Cashflow – {zeitraum} Monate",
-                           font=dict(family='Outfit', size=13, color='#1A1F2E'), x=0.02),
+                           font=dict(family='Outfit', size=13, color=_CHART_TEXT), x=0.02),
                 barmode='group', bargap=0.22, bargroupgap=0.06,
             )
             st.plotly_chart(fig2, width='stretch')
@@ -447,32 +494,32 @@ def dashboard_page(conn, u_id):
         # Monatstrenner
         st.markdown(f"""
         <div style="display:flex;align-items:center;gap:0.8rem;margin:{'1.4rem' if i>0 else '0.4rem'} 0 0.6rem;">
-            <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:0.95rem;
-                        color:var(--text,#1A1F2E);letter-spacing:-0.01em;white-space:nowrap;">
+            <div style="font-family:var(--font);font-weight:700;font-size:var(--font-size-base);
+                        color:var(--c-heading);letter-spacing:-0.01em;white-space:nowrap;">
                 📅 {monat}
             </div>
-            <div style="flex:1;height:1px;background:var(--border,rgba(27,58,107,0.11));"></div>
+            <div style="flex:1;height:1px;background:var(--c-list-border);"></div>
             <div style="display:flex;gap:0.5rem;align-items:center;flex-shrink:0;">
-                <span style="font-size:0.78rem;color:{_GREEN};font-weight:600;">
+                <span style="font-size:var(--font-size-sm);color:{_GREEN};font-weight:600;">
                     +{format_euro(ein_s)}
                 </span>
-                <span style="color:var(--text-3,#7A84A0);font-size:0.75rem;">·</span>
-                <span style="font-size:0.78rem;color:{_RED};font-weight:600;">
+                <span style="color:var(--c-list-text-sub);font-size:var(--font-size-xs);">·</span>
+                <span style="font-size:var(--font-size-sm);color:{_RED};font-weight:600;">
                     -{format_euro(aus_s)}
                 </span>
-                <span style="color:var(--text-3,#7A84A0);font-size:0.75rem;">·</span>
-                <span style="font-size:0.82rem;color:{s_color};font-weight:700;">
+                <span style="color:var(--c-list-text-sub);font-size:var(--font-size-xs);">·</span>
+                <span style="font-size:var(--font-size-sm);color:{s_color};font-weight:700;">
                     {s_sign}{format_euro(saldo_m)}
                 </span>
             </div>
         </div>
         """, unsafe_allow_html=True)
 
-        # Einträge – einzelne st.markdown pro Zeile (kein JS-Event, kein f-string-Konflikt)
+        # Einträge – einzelne st.markdown pro Zeile
         st.markdown(
-            "<div style='background:var(--surface,#F4F5F9);"
-            "border:1px solid var(--border,rgba(27,58,107,0.11));"
-            "border-radius:12px;overflow:hidden;margin-bottom:0.3rem;'>",
+            "<div style='background:var(--c-list-bg);"
+            "border:1px solid var(--c-list-border);"
+            "border-radius:var(--r);overflow:hidden;margin-bottom:0.3rem;'>",
             unsafe_allow_html=True)
 
         for _, row in m_sub.iterrows():
@@ -491,34 +538,34 @@ def dashboard_page(conn, u_id):
             t_badge = ""
             if row['Turnus'] != "Monatlich":
                 t_badge = (
-                    "<span style='background:rgba(240,120,0,0.12);color:#F07800;"
-                    "border:1px solid rgba(240,120,0,0.25);border-radius:10px;"
-                    "padding:1px 7px;font-size:0.7rem;font-weight:600;"
+                    "<span style='background:var(--c-badge-turnus-bg);color:var(--c-badge-turnus-text);"
+                    "border:1px solid var(--c-badge-turnus-border);border-radius:10px;"
+                    "padding:1px 7px;font-size:var(--font-size-xs);font-weight:600;"
                     "margin-left:0.4rem;'>" + str(row['Turnus']) + "</span>"
                 )
             not_due = "" if faellig else (
-                "<span style='font-size:0.7rem;color:var(--text-3,#7A84A0);"
+                "<span style='font-size:var(--font-size-xs);color:var(--c-list-text-sub);"
                 "margin-left:0.4rem;font-style:italic;'>anteilig</span>"
             )
 
             row_html = (
                 "<div style='display:flex;align-items:center;padding:0.5rem 0.9rem;"
-                "border-bottom:1px solid var(--border,rgba(27,58,107,0.08));"
+                "border-bottom:1px solid var(--c-list-row-divider);"
                 "opacity:" + opacity + ";'>"
                 "<span style='font-size:1rem;width:1.6rem;flex-shrink:0;'>"
                 + icon + "</span>"
                 "<div style='flex:1;min-width:0;margin:0 0.6rem;'>"
-                "<div style='font-weight:600;font-size:0.88rem;"
-                "color:var(--text,#1A1F2E);"
+                "<div style='font-weight:600;font-size:var(--font-size-base);"
+                "color:var(--c-list-text-primary);"
                 "white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>"
                 + zweck + t_badge + not_due + "</div>"
-                "<div style='font-size:0.75rem;color:var(--text-3,#7A84A0);margin-top:1px;'>"
+                "<div style='font-size:var(--font-size-xs);color:var(--c-list-text-sub);margin-top:1px;'>"
                 + konto + " &middot; " + kat + "</div>"
                 "</div>"
                 "<div style='text-align:right;flex-shrink:0;'>"
-                "<div style='font-weight:700;font-size:0.92rem;color:" + color_b + ";'>"
+                "<div style='font-weight:700;font-size:var(--font-size-base);color:" + color_b + ";'>"
                 + sign + format_euro(betrag) + "</div>"
-                "<div style='font-size:0.7rem;color:var(--text-3,#7A84A0);'>"
+                "<div style='font-size:var(--font-size-xs);color:var(--c-list-text-sub);'>"
                 + format_euro(anteilig) + "/M</div>"
                 "</div></div>"
             )
@@ -527,33 +574,39 @@ def dashboard_page(conn, u_id):
         st.markdown("</div>", unsafe_allow_html=True)
 
 def _entry_row_list(conn, u_id, subset, key, color):
-    """Option 2: Banking-Style Zeilenliste."""
+    """Banking-Style Zeilenliste für Einträge.
+       Container: --c-list-bg, --c-list-border
+       Zeilen-Trennlinie: --c-list-row-divider
+       Primärtext: --c-list-text-primary
+       Subtext: --c-list-text-sub
+       Turnus-Badge: --c-badge-turnus-*
+    """
     if subset.empty:
         st.markdown(
-            "<p style='color:var(--text-3,#7A84A0);font-size:0.84rem;"
+            "<p style='color:var(--c-list-text-sub);font-size:var(--font-size-sm);"
             "margin:0.2rem 0 0.7rem 1rem;'>Keine aktiven Einträge.</p>",
             unsafe_allow_html=True)
         return
 
-    # Container-Start
+    # Listen-Container
     st.markdown(
-        "<div style='background:var(--surface,#F4F5F9);"
-        "border:1px solid var(--border,rgba(27,58,107,0.11));"
-        "border-radius:12px;overflow:hidden;margin-bottom:0.2rem;'>",
+        "<div style='background:var(--c-list-bg);"
+        "border:1px solid var(--c-list-border);"
+        "border-radius:var(--r);overflow:hidden;margin-bottom:0.2rem;'>",
         unsafe_allow_html=True)
 
     for _, row in subset.iterrows():
         is_ein   = row['typ'] == 'Einnahme'
         col_b    = _GREEN if is_ein else _RED
-        sign     = "+" if is_ein else chr(8722)   # minus sign
+        sign     = "+" if is_ein else chr(8722)
         art_icon = get_emoji(row['art'], row['typ'])
 
         t_badge = ""
         if row['intervall'] != "Monatlich":
             t_badge = (
-                "<span style='background:rgba(240,120,0,0.1);color:#F07800;"
-                "border:1px solid rgba(240,120,0,0.22);border-radius:8px;"
-                "padding:1px 6px;font-size:0.68rem;font-weight:600;"
+                "<span style='background:var(--c-badge-turnus-bg);color:var(--c-badge-turnus-text);"
+                "border:1px solid var(--c-badge-turnus-border);border-radius:var(--r-s);"
+                "padding:1px 6px;font-size:var(--font-size-xs);font-weight:600;"
                 "margin-left:0.35rem;'>" + row['intervall'] + "</span>"
             )
 
@@ -577,24 +630,24 @@ def _entry_row_list(conn, u_id, subset, key, color):
 
         html = (
             "<div style='display:flex;align-items:center;padding:0.65rem 1rem;"
-            "border-bottom:1px solid var(--border,rgba(27,58,107,0.08));'>"
+            "border-bottom:1px solid var(--c-list-row-divider);'>"
 
             "<span style='font-size:1.1rem;width:1.8rem;flex-shrink:0;'>"
             + art_icon + "</span>"
 
             "<div style='flex:1;min-width:0;margin:0 0.75rem;'>"
-            "<div style='font-weight:600;font-size:0.9rem;"
-            "color:var(--text,#1A1F2E);"
+            "<div style='font-weight:600;font-size:var(--font-size-base);"
+            "color:var(--c-list-text-primary);"
             "white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>"
             + zweck_esc + t_badge + "</div>"
-            "<div style='font-size:0.75rem;color:var(--text-3,#7A84A0);margin-top:1px;'>"
+            "<div style='font-size:var(--font-size-xs);color:var(--c-list-text-sub);margin-top:1px;'>"
             + konto_esc + " &middot; " + kat_esc + " &middot; " + d_str + end_str
             + "</div></div>"
 
             "<div style='text-align:right;flex-shrink:0;'>"
-            "<div style='font-weight:700;font-size:0.95rem;color:" + col_b + ";'>"
+            "<div style='font-weight:700;font-size:var(--font-size-base);color:" + col_b + ";'>"
             + sign + " " + betrag_fmt + "</div>"
-            "<div style='font-size:0.7rem;color:var(--text-3,#7A84A0);'>"
+            "<div style='font-size:var(--font-size-xs);color:var(--c-list-text-sub);'>"
             + intervall + "</div></div></div>"
         )
         st.markdown(html, unsafe_allow_html=True)
@@ -680,13 +733,18 @@ def entries_page(conn, u_id):
 
 
 def _render_konto_list(kd):
-    """Konten als Zeilenliste im Banking-Stil."""
+    """Konten als Zeilenliste im Banking-Stil.
+       Container: --c-list-bg, --c-list-border
+       Zeilen-Trennlinie: --c-list-row-divider
+       Primärtext: --c-list-text-primary   Subtext: --c-list-text-sub
+       Konto-Badge: --c-badge-konto-*      Zahldienst-Badge: --c-badge-turnus-*
+    """
     if kd.empty:
         return
     st.markdown(
-        "<div style='background:var(--surface,#F4F5F9);"
-        "border:1px solid var(--border,rgba(27,58,107,0.11));"
-        "border-radius:12px;overflow:hidden;'>",
+        "<div style='background:var(--c-list-bg);"
+        "border:1px solid var(--c-list-border);"
+        "border-radius:var(--r);overflow:hidden;'>",
         unsafe_allow_html=True)
 
     for _, row in kd.iterrows():
@@ -695,9 +753,10 @@ def _render_konto_list(kd):
         iban       = str(row['iban']) if row['iban'] else ""
         verknuepft = str(row['verbundenes_konto']) if row['verbundenes_konto'] else ""
         icon       = "🏦" if typ == "Bankkonto" else "💳"
-        typ_color  = _MARINE if typ == "Bankkonto" else _ORANGE
-        typ_bg     = "rgba(27,58,107,0.1)" if typ == "Bankkonto" else "rgba(240,120,0,0.1)"
-        typ_border = "rgba(27,58,107,0.2)" if typ == "Bankkonto" else "rgba(240,120,0,0.22)"
+        # Bankkonto → Marine-Badge, Zahldienstleister → Orange-Badge
+        typ_bg     = "var(--c-badge-konto-bg)"     if typ == "Bankkonto" else "var(--c-badge-turnus-bg)"
+        typ_color  = "var(--c-badge-konto-text)"   if typ == "Bankkonto" else "var(--c-badge-turnus-text)"
+        typ_border = "var(--c-badge-konto-border)" if typ == "Bankkonto" else "var(--c-badge-turnus-border)"
 
         sub_parts = []
         if iban:
@@ -708,21 +767,21 @@ def _render_konto_list(kd):
 
         typ_badge = (
             "<span style='background:" + typ_bg + ";color:" + typ_color + ";"
-            "border:1px solid " + typ_border + ";border-radius:8px;"
-            "padding:1px 7px;font-size:0.68rem;font-weight:600;margin-left:0.4rem;'>"
+            "border:1px solid " + typ_border + ";border-radius:var(--r-s);"
+            "padding:1px 7px;font-size:var(--font-size-xs);font-weight:600;margin-left:0.4rem;'>"
             + typ + "</span>"
         )
         sub_html = (
-            "<div style='font-size:0.75rem;color:var(--text-3,#7A84A0);margin-top:1px;'>"
+            "<div style='font-size:var(--font-size-xs);color:var(--c-list-text-sub);margin-top:1px;'>"
             + sub_line + "</div>"
         ) if sub_line else ""
 
         html = (
             "<div style='display:flex;align-items:center;padding:0.6rem 1rem;"
-            "border-bottom:1px solid var(--border,rgba(27,58,107,0.08));'>"
+            "border-bottom:1px solid var(--c-list-row-divider);'>"
             "<span style='font-size:1.1rem;width:1.8rem;flex-shrink:0;'>" + icon + "</span>"
             "<div style='flex:1;min-width:0;margin:0 0.6rem;'>"
-            "<div style='font-weight:600;font-size:0.9rem;color:var(--text,#1A1F2E);'>"
+            "<div style='font-weight:600;font-size:var(--font-size-base);color:var(--c-list-text-primary);'>"
             + name + typ_badge + "</div>"
             + sub_html + "</div></div>"
         )
@@ -732,22 +791,26 @@ def _render_konto_list(kd):
 
 
 def _render_kategorie_list(ctd):
-    """Kategorien als Zeilenliste."""
+    """Kategorien als Zeilenliste.
+       Container: --c-list-bg, --c-list-border
+       Zeilen-Trennlinie: --c-list-row-divider
+       Text: --c-list-text-primary
+    """
     if ctd.empty:
         return
     st.markdown(
-        "<div style='background:var(--surface,#F4F5F9);"
-        "border:1px solid var(--border,rgba(27,58,107,0.11));"
-        "border-radius:12px;overflow:hidden;'>",
+        "<div style='background:var(--c-list-bg);"
+        "border:1px solid var(--c-list-border);"
+        "border-radius:var(--r);overflow:hidden;'>",
         unsafe_allow_html=True)
 
     for _, row in ctd.iterrows():
         name = str(row['name']).replace('<','&lt;').replace('>','&gt;')
         html = (
             "<div style='display:flex;align-items:center;padding:0.6rem 1rem;"
-            "border-bottom:1px solid var(--border,rgba(27,58,107,0.08));'>"
+            "border-bottom:1px solid var(--c-list-row-divider);'>"
             "<span style='font-size:1rem;width:1.8rem;flex-shrink:0;'>📂</span>"
-            "<div style='font-weight:500;font-size:0.9rem;color:var(--text,#1A1F2E);'>"
+            "<div style='font-weight:500;font-size:var(--font-size-base);color:var(--c-list-text-primary);'>"
             + name + "</div></div>"
         )
         st.markdown(html, unsafe_allow_html=True)
