@@ -80,6 +80,29 @@ st.markdown("""
     --r-s:  8px;
 }
 
+/* ── DARK MODE ────────────────────────────────────────────────────
+ * Überschreibt nur die 4 Basis-Variablen.
+ * Dark-Mode-Farben ebenfalls nur hier ändern.
+ *
+ *   --dm-primary:  Akzentfarbe im Dark-Mode  (z.B. aufgehelltes Marine)
+ *   --dm-bg:       App-Hintergrund           (z.B. dunkles Schieferblau)
+ *   --dm-surface:  Karten / Eingaben         (z.B. mittleres Blaugrau)
+ *   --dm-text:     Haupttext                 (z.B. weiches Eisblau)
+ * ─────────────────────────────────────────────────────────────── */
+:root {
+    --dm-primary:  #3A6FBF;
+    --dm-bg:       #1E2132;
+    --dm-surface:  #262B40;
+    --dm-text:     #DDE2F0;
+}
+
+[data-theme="dark"] {
+    --c-primary:  var(--dm-primary);
+    --c-bg:       var(--dm-bg);
+    --c-surface:  var(--dm-surface);
+    --c-text:     var(--dm-text);
+}
+
 /* ── BASE ─────────────────────────────────── */
 html, body, [class*="css"] {
     font-family: 'Outfit', sans-serif !important;
@@ -498,8 +521,21 @@ hr {
 # --- SESSION STATE ---
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
+if 'dark_mode' not in st.session_state:
+    st.session_state.dark_mode = False
+
+# --- THEME INJECTOR ---
+def _inject_theme():
+    val = "dark" if st.session_state.dark_mode else "light"
+    st.markdown(f"""<script>
+        (function() {{
+            var el = window.parent.document.querySelector('[data-testid="stAppViewContainer"]');
+            if (el) el.setAttribute('data-theme', '{val}');
+        }})();
+    </script>""", unsafe_allow_html=True)
 
 # --- ROUTING ---
+_inject_theme()
 if not st.session_state.logged_in:
     auth_page()
 else:
@@ -545,6 +581,16 @@ else:
             eintrag_dialog(conn, u_id)
 
         st.markdown("<div style='height:0.4rem'></div>", unsafe_allow_html=True)
+
+        # Dark/Light Toggle
+        dm = st.session_state.dark_mode
+        toggle_icon = "☀️" if dm else "🌙"
+        toggle_label = f"{toggle_icon}  {'Hell-Modus' if dm else 'Dunkel-Modus'}"
+        if st.button(toggle_label, width='stretch'):
+            st.session_state.dark_mode = not st.session_state.dark_mode
+            st.rerun()
+
+        st.markdown("<div style='height:0.2rem'></div>", unsafe_allow_html=True)
 
         if st.button("↩  Abmelden", width='stretch'):
             for key in ['logged_in', 'user_id', 'username', 'vorname', 'conn']:
