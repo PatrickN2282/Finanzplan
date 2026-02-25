@@ -4,7 +4,7 @@
 # unabhängig vom OS- oder Browser-Darkmode
 base = "light"
 primaryColor = "#1B3A6B"             # Deep Marine
-backgroundColor = "#F8F9FA"          # Sanftes Hellgrau/Off-White
+backgroundColor = "#868686" #"#F8F9FA"          # Sanftes Hellgrau/Off-White
 secondaryBackgroundColor = "#FFFFFF"  # Karten/Inputs
 textColor = "#1E293B"                # Dunkles Schieferblau
 font = "sans serif"
