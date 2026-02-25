@@ -127,6 +127,222 @@ svg text {
 .neg { color: var(--value-neg) !important; font-weight:600; }
 .warn { color: var(--value-warn) !important; font-weight:600; }
 
+/* ─────────────────────────────────────────────
+   MODAL / DIALOG – DARKMODE-PROOF
+   Erzwingt Light-Theme unabhängig vom OS
+───────────────────────────────────────────── */
+
+/* Backdrop */
+[data-testid="stModal"] > div:first-child {
+    background: rgba(10, 20, 50, 0.55) !important;
+    backdrop-filter: blur(4px);
+}
+
+/* Dialog-Container */
+[data-testid="stModal"] [role="dialog"],
+div[class*="dialog"],
+div[class*="Modal"] {
+    background: #FFFFFF !important;
+    color: #1E293B !important;
+    border: 1px solid rgba(27,58,107,0.12) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18) !important;
+}
+
+/* Alle Texte im Dialog */
+[data-testid="stModal"] *,
+[data-testid="stModal"] p,
+[data-testid="stModal"] label,
+[data-testid="stModal"] span:not(.pos):not(.neg):not(.warn),
+[data-testid="stModal"] div {
+    color: #1E293B !important;
+}
+
+/* Dialog-Titel */
+[data-testid="stModal"] h1,
+[data-testid="stModal"] h2,
+[data-testid="stModal"] h3 {
+    color: #1A1F2E !important;
+    font-weight: 700 !important;
+}
+
+/* ─────────────────────────────────────────────
+   INPUTS & TEXTFELDER (überall, nicht nur Dialog)
+───────────────────────────────────────────── */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+textarea,
+[data-testid="stTextInput"] input,
+[data-testid="stNumberInput"] input,
+[data-testid="stDateInput"] input {
+    background: #F8F9FA !important;
+    color: #1E293B !important;
+    border: 1px solid rgba(27,58,107,0.2) !important;
+    border-radius: 8px !important;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+[data-testid="stTextInput"] input:focus,
+[data-testid="stNumberInput"] input:focus {
+    border-color: #1B3A6B !important;
+    box-shadow: 0 0 0 3px rgba(27,58,107,0.12) !important;
+    background: #FFFFFF !important;
+}
+
+/* ─────────────────────────────────────────────
+   DROPDOWNS / SELECTBOX
+───────────────────────────────────────────── */
+[data-testid="stSelectbox"] > div > div,
+[data-testid="stSelectbox"] [data-baseweb="select"] > div {
+    background: #F8F9FA !important;
+    color: #1E293B !important;
+    border: 1px solid rgba(27,58,107,0.2) !important;
+    border-radius: 8px !important;
+}
+
+[data-testid="stSelectbox"] [data-baseweb="select"] > div:focus-within {
+    border-color: #1B3A6B !important;
+    box-shadow: 0 0 0 3px rgba(27,58,107,0.12) !important;
+}
+
+/* Dropdown-Optionsliste */
+[data-baseweb="popover"],
+[data-baseweb="menu"],
+ul[role="listbox"],
+[role="listbox"] {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(27,58,107,0.15) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12) !important;
+}
+
+/* Einzelne Dropdown-Option */
+li[role="option"],
+[data-baseweb="menu"] li,
+[role="option"] {
+    background: #FFFFFF !important;
+    color: #1E293B !important;
+}
+
+/* Hover-State der Option */
+li[role="option"]:hover,
+[role="option"]:hover,
+[aria-selected="true"][role="option"] {
+    background: rgba(27,58,107,0.08) !important;
+    color: #1B3A6B !important;
+}
+
+/* Ausgewählte Option */
+[aria-selected="true"] {
+    background: rgba(27,58,107,0.1) !important;
+    font-weight: 600 !important;
+}
+
+/* Selectbox-Text-Farbe */
+[data-testid="stSelectbox"] span,
+[data-testid="stSelectbox"] div[class*="ValueContainer"] span {
+    color: #1E293B !important;
+}
+
+/* ─────────────────────────────────────────────
+   SEGMENTED CONTROL (Art-Auswahl im Dialog)
+───────────────────────────────────────────── */
+[data-testid="stSegmentedControl"] {
+    background: rgba(27,58,107,0.06) !important;
+    border-radius: 10px !important;
+    padding: 3px !important;
+}
+
+[data-testid="stSegmentedControl"] button {
+    background: transparent !important;
+    color: #4A5270 !important;
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+    border: none !important;
+}
+
+[data-testid="stSegmentedControl"] button[aria-checked="true"],
+[data-testid="stSegmentedControl"] button[data-active="true"] {
+    background: #1B3A6B !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 8px rgba(27,58,107,0.25) !important;
+}
+
+/* ─────────────────────────────────────────────
+   DATE INPUT
+───────────────────────────────────────────── */
+[data-testid="stDateInput"] > div {
+    background: #F8F9FA !important;
+    border: 1px solid rgba(27,58,107,0.2) !important;
+    border-radius: 8px !important;
+}
+
+/* ─────────────────────────────────────────────
+   FORM / BUTTON
+───────────────────────────────────────────── */
+[data-testid="stModal"] [data-testid="stForm"] {
+    background: transparent !important;
+}
+
+/* Primär-Button im Dialog */
+[data-testid="stModal"] .stButton > button[kind="primary"],
+[data-testid="stModal"] button[data-testid="stFormSubmitButton"][kind="primary"] {
+    background: #1B3A6B !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+}
+
+[data-testid="stModal"] .stButton > button[kind="primary"]:hover {
+    background: #142d54 !important;
+    box-shadow: 0 4px 14px rgba(27,58,107,0.35) !important;
+}
+
+/* Sekundär-Button (Abbrechen) */
+[data-testid="stModal"] .stButton > button:not([kind="primary"]) {
+    background: #F1F3F7 !important;
+    color: #4A5270 !important;
+    border: 1px solid rgba(27,58,107,0.15) !important;
+    border-radius: 8px !important;
+}
+
+/* ─────────────────────────────────────────────
+   INFO / WARNING BOXES IM DIALOG
+───────────────────────────────────────────── */
+[data-testid="stModal"] [data-testid="stAlert"],
+[data-testid="stModal"] .stAlert {
+    border-radius: 8px !important;
+}
+
+[data-testid="stModal"] [data-testid="stAlert"][data-type="info"] {
+    background: rgba(27,58,107,0.07) !important;
+    border-left: 3px solid #1B3A6B !important;
+    color: #1A1F2E !important;
+}
+
+/* ─────────────────────────────────────────────
+   DIVIDER IM DIALOG
+───────────────────────────────────────────── */
+[data-testid="stModal"] hr {
+    border-color: rgba(27,58,107,0.1) !important;
+}
+
+/* ─────────────────────────────────────────────
+   LABEL-TEXTE (überall, nicht nur Dialog)
+───────────────────────────────────────────── */
+[data-testid="stWidgetLabel"] p,
+[data-testid="stWidgetLabel"] span {
+    color: #4A5270 !important;
+    font-weight: 500 !important;
+    font-size: 0.85rem !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
