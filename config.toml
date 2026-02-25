@@ -1,9 +1,12 @@
 [theme]
 # PRECISION LIGHT - Grey, Orange & Marine
-primaryColor = "#1B3A6B"            # Deep Marine
-backgroundColor = "#F8F9FA"         # Sanftes Hellgrau/Off-White
-secondaryBackgroundColor = "#FFFFFF" # Karten/Inputs
-textColor = "#1E293B"               # Dunkles Schieferblau
+# base = "light" erzwingt immer das helle Theme,
+# unabhängig vom OS- oder Browser-Darkmode
+base = "light"
+primaryColor = "#1B3A6B"             # Deep Marine
+backgroundColor = "#F8F9FA"          # Sanftes Hellgrau/Off-White
+secondaryBackgroundColor = "#FFFFFF"  # Karten/Inputs
+textColor = "#1E293B"                # Dunkles Schieferblau
 font = "sans serif"
 
 [server]
