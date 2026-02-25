@@ -23,7 +23,7 @@ st.markdown("""
     --c-surface:    #FFFFFF; 
     --c-text:       #1E293B; 
     --c-list-text:  #2D3748;
-    --c-expander-bg: #1b3a6b;
+    --c-expander-bg: #ffffff;
 
     --value-pos:    #2BB34F; 
     --value-neg:    #F44336; 
