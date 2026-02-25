@@ -17,54 +17,47 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
-/* * DYNAMISCHE FARBSTEUERUNG:
- * :root nutzt die config.toml Werte (optimiert für Kontrast).
- * @media erkennt den Browser-Darkmode automatisch.
- */
 :root {
-    /* ── Basis-Farben (Light Mode aus config.toml) ── */
+    /* ── LIGHT MODE (Config-Basis) ── */
     --c-primary:  var(--primary-color, #1B3A6B);
     --c-bg:       var(--background-color, #87888C); 
     --c-surface:  var(--secondary-background-color, #F4F5F9);
-    
-    /* Text auf fast Schwarz für maximalen Kontrast auf dem grauen Hintergrund */
     --c-text:     #0F172A; 
 
-    /* Semantische Wertfarben */
     --value-pos:   #1C9E3A;
     --value-neg:   #D63B3B;
     --value-warn:  #F07800;
     --value-neon:  #39D353;
 
-    /* Mathematische Ableitungen */
     --c-surface2:  color-mix(in srgb, var(--c-surface) 80%, var(--c-bg) 20%);
     --c-dialog:    color-mix(in srgb, var(--c-surface) 95%, var(--c-bg) 5%);
     --border:      rgba(0, 0, 0, 0.12);
     --border-s:    rgba(0, 0, 0, 0.25);
-    --text-2:      rgba(15, 23, 42, 0.8);
-    --text-3:      rgba(15, 23, 42, 0.55);
+    --text-2:      rgba(15, 23, 42, 0.85);
+    --text-3:      rgba(15, 23, 42, 0.6);
     --shadow:      rgba(0, 0, 0, 0.08);
     --primary-dim:  color-mix(in srgb, var(--c-primary) 10%, transparent);
-    --primary-dim2: color-mix(in srgb, var(--c-primary) 5%, transparent);
 
     --r:   12px;
     --r-s:  8px;
 }
 
-/* ── AUTOMATISCHER DARK MODE OVERRIDE ── */
+/* ── DARK MODE OVERRIDE (Maximale Lesbarkeit) ── */
 @media (prefers-color-scheme: dark) {
     :root {
-        --c-primary:  #3A6FBF; 
+        --c-primary:  #4A88E3; 
         --c-bg:       #1A1C24; 
         --c-surface:  #252836; 
-        --c-text:     #E2E8F0;
+        --c-text:     #F8FAFC; /* Sehr helles Weiß-Blau für Text */
         
-        --shadow:      rgba(0,0,0,0.4);
-        --border:      rgba(255,255,255,0.08);
-        --border-s:    rgba(255,255,255,0.15);
-        --text-2:      rgba(226, 232, 240, 0.75);
-        --text-3:      rgba(226, 232, 240, 0.45);
-        --primary-dim: rgba(58, 111, 191, 0.18);
+        --c-surface2:  #2D3245;
+        --c-dialog:    #1F222F;
+        --text-2:      #CBD5E1; /* Gut lesbares Hellgrau */
+        --text-3:      #94A3B8; /* Sanftes Grau für Labels */
+        --border:      rgba(255, 255, 255, 0.1);
+        --border-s:    rgba(255, 255, 255, 0.2);
+        --shadow:      rgba(0, 0, 0, 0.4);
+        --primary-dim: rgba(74, 136, 227, 0.15);
     }
 }
 
@@ -76,31 +69,22 @@ html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
 
 /* SIDEBAR */
 [data-testid="stSidebar"] { background: var(--c-primary) !important; border-right: none !important; }
-[data-testid="stSidebar"] * { color: rgba(255,255,255,0.85) !important; }
+[data-testid="stSidebar"] * { color: rgba(255,255,255,0.9) !important; }
 [data-testid="stSidebar"] .stButton > button {
-    background: rgba(255,255,255,0.07) !important;
-    border: 1px solid rgba(255,255,255,0.13) !important;
+    background: rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
     border-radius: var(--r-s) !important;
-    color: rgba(255,255,255,0.75) !important;
+    color: white !important;
     transition: all 0.2s ease !important;
-    width: 100%;
 }
 [data-testid="stSidebar"] .stButton > button:hover {
-    background: rgba(255,255,255,0.13) !important;
-    color: white !important;
+    background: rgba(255,255,255,0.18) !important;
     transform: translateX(2px);
 }
 [data-testid="stSidebar"] .stButton > button[kind="primary"] {
     background: var(--value-neon) !important;
     border-color: var(--value-neon) !important;
     color: #0A1F0D !important;
-    font-weight: 700 !important;
-    box-shadow: 0 4px 14px rgba(57,211,83,0.35);
-}
-[data-testid="stSidebar"] .stRadio label:has(input:checked) {
-    background: rgba(255,255,255,0.13) !important;
-    color: white !important;
-    font-weight: 600 !important;
 }
 
 /* METRIKEN */
@@ -109,42 +93,47 @@ html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
     border: 1px solid var(--border) !important;
     border-radius: var(--r) !important;
     box-shadow: 0 2px 6px var(--shadow) !important;
-    transition: transform 0.2s ease !important;
 }
-[data-testid="metric-container"]:hover { transform: translateY(-2px); }
-[data-testid="stMetricLabel"] { color: var(--text-3) !important; text-transform: uppercase !important; font-size: 0.72rem !important; }
+[data-testid="stMetricLabel"] { color: var(--text-3) !important; text-transform: uppercase !important; }
 [data-testid="stMetricValue"] { color: var(--c-text) !important; font-weight: 700 !important; }
 
-/* DATAFRAMES / TABELLEN (Fix für Lesbarkeit) */
+/* TABELLEN - Erzwingt helle Schrift im Dark Mode */
 [data-testid="stDataFrame"] { 
     border: 1px solid var(--border) !important; 
     border-radius: var(--r) !important; 
     background-color: var(--c-surface) !important;
 }
-[data-testid="stDataFrame"] * { color: var(--c-text) !important; }
+[data-testid="stDataFrame"] div[data-testid="stTable"] td, 
+[data-testid="stDataFrame"] div[data-testid="stTable"] th,
+[data-testid="stDataFrame"] * { 
+    color: var(--c-text) !important; 
+}
 [data-testid="stDataFrame"] thead th { 
     background: var(--c-surface2) !important; 
     font-weight: 700 !important; 
 }
 
-/* INPUTS & MODALS */
+/* ÜBERSCHRIFTEN & TEXT */
+h1, h2, h3, p, span, label { 
+    color: var(--c-text) !important; 
+}
+
+/* INPUTS */
 [data-testid="stTextInput"] input, [data-testid="stNumberInput"] input {
     background: var(--c-surface) !important;
     border: 1px solid var(--border-s) !important;
     color: var(--c-text) !important;
 }
+
+/* MODAL */
 [data-testid="stModal"] > div {
     background: var(--c-dialog) !important;
-    border-radius: 16px !important;
+    color: var(--c-text) !important;
 }
 
-/* TYPO & DIVIDER */
-h1, h2, h3 { color: var(--c-text) !important; font-weight: 700 !important; }
-hr { background: var(--border) !important; }
-
 /* SCROLLBAR */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-thumb { background: var(--border-s); border-radius: 3px; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: var(--border-s); border-radius: 10px; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -172,7 +161,6 @@ else:
         """, unsafe_allow_html=True)
 
         page = st.radio("Navigation", ["📊 Dashboard", "📝 Einträge", "⚙️ Verwaltung"], label_visibility="collapsed")
-        
         st.divider()
 
         if st.button("＋ Neuer Eintrag", width='stretch', type="primary"):
@@ -190,7 +178,6 @@ else:
             </span>
         </div>""", unsafe_allow_html=True)
 
-    # Routing
     if page == "📊 Dashboard":
         dashboard_page(conn, u_id)
     elif page == "📝 Einträge":
