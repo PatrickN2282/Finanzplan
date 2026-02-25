@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 # ═══════════════════════════════════════════════════════════════
-# PRECISION FINANCE – High Contrast Light Design (v1.3.3)
+# PRECISION FINANCE – Unified Light Design (v1.3.3)
 # ═══════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
@@ -22,67 +22,78 @@ st.markdown("""
     --c-bg:         #F8F9FA; 
     --c-surface:    #FFFFFF; 
     --c-text:       #1E293B; 
-    --value-pos:    #2BB34F; 
-    --value-neg:    #F44336; 
-    --value-warn:   #FF9800; 
-    --value-neon:   #39D353; 
-    --border:       rgba(27, 58, 107, 0.15);
+    --c-list-text:  #2D3748; 
+    --value-neon:   #39D353;
+    --value-warn:   #FF9800;
+    --border:       rgba(27, 58, 107, 0.1);
+    --r: 12px;
 }
 
-/* 1. DER RADIKALE TEXT-FIX */
-/* Erzwingt dunkle Schrift für ALLES, außer Elemente mit expliziter Farbe (Bilanzen) */
-html, body, [data-testid="stAppViewContainer"], .main, [data-testid="stMarkdownContainer"] p, 
-[data-testid="stMetricLabel"], label, .stCaptionContainer, span:not([style*="color"]) {
+/* GLOBAL LIGHT OVERRIDE */
+html, body, [class*="css"], [data-testid="stAppViewContainer"] { 
+    font-family: 'Outfit', sans-serif !important; 
     color: var(--c-text) !important;
-    font-family: 'Outfit', sans-serif !important;
-    opacity: 1 !important;
+    background-color: var(--c-bg) !important;
 }
 
-/* 2. BILANZ-FARBEN RETTEN (Grün & Rot in der Timeline) */
-/* Diese Selektoren schützen deine farbigen Beträge vor der allgemeinen Abdunklung */
-span[style*="color: rgb(28, 158, 58)"], span[style*="color: #1C9E3A"], span[style*="color: green"] { 
-    color: var(--value-pos) !important; 
-    font-weight: 700 !important;
-}
-span[style*="color: rgb(214, 59, 59)"], span[style*="color: #D63B3B"], span[style*="color: red"] { 
-    color: var(--value-neg) !important; 
-    font-weight: 700 !important;
-}
-
-/* 3. MODAL / POP-UP (Pastell & Klarheit) */
+/* FIX FÜR MODALS / POP-UPS (Eintrag bearbeiten) */
 div[data-testid="stModal"] > div:first-child > div:first-child {
-    background-color: #F0F2F6 !important; /* Helles Pastell-Blau */
+    background-color: var(--c-surface) !important;
     border: 1px solid var(--border) !important;
 }
-div[data-testid="stModal"] * { color: var(--c-text) !important; }
-div[data-testid="stModal"] input, div[data-testid="stModal"] div[data-baseweb="select"] > div {
-    background-color: white !important;
+div[data-testid="stModal"] h1, div[data-testid="stModal"] h2, div[data-testid="stModal"] p {
     color: var(--c-text) !important;
 }
 
-/* 4. DIAGRAMM-LEGENDEN (Fix für die unsichtbaren Kategorien) */
-/* Plotly/SVG Texte werden hiermit erfasst */
-text, .legendtext, .xtick text, .ytick text {
-    fill: #475569 !important;
-    font-size: 13px !important;
+/* FIX FÜR INPUT FIELDS (Text, Number, Date, Select) */
+input, div[data-baseweb="select"] > div, div[data-baseweb="input"] > div {
+    background-color: #F1F4F9 !important;
+    color: var(--c-text) !important;
+    border: 1px solid var(--border) !important;
 }
 
-/* 5. EXPANDER FIX */
-.stExpander { background: white !important; border: 1px solid var(--border) !important; }
-.stExpander summary { background-color: #2D3748 !important; color: white !important; }
-.stExpander summary svg { fill: white !important; }
+/* FIX FÜR DROPDOWN-LISTEN (Die schwebenden Menüs) */
+div[data-baseweb="menu"] {
+    background-color: #FFFFFF !important;
+    border: 1px solid var(--border) !important;
+}
+div[data-baseweb="menu"] li {
+    color: var(--c-text) !important;
+    background-color: transparent !important;
+}
+div[data-baseweb="menu"] li:hover {
+    background-color: #EDF2F7 !important;
+}
 
-/* 6. SIDEBAR */
+/* DIAGRAMM-TEXTE (SVG) */
+text, .legendtext, .xtick text, .ytick text {
+    fill: var(--c-list-text) !important;
+}
+
+/* EXPANDER (Grafiken) */
+.stExpander { border: 1px solid var(--border) !important; background: var(--c-surface) !important; }
+.stExpander summary { background-color: #2D3748 !important; color: white !important; }
+.stExpander svg { fill: white !important; }
+
+/* SIDEBAR */
 [data-testid="stSidebar"] { background: var(--c-primary) !important; }
-[data-testid="stSidebar"] * { color: white !important; }
+[data-testid="stSidebar"] * { color: rgba(255,255,255,0.9) !important; }
 [data-testid="stSidebar"] .stButton > button[kind="primary"] {
     background: var(--value-neon) !important;
     color: #0A1F0D !important;
 }
+
+/* BUTTONS IM MODAL */
+div[data-testid="stModal"] button {
+    border-radius: 8px !important;
+}
+
+/* METRIKEN */
+[data-testid="metric-container"] { background: var(--c-surface) !important; border: 1px solid var(--border) !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# --- ROUTING (unverändert) ---
+# --- ROUTING ---
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 
