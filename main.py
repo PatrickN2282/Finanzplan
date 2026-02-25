@@ -19,67 +19,59 @@ st.markdown("""
 
 :root {
     /* ── LIGHT MODE ── */
-    --c-primary:  var(--primary-color, #1B3A6B);
-    --c-bg:       var(--background-color, #F8F9FA); 
-    --c-surface:  var(--secondary-background-color, #FFFFFF);
-    --c-text:     var(--text-color, #1E293B);
-
-    --value-pos:   #2BB34F;
-    --value-neg:   #F44336;
-    --value-warn:  #FF9800;
-    --value-neon:  #39D353;
-
-    --c-surface2:  color-mix(in srgb, var(--c-surface) 90%, var(--c-bg) 10%);
-    --c-dialog:    #FFFFFF;
-    --border:      rgba(27, 58, 107, 0.1);
-    --border-s:    rgba(27, 58, 107, 0.2);
-    --text-2:      rgba(30, 41, 59, 0.85);
-    --text-3:      rgba(30, 41, 59, 0.6);
-    --shadow:      rgba(27, 58, 107, 0.05);
+    --c-primary:    var(--primary-color, #1B3A6B);
+    --c-bg:         var(--background-color, #F8F9FA); 
+    --c-surface:    var(--secondary-background-color, #FFFFFF);
+    --c-text:       #1E293B;
     
-    --r:   12px;
-    --r-s:  8px;
+    /* Spezifische Farbe für Listeneinträge (Tiguan, Arbeitgeber) */
+    --c-list-text:  #2D3748; 
+
+    --value-pos:    #2BB34F;
+    --value-neg:    #F44336;
+    --value-warn:   #FF9800;
+    --value-neon:   #39D353;
+
+    --c-surface2:   color-mix(in srgb, var(--c-surface) 90%, var(--c-bg) 10%);
+    --text-2:       rgba(30, 41, 59, 0.85);
+    --text-3:       rgba(30, 41, 59, 0.6);
+    --border:       rgba(27, 58, 107, 0.1);
+    --r: 12px; --r-s: 8px;
 }
 
-/* ── DARK MODE OVERRIDE (Maximale Sichtbarkeit) ── */
+/* ── DARK MODE OVERRIDE (Pastell & Kontrast) ── */
 @media (prefers-color-scheme: dark) {
     :root {
-        --c-primary:  #7DA7D9; 
-        --c-bg:       #1A1C24; 
-        --c-surface:  #252833; 
-        --c-text:     #F8FAFC !important; /* Strahlendes Weiß */
+        --c-primary:    #7DA7D9; 
+        --c-bg:         #1A1C24; 
+        --c-surface:    #252833; 
+        --c-text:       #F8FAFC; 
         
-        --c-surface2:  #2D313F;
-        --c-dialog:    #1F222B;
+        /* Neue Pastell-Abstufung für deine Buchungs-Namen */
+        --c-list-text:  #E2E8F0; 
         
-        /* Hellere Grautöne für Sekundärtexte */
-        --text-2:      #E2E8F0 !important; 
-        --text-3:      #CBD5E1 !important; 
+        --text-2:       #CBD5E1; /* Für Unterzeilen wie 'Hauptkonto' */
+        --text-3:       #94A3B8;
         
-        --border:      rgba(255, 255, 255, 0.1);
-        --border-s:    rgba(255, 255, 255, 0.2);
-        --shadow:      rgba(0, 0, 0, 0.4);
+        --c-surface2:   #2D313F;
+        --border:       rgba(255, 255, 255, 0.1);
     }
 
-    /* RADIKALER FIX FÜR ALLE TEXTE IM DARK MODE */
-    /* Dies erzwingt die Farbe für Absätze, Spans, Labels und Divs in Containern */
-    div[data-testid="stVerticalBlock"] * {
+    /* Anwenden der neuen Listen-Farbe auf alle Buchungs-Elemente */
+    div[data-testid="stVerticalBlock"] .stMarkdown p {
+        color: var(--c-list-text) !important;
+        font-weight: 500 !important;
+    }
+
+    /* Unterzeilen (Secondary Info) etwas dezenter aber sichtbar */
+    div[data-testid="stVerticalBlock"] .stMarkdown span,
+    div[data-testid="stVerticalBlock"] .stMarkdown small {
         color: var(--text-2) !important;
     }
 
-    /* Überschriften, Fettgedrucktes und Metriken extra hell */
-    h1, h2, h3, h4, h5, h6, b, strong, [data-testid="stMetricValue"] {
+    /* Überschriften bleiben im Fokus */
+    h1, h2, h3, [data-testid="stMetricValue"] {
         color: var(--c-text) !important;
-    }
-
-    /* Speziell für die Timeline-Einträge und Captions */
-    .stMarkdown p, .stMarkdown span, div[class*="st-"] p {
-        color: var(--text-2) !important;
-    }
-
-    /* Falls Captions (st.caption) genutzt werden */
-    [data-testid="captionContainer"] {
-        color: var(--text-3) !important;
     }
 }
 
@@ -89,33 +81,20 @@ html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
 [data-testid="stHeader"] { background: transparent !important; }
 .main .block-container { padding: 1.8rem 2.8rem 3rem !important; max-width: 1500px !important; }
 
-/* SIDEBAR */
+/* SIDEBAR (Bleibt Marineblau für den Look) */
 [data-testid="stSidebar"] { background: #1B3A6B !important; border-right: none !important; }
 [data-testid="stSidebar"] * { color: rgba(255,255,255,0.9) !important; }
-[data-testid="stSidebar"] .stButton > button {
-    background: rgba(255,255,255,0.08) !important;
-    border: 1px solid rgba(255,255,255,0.15) !important;
-    border-radius: var(--r-s) !important;
-    color: white !important;
-    transition: all 0.2s ease !important;
-}
-[data-testid="stSidebar"] .stButton > button:hover {
-    background: rgba(255,255,255,0.15) !important;
-    border-color: var(--value-warn) !important;
-}
 [data-testid="stSidebar"] .stButton > button[kind="primary"] {
     background: var(--value-neon) !important;
-    border-color: var(--value-neon) !important;
     color: #0A1F0D !important;
     font-weight: 700 !important;
 }
 
-/* METRIKEN */
+/* METRIKEN & KARTEN */
 [data-testid="metric-container"] {
     background: var(--c-surface) !important;
     border: 1px solid var(--border) !important;
     border-radius: var(--r) !important;
-    box-shadow: 0 4px 12px var(--shadow) !important;
 }
 
 /* TABELLEN */
@@ -127,16 +106,10 @@ html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
 [data-testid="stDataFrame"] * { color: var(--c-text) !important; }
 
 /* INPUTS */
-[data-testid="stTextInput"] input, [data-testid="stNumberInput"] input {
+[data-testid="stTextInput"] input {
     background: var(--c-surface) !important;
-    border: 1px solid var(--border-s) !important;
     color: var(--c-text) !important;
-}
-
-/* MODAL */
-[data-testid="stModal"] > div {
-    background: var(--c-dialog) !important;
-    border-radius: 16px !important;
+    border: 1px solid var(--border) !important;
 }
 </style>
 """, unsafe_allow_html=True)
