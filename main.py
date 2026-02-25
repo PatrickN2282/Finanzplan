@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 # ═══════════════════════════════════════════════════════════════
-# PRECISION FINANCE – Fixed High Contrast Design (v1.3.3)
+# PRECISION FINANCE – High-Contrast & Pastel Modals (v1.3.3)
 # ═══════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
@@ -23,82 +23,87 @@ st.markdown("""
     --c-surface:    #FFFFFF; 
     --c-text:       #1E293B; 
     --c-list-text:  #2D3748; 
-
-    --value-pos:    #2BB34F; 
-    --value-neg:    #F44336; 
-    --value-warn:   #FF9800; 
-    --value-neon:   #39D353; 
-
-    --text-2:       #475569; 
-    --border:       rgba(27, 58, 107, 0.08);
-    --r: 12px; --r-s: 8px;
+    --c-modal-bg:   #F0F4F8; /* Pastell-Blau-Grau für Popups */
+    --value-neon:   #39D353;
+    --value-warn:   #FF9800;
+    --border:       rgba(27, 58, 107, 0.12);
 }
 
-/* BASE STYLE */
-html, body, [class*="css"] { 
-    font-family: 'Outfit', sans-serif !important; 
-    color: var(--c-text) !important; 
-}
-[data-testid="stAppViewContainer"] { background: var(--c-bg) !important; }
-
-/* RADIKALER FIX FÜR TEXTE & DIAGRAMM-LEGENDEN */
-/* Dies zielt auf alle Texte ab, die Streamlit in Diagrammen (SVG) rendert */
-text, .legendtext, .xtick text, .ytick text {
-    fill: var(--c-list-text) !important;
-    font-family: 'Outfit', sans-serif !important;
+/* 1. GLOBALE TEXTRETTUNG (Sorgt dafür, dass auf Weiß alles sichtbar ist) */
+html, body, [data-testid="stAppViewContainer"] {
+    background-color: var(--c-bg) !important;
 }
 
-/* Fix für alle Labels und Markdown-Texte */
+/* Alle Standard-Texte, Labels und Beschreibungen auf der Hauptseite */
+[data-testid="stMarkdownContainer"] p, 
 [data-testid="stMetricLabel"], 
 .stCaptionContainer, 
-small, 
-label,
-[data-testid="stText"],
-.stMarkdown p,
-.stMarkdown span {
-    color: var(--c-list-text) !important;
+label, 
+span {
+    color: var(--c-text) !important;
     opacity: 1 !important;
 }
 
-/* EXPANDER DESIGN (Statistiken) */
-.stExpander {
+/* 2. MODAL & POP-UP (Eintrag bearbeiten) - PASTELL LOOK */
+div[data-testid="stModal"] > div:first-child > div:first-child {
+    background-color: var(--c-modal-bg) !important;
+    border: 2px solid var(--border) !important;
+    border-radius: 16px !important;
+}
+
+/* Alle Texte innerhalb des Modals */
+div[data-testid="stModal"] * {
+    color: #0F172A !important; /* Extra dunkel für Kontrast im Modal */
+}
+
+/* Eingabefelder im Modal */
+div[data-testid="stModal"] input, 
+div[data-testid="stModal"] div[data-baseweb="select"] > div {
+    background-color: #FFFFFF !important;
     border: 1px solid var(--border) !important;
-    border-radius: var(--r) !important;
-    background: var(--c-surface) !important;
-    margin-bottom: 1rem !important;
-}
-.stExpander summary {
-    background-color: #2D3748 !important;
-    color: white !important;
-    border-radius: var(--r-s) !important;
-}
-.stExpander summary:hover { background-color: var(--c-primary) !important; }
-.stExpander svg { fill: white !important; }
-
-/* DIAGRAMM-CONTAINER FIX */
-div[data-testid="stExpanderDetails"] * {
-    color: var(--c-list-text) !important;
+    border-radius: 8px !important;
 }
 
-/* SIDEBAR */
+/* 3. DROPDOWN-MENÜS (Die schwebenden Listen) */
+div[data-baseweb="menu"] {
+    background-color: #FFFFFF !important;
+    border: 1px solid var(--border) !important;
+}
+div[data-baseweb="menu"] li {
+    color: #1E293B !important;
+}
+div[data-baseweb="menu"] li:hover {
+    background-color: #E2E8F0 !important;
+}
+
+/* 4. SPEZIAL-FIX FÜR DIAGRAMME */
+text, .legendtext {
+    fill: #475569 !important;
+    font-size: 12px !important;
+}
+
+/* 5. EXPANDER (Grafiken & Statistiken) */
+.stExpander { 
+    background: white !important; 
+    border: 1px solid var(--border) !important; 
+}
+.stExpander summary { 
+    background-color: #2D3748 !important; 
+    color: white !important; 
+}
+.stExpander summary * { color: white !important; }
+
+/* 6. SIDEBAR */
 [data-testid="stSidebar"] { background: var(--c-primary) !important; }
-[data-testid="stSidebar"] * { color: rgba(255,255,255,0.9) !important; }
+[data-testid="stSidebar"] * { color: white !important; }
 [data-testid="stSidebar"] .stButton > button[kind="primary"] {
     background: var(--value-neon) !important;
     color: #0A1F0D !important;
-    font-weight: 700 !important;
 }
-
-/* METRIKEN */
-[data-testid="metric-container"] { 
-    background: var(--c-surface) !important; 
-    border: 1px solid var(--border) !important; 
-}
-[data-testid="stMetricValue"] { color: var(--c-text) !important; font-weight: 800 !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# --- ROUTING ---
+# --- SESSION STATE & ROUTING (Unverändert) ---
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 
