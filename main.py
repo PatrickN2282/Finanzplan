@@ -18,14 +18,15 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 /* * DYNAMISCHE FARBSTEUERUNG:
- * Wir nutzen die von Streamlit injizierten Variablen aus der config.toml.
- * Falls diese nicht vorhanden sind (Fallback), nutzen wir deine Originalfarben.
+ * :root definiert den Standard (Light Mode aus config.toml).
+ * @media (prefers-color-scheme: dark) überschreibt diese Werte für den Browser-Darkmode.
  */
 :root {
+    /* ── Basis-Farben (Standard: Light aus config.toml) ── */
     --c-primary:  var(--primary-color, #1B3A6B);
-    --c-bg:       var(--background-color, #E8EBF2);
-    --c-surface:  var(--secondary-background-color, #F4F5F9);
-    --c-text:     var(--text-color, #1A1F2E);
+    --c-bg:       var(--background-color, #F0F2F5);
+    --c-surface:  var(--secondary-background-color, #FFFFFF);
+    --c-text:     var(--text-color, #1E293B);
 
     /* Semantische Wertfarben */
     --value-pos:   #1C9E3A;
@@ -33,7 +34,7 @@ st.markdown("""
     --value-warn:  #F07800;
     --value-neon:  #39D353;
 
-    /* Deine originalen mathematischen Ableitungen */
+    /* Mathematische Ableitungen */
     --c-surface2:  color-mix(in srgb, var(--c-surface) 80%, var(--c-bg) 20%);
     --c-dialog:    color-mix(in srgb, var(--c-surface) 90%, var(--c-bg) 10%);
     --border:      color-mix(in srgb, var(--c-primary) 11%, transparent);
@@ -46,6 +47,26 @@ st.markdown("""
 
     --r:   12px;
     --r-s:  8px;
+}
+
+/* ── AUTOMATISCHER DARK MODE OVERRIDE ── */
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Ruhiges Dunkelgrau statt config.toml Werte */
+        --c-primary:  #3A6FBF; 
+        --c-bg:       #1A1C24; 
+        --c-surface:  #252836; 
+        --c-text:     #E2E8F0;
+        
+        /* Anpassung der Ableitungen für dunkle Oberflächen */
+        --shadow:      rgba(0,0,0,0.4);
+        --border:      rgba(255,255,255,0.08);
+        --border-s:    rgba(255,255,255,0.15);
+        --text-2:      rgba(226, 232, 240, 0.7);
+        --text-3:      rgba(226, 232, 240, 0.45);
+        --primary-dim: rgba(58, 111, 191, 0.15);
+        --primary-dim2:rgba(58, 111, 191, 0.1);
+    }
 }
 
 /* BASE */
@@ -94,7 +115,7 @@ html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
     font-weight: 600 !important;
 }
 
-/* METRIKEN - Vollständiges Original-Styling */
+/* METRIKEN */
 [data-testid="metric-container"] {
     background: var(--c-surface) !important;
     border: 1px solid var(--border) !important;
@@ -160,7 +181,7 @@ hr { border: none !important; height: 1px !important; background: var(--border) 
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 
-# --- ROUTING (OHNE TOGGLE LOGIK) ---
+# --- ROUTING (AUTOMATIC BROWSER THEMING) ---
 if not st.session_state.logged_in:
     auth_page()
 else:
