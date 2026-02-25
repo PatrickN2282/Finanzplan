@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 # ═══════════════════════════════════════════════════════════════
-# PRECISION FINANCE – Fixed High Contrast Design (v1.3.3)
+# PRECISION FINANCE – Unified High Contrast Design (v2.0 Stable)
 # ═══════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
@@ -29,76 +29,110 @@ st.markdown("""
     --value-warn:   #FF9800; 
     --value-neon:   #39D353; 
 
-    --text-2:       #475569; 
     --border:       rgba(27, 58, 107, 0.08);
-    --r: 12px; --r-s: 8px;
+    --r: 12px; 
+    --r-s: 8px;
 }
 
-/* BASE STYLE */
-html, body, [class*="css"] { 
-    font-family: 'Outfit', sans-serif !important; 
-    color: var(--c-text) !important; 
+/* ─────────────────────────────────────────────
+   BASE TYPOGRAPHY
+───────────────────────────────────────────── */
+html, body {
+    font-family: 'Outfit', sans-serif !important;
+    color: var(--c-text);
 }
-[data-testid="stAppViewContainer"] { background: var(--c-bg) !important; }
 
-/* RADIKALER FIX FÜR TEXTE & DIAGRAMM-LEGENDEN */
-/* Dies zielt auf alle Texte ab, die Streamlit in Diagrammen (SVG) rendert */
-text, .legendtext, .xtick text, .ytick text {
+[data-testid="stAppViewContainer"] {
+    background: var(--c-bg);
+}
+
+/* Markdown & normale Texte */
+.stMarkdown p,
+.stMarkdown span,
+label,
+small,
+[data-testid="stMetricLabel"],
+[data-testid="stWidgetLabel"] {
+    color: var(--c-list-text);
+}
+
+/* ─────────────────────────────────────────────
+   SVG FIX FÜR DIAGRAMME (WICHTIG!)
+───────────────────────────────────────────── */
+svg text {
     fill: var(--c-list-text) !important;
     font-family: 'Outfit', sans-serif !important;
 }
 
-/* Fix für alle Labels und Markdown-Texte */
-[data-testid="stMetricLabel"], 
-.stCaptionContainer, 
-small, 
-label,
-[data-testid="stText"],
-.stMarkdown p,
-.stMarkdown span {
-    color: var(--c-list-text) !important;
-    opacity: 1 !important;
-}
-
-/* EXPANDER DESIGN (Statistiken) */
+/* ─────────────────────────────────────────────
+   EXPANDER
+───────────────────────────────────────────── */
 .stExpander {
-    border: 1px solid var(--border) !important;
-    border-radius: var(--r) !important;
-    background: var(--c-surface) !important;
-    margin-bottom: 1rem !important;
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    background: var(--c-surface);
+    margin-bottom: 1rem;
 }
+
 .stExpander summary {
-    background-color: #2D3748 !important;
-    color: white !important;
-    border-radius: var(--r-s) !important;
-}
-.stExpander summary:hover { background-color: var(--c-primary) !important; }
-.stExpander svg { fill: white !important; }
-
-/* DIAGRAMM-CONTAINER FIX */
-div[data-testid="stExpanderDetails"] * {
-    color: var(--c-list-text) !important;
+    background-color: #2D3748;
+    color: white;
+    border-radius: var(--r-s);
 }
 
-/* SIDEBAR */
-[data-testid="stSidebar"] { background: var(--c-primary) !important; }
-[data-testid="stSidebar"] * { color: rgba(255,255,255,0.9) !important; }
-[data-testid="stSidebar"] .stButton > button[kind="primary"] {
-    background: var(--value-neon) !important;
-    color: #0A1F0D !important;
-    font-weight: 700 !important;
+.stExpander summary:hover {
+    background-color: var(--c-primary);
 }
 
-/* METRIKEN */
+.stExpander svg {
+    fill: white !important;
+}
+
+/* ─────────────────────────────────────────────
+   METRIKEN
+───────────────────────────────────────────── */
 [data-testid="metric-container"] { 
-    background: var(--c-surface) !important; 
-    border: 1px solid var(--border) !important; 
+    background: var(--c-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
 }
-[data-testid="stMetricValue"] { color: var(--c-text) !important; font-weight: 800 !important; }
+
+[data-testid="stMetricValue"] { 
+    color: var(--c-text);
+    font-weight: 800;
+}
+
+/* ─────────────────────────────────────────────
+   SIDEBAR
+───────────────────────────────────────────── */
+[data-testid="stSidebar"] {
+    background: var(--c-primary);
+}
+
+[data-testid="stSidebar"] * {
+    color: rgba(255,255,255,0.9);
+}
+
+[data-testid="stSidebar"] .stButton > button[kind="primary"] {
+    background: var(--value-neon);
+    color: #0A1F0D;
+    font-weight: 700;
+}
+
+/* ─────────────────────────────────────────────
+   WERTFARBEN (FÜR TABELLEN & LISTEN)
+   → NICHT global überschrieben!
+───────────────────────────────────────────── */
+.pos { color: var(--value-pos) !important; font-weight:600; }
+.neg { color: var(--value-neg) !important; font-weight:600; }
+.warn { color: var(--value-warn) !important; font-weight:600; }
+
 </style>
 """, unsafe_allow_html=True)
 
-# --- ROUTING ---
+# ─────────────────────────────────────────────
+# ROUTING
+# ─────────────────────────────────────────────
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 
@@ -113,20 +147,42 @@ else:
     with st.sidebar:
         initials = (display_name[:2]).upper()
         st.markdown(f"""
-        <div style="padding:1.4rem 0.5rem 1rem;text-align:center; border-bottom:1px solid rgba(255,255,255,0.1);margin-bottom:0.8rem;">
-            <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,152,0,0.15);border:2px solid var(--value-warn);display:flex;align-items:center;justify-content:center;margin:0 auto 0.7rem;font-family:'Outfit',sans-serif;font-weight:800;color:var(--value-warn);">{initials}</div>
-            <div style="font-weight:700;color:white;">{display_name}</div>
-            <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">@{username}</div>
+        <div style="padding:1.4rem 0.5rem 1rem;
+                    text-align:center;
+                    border-bottom:1px solid rgba(255,255,255,0.1);
+                    margin-bottom:0.8rem;">
+            <div style="width:48px;height:48px;border-radius:12px;
+                        background:rgba(255,152,0,0.15);
+                        border:2px solid var(--value-warn);
+                        display:flex;align-items:center;
+                        justify-content:center;
+                        margin:0 auto 0.7rem;
+                        font-weight:800;
+                        color:var(--value-warn);">
+                {initials}
+            </div>
+            <div style="font-weight:700;color:white;">
+                {display_name}
+            </div>
+            <div style="font-size:0.72rem;
+                        color:rgba(255,255,255,0.35);">
+                @{username}
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
-        page = st.radio("Navigation", ["📊 Dashboard", "📝 Einträge", "⚙️ Verwaltung"], label_visibility="collapsed")
+        page = st.radio(
+            "Navigation",
+            ["📊 Dashboard", "📝 Einträge", "⚙️ Verwaltung"],
+            label_visibility="collapsed"
+        )
+
         st.divider()
 
-        if st.button("＋ Neuer Eintrag", width='stretch', type="primary"):
+        if st.button("＋ Neuer Eintrag", use_container_width=True, type="primary"):
             eintrag_dialog(conn, u_id)
 
-        if st.button("↩ Abmelden", width='stretch'):
+        if st.button("↩ Abmelden", use_container_width=True):
             for key in ['logged_in', 'user_id', 'username', 'vorname']:
                 st.session_state.pop(key, None)
             st.rerun()
