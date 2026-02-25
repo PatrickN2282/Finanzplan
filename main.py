@@ -11,77 +11,97 @@ st.set_page_config(
 )
 
 # ═══════════════════════════════════════════════════════════════
-# PRECISION FINANCE – Unified High Contrast Design (v2.0 Stable)
+# FINANCE MASTER – Marine Neon Stable UI (Dialog + Dropdown Fix)
 # ═══════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
+/* ─────────────────────────────────────────────
+   COLOR SYSTEM
+───────────────────────────────────────────── */
 :root {
-    --c-primary:    #1B3A6B; 
-    --c-bg:         #F8F9FA; 
-    --c-surface:    #FFFFFF; 
-    --c-text:       #1E293B; 
-    --c-list-text:  #2D3748; 
+    --marine: #1B3A6B;
+    --neon: #39D353;
+    --orange: #F07800;
+    --bg: #F4F6FA;
+    --surface: #FFFFFF;
+    --text: #1A1F2E;
+    --text-soft: #6B7280;
+    --border: rgba(27,58,107,0.12);
 
-    --value-pos:    #2BB34F; 
-    --value-neg:    #F44336; 
-    --value-warn:   #FF9800; 
-    --value-neon:   #39D353; 
-
-    --border:       rgba(27, 58, 107, 0.08);
-    --r: 12px; 
-    --r-s: 8px;
+    --value-pos: #2BB34F;
+    --value-neg: #F44336;
+    --value-warn: #FF9800;
 }
 
 /* ─────────────────────────────────────────────
-   BASE TYPOGRAPHY
+   GLOBAL BASE
 ───────────────────────────────────────────── */
 html, body {
+    background: var(--bg) !important;
+    color: var(--text) !important;
     font-family: 'Outfit', sans-serif !important;
-    color: var(--c-text);
 }
 
 [data-testid="stAppViewContainer"] {
-    background: var(--c-bg);
+    background: var(--bg) !important;
 }
 
-/* Markdown & normale Texte */
+/* Text Elemente */
 .stMarkdown p,
 .stMarkdown span,
 label,
 small,
 [data-testid="stMetricLabel"],
 [data-testid="stWidgetLabel"] {
-    color: var(--c-list-text);
+    color: var(--text-soft) !important;
 }
 
 /* ─────────────────────────────────────────────
-   SVG FIX FÜR DIAGRAMME (WICHTIG!)
+   SIDEBAR
 ───────────────────────────────────────────── */
-svg text {
-    fill: var(--c-list-text) !important;
-    font-family: 'Outfit', sans-serif !important;
+[data-testid="stSidebar"] {
+    background: var(--marine) !important;
+}
+
+[data-testid="stSidebar"] * {
+    color: rgba(255,255,255,0.92) !important;
+}
+
+[data-testid="stSidebar"] .stButton > button[kind="primary"] {
+    background: var(--neon) !important;
+    color: #0A1F0D !important;
+    font-weight: 700 !important;
+    border: none !important;
+}
+
+/* ─────────────────────────────────────────────
+   METRICS
+───────────────────────────────────────────── */
+[data-testid="metric-container"] {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 12px !important;
+}
+
+[data-testid="stMetricValue"] {
+    font-weight: 800 !important;
+    color: var(--text) !important;
 }
 
 /* ─────────────────────────────────────────────
    EXPANDER
 ───────────────────────────────────────────── */
 .stExpander {
-    border: 1px solid var(--border);
-    border-radius: var(--r);
-    background: var(--c-surface);
-    margin-bottom: 1rem;
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 12px !important;
 }
 
 .stExpander summary {
-    background-color: #2D3748;
-    color: white;
-    border-radius: var(--r-s);
-}
-
-.stExpander summary:hover {
-    background-color: var(--c-primary);
+    background: var(--marine) !important;
+    color: white !important;
 }
 
 .stExpander svg {
@@ -89,39 +109,75 @@ svg text {
 }
 
 /* ─────────────────────────────────────────────
-   METRIKEN
+   SVG FIX (Charts)
 ───────────────────────────────────────────── */
-[data-testid="metric-container"] { 
-    background: var(--c-surface);
-    border: 1px solid var(--border);
-    border-radius: var(--r);
-}
-
-[data-testid="stMetricValue"] { 
-    color: var(--c-text);
-    font-weight: 800;
+svg text {
+    fill: #4A5270 !important;
+    font-family: 'Outfit', sans-serif !important;
 }
 
 /* ─────────────────────────────────────────────
-   SIDEBAR
+   DIALOG FIX (für @st.dialog)
 ───────────────────────────────────────────── */
-[data-testid="stSidebar"] {
-    background: var(--c-primary);
+
+/* Overlay */
+div[data-testid="stDialogOverlay"] {
+    background: rgba(0,0,0,0.35) !important;
 }
 
-[data-testid="stSidebar"] * {
-    color: rgba(255,255,255,0.9);
+/* Dialog Container */
+div[data-testid="stDialog"] {
+    background: var(--surface) !important;
+    border-radius: 16px !important;
+    border: 1px solid var(--border) !important;
 }
 
-[data-testid="stSidebar"] .stButton > button[kind="primary"] {
-    background: var(--value-neon);
-    color: #0A1F0D;
-    font-weight: 700;
+/* Dialog Content */
+div[data-testid="stDialog"] * {
+    color: var(--text) !important;
 }
 
 /* ─────────────────────────────────────────────
-   WERTFARBEN (FÜR TABELLEN & LISTEN)
-   → NICHT global überschrieben!
+   SELECTBOX / DROPDOWN FIX (BaseWeb Portal)
+───────────────────────────────────────────── */
+
+/* Select Feld */
+div[data-baseweb="select"] > div {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+}
+
+/* Dropdown Popover */
+div[data-baseweb="popover"] {
+    background: var(--surface) !important;
+}
+
+/* Listbox */
+div[role="listbox"] {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+}
+
+/* Optionen */
+div[role="option"] {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+}
+
+/* Hover */
+div[role="option"]:hover {
+    background: var(--bg) !important;
+}
+
+/* Selected Option */
+div[aria-selected="true"] {
+    background: var(--marine) !important;
+    color: white !important;
+}
+
+/* ─────────────────────────────────────────────
+   VALUE COLORS (NICHT ÜBERSCHREIBEN!)
 ───────────────────────────────────────────── */
 .pos { color: var(--value-pos) !important; font-weight:600; }
 .neg { color: var(--value-neg) !important; font-weight:600; }
@@ -152,13 +208,13 @@ else:
                     border-bottom:1px solid rgba(255,255,255,0.1);
                     margin-bottom:0.8rem;">
             <div style="width:48px;height:48px;border-radius:12px;
-                        background:rgba(255,152,0,0.15);
-                        border:2px solid var(--value-warn);
+                        background:rgba(240,120,0,0.15);
+                        border:2px solid var(--orange);
                         display:flex;align-items:center;
                         justify-content:center;
                         margin:0 auto 0.7rem;
                         font-weight:800;
-                        color:var(--value-warn);">
+                        color:var(--orange);">
                 {initials}
             </div>
             <div style="font-weight:700;color:white;">
