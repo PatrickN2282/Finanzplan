@@ -30,8 +30,8 @@ st.markdown("""
     --value-neon:   #39D353; 
 
     --c-surface2:   #F1F3F5;
-    --text-2:       #475569; /* Deutlich dunkleres Grau für Unterzeilen */
-    --text-3:       #64748B; /* Für kleine Labels */
+    --text-2:       #475569; 
+    --text-3:       #64748B; 
     --border:       rgba(27, 58, 107, 0.08);
     --r: 12px; --r-s: 8px;
 }
@@ -43,19 +43,25 @@ html, body, [class*="css"] {
 }
 [data-testid="stAppViewContainer"] { background: var(--c-bg) !important; }
 
-/* FIX FÜR UNLESBARE ÜBERSCHRIFTEN & LABELS */
-/* Erzwingt dunkle Farbe für Metrik-Labels, Captions und kleine Texte */
+/* RADIKALER FIX FÜR ALLE LABELS & LEGENDEN (Statistik-Teil) */
 [data-testid="stMetricLabel"], 
 .stCaptionContainer, 
 small, 
-label, 
-[data-testid="stText"] {
-    color: var(--text-2) !important;
-    font-weight: 600 !important;
+label,
+[data-testid="stText"],
+[data-testid="stWidgetLabel"] p,
+.stMarkdown p,
+.stMarkdown span {
+    color: var(--c-list-text) !important;
     opacity: 1 !important;
 }
 
-/* FIX FÜR EXPANDER */
+/* Spezieller Fix für Diagramm-Legenden und Achsen-Beschriftungen */
+div[data-testid="stExpanderDetails"] * {
+    color: var(--c-list-text) !important;
+}
+
+/* EXPANDER DESIGN */
 .stExpander {
     border: 1px solid var(--border) !important;
     border-radius: var(--r) !important;
@@ -67,15 +73,12 @@ label,
     color: white !important;
     border-radius: var(--r-s) !important;
 }
+.stExpander summary:hover { background-color: var(--c-primary) !important; }
 .stExpander svg { fill: white !important; }
 
-/* TEXT-LOGIK IN LISTEN */
-div[data-testid="stVerticalBlock"] .stMarkdown p:not(:has(span[style*="color"])) {
-    color: var(--c-list-text) !important;
-}
-div[data-testid="stVerticalBlock"] .stMarkdown span:not([style*="color"]) {
-    color: var(--text-2) !important;
-}
+/* SCHUTZ FÜR FARBIGE WERTE (Timeline) */
+span[style*="color: rgb(28, 158, 58)"], span[style*="color: green"] { color: var(--value-pos) !important; }
+span[style*="color: rgb(214, 59, 59)"], span[style*="color: red"] { color: var(--value-neg) !important; }
 
 /* SIDEBAR */
 [data-testid="stSidebar"] { background: var(--c-primary) !important; }
@@ -86,7 +89,7 @@ div[data-testid="stVerticalBlock"] .stMarkdown span:not([style*="color"]) {
     font-weight: 700 !important;
 }
 
-/* METRIKEN & TABELLEN */
+/* METRIKEN */
 [data-testid="metric-container"] { 
     background: var(--c-surface) !important; 
     border: 1px solid var(--border) !important; 
