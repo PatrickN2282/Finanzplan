@@ -1,9 +1,9 @@
 [theme]
-# SANFTES HELL-LAYOUT (Basis)
-primaryColor = "#1B3A6B"
-backgroundColor = "#F0F2F5"
-secondaryBackgroundColor = "#FFFFFF"
-textColor = "#1E293B"
+# PRECISION LIGHT - Grey, Orange & Marine
+primaryColor = "#1B3A6B"            # Deep Marine
+backgroundColor = "#F8F9FA"         # Sanftes Hellgrau/Off-White
+secondaryBackgroundColor = "#FFFFFF" # Karten/Inputs
+textColor = "#1E293B"               # Dunkles Schieferblau
 font = "sans serif"
 
 [server]
