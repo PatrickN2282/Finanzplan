@@ -11,22 +11,24 @@ st.set_page_config(
 )
 
 # ═══════════════════════════════════════════════════════════════
-# PRECISION FINANCE – Native Adaptive CSS
+# PRECISION FINANCE – Native Adaptive CSS (v1.3.3)
 # ═══════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 /* * DYNAMISCHE FARBSTEUERUNG:
- * :root definiert den Standard (Light Mode aus config.toml).
- * @media (prefers-color-scheme: dark) überschreibt diese Werte für den Browser-Darkmode.
+ * :root nutzt die config.toml Werte (optimiert für Kontrast).
+ * @media erkennt den Browser-Darkmode automatisch.
  */
 :root {
-    /* ── Basis-Farben (Standard: Light aus config.toml) ── */
+    /* ── Basis-Farben (Light Mode aus config.toml) ── */
     --c-primary:  var(--primary-color, #1B3A6B);
-    --c-bg:       var(--background-color, #F0F2F5);
-    --c-surface:  var(--secondary-background-color, #FFFFFF);
-    --c-text:     var(--text-color, #1E293B);
+    --c-bg:       var(--background-color, #87888C); 
+    --c-surface:  var(--secondary-background-color, #F4F5F9);
+    
+    /* Text auf fast Schwarz für maximalen Kontrast auf dem grauen Hintergrund */
+    --c-text:     #0F172A; 
 
     /* Semantische Wertfarben */
     --value-pos:   #1C9E3A;
@@ -36,13 +38,13 @@ st.markdown("""
 
     /* Mathematische Ableitungen */
     --c-surface2:  color-mix(in srgb, var(--c-surface) 80%, var(--c-bg) 20%);
-    --c-dialog:    color-mix(in srgb, var(--c-surface) 90%, var(--c-bg) 10%);
-    --border:      color-mix(in srgb, var(--c-primary) 11%, transparent);
-    --border-s:    color-mix(in srgb, var(--c-primary) 22%, transparent);
-    --text-2:      color-mix(in srgb, var(--c-text) 70%, transparent);
-    --text-3:      color-mix(in srgb, var(--c-text) 40%, transparent);
-    --shadow:      color-mix(in srgb, var(--c-primary) 8%, transparent);
-    --primary-dim:  color-mix(in srgb, var(--c-primary) 9%, transparent);
+    --c-dialog:    color-mix(in srgb, var(--c-surface) 95%, var(--c-bg) 5%);
+    --border:      rgba(0, 0, 0, 0.12);
+    --border-s:    rgba(0, 0, 0, 0.25);
+    --text-2:      rgba(15, 23, 42, 0.8);
+    --text-3:      rgba(15, 23, 42, 0.55);
+    --shadow:      rgba(0, 0, 0, 0.08);
+    --primary-dim:  color-mix(in srgb, var(--c-primary) 10%, transparent);
     --primary-dim2: color-mix(in srgb, var(--c-primary) 5%, transparent);
 
     --r:   12px;
@@ -52,20 +54,17 @@ st.markdown("""
 /* ── AUTOMATISCHER DARK MODE OVERRIDE ── */
 @media (prefers-color-scheme: dark) {
     :root {
-        /* Ruhiges Dunkelgrau statt config.toml Werte */
         --c-primary:  #3A6FBF; 
         --c-bg:       #1A1C24; 
         --c-surface:  #252836; 
         --c-text:     #E2E8F0;
         
-        /* Anpassung der Ableitungen für dunkle Oberflächen */
         --shadow:      rgba(0,0,0,0.4);
         --border:      rgba(255,255,255,0.08);
         --border-s:    rgba(255,255,255,0.15);
-        --text-2:      rgba(226, 232, 240, 0.7);
+        --text-2:      rgba(226, 232, 240, 0.75);
         --text-3:      rgba(226, 232, 240, 0.45);
-        --primary-dim: rgba(58, 111, 191, 0.15);
-        --primary-dim2:rgba(58, 111, 191, 0.1);
+        --primary-dim: rgba(58, 111, 191, 0.18);
     }
 }
 
@@ -75,7 +74,7 @@ html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
 [data-testid="stHeader"] { background: transparent !important; }
 .main .block-container { padding: 1.8rem 2.8rem 3rem !important; max-width: 1500px !important; }
 
-/* SIDEBAR - Vollständiges Original-Styling */
+/* SIDEBAR */
 [data-testid="stSidebar"] { background: var(--c-primary) !important; border-right: none !important; }
 [data-testid="stSidebar"] * { color: rgba(255,255,255,0.85) !important; }
 [data-testid="stSidebar"] .stButton > button {
@@ -83,16 +82,11 @@ html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
     border: 1px solid rgba(255,255,255,0.13) !important;
     border-radius: var(--r-s) !important;
     color: rgba(255,255,255,0.75) !important;
-    font-family: 'Outfit', sans-serif !important;
-    font-weight: 500 !important;
-    font-size: 0.88rem !important;
-    padding: 0.55rem 1rem !important;
     transition: all 0.2s ease !important;
     width: 100%;
 }
 [data-testid="stSidebar"] .stButton > button:hover {
     background: rgba(255,255,255,0.13) !important;
-    border-color: rgba(255,255,255,0.24) !important;
     color: white !important;
     transform: translateX(2px);
 }
@@ -102,12 +96,6 @@ html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
     color: #0A1F0D !important;
     font-weight: 700 !important;
     box-shadow: 0 4px 14px rgba(57,211,83,0.35);
-}
-[data-testid="stSidebar"] .stRadio label {
-    border-radius: var(--r-s) !important;
-    padding: 0.55rem 0.85rem !important;
-    color: rgba(255,255,255,0.6) !important;
-    transition: all 0.18s ease !important;
 }
 [data-testid="stSidebar"] .stRadio label:has(input:checked) {
     background: rgba(255,255,255,0.13) !important;
@@ -120,59 +108,42 @@ html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
     background: var(--c-surface) !important;
     border: 1px solid var(--border) !important;
     border-radius: var(--r) !important;
-    padding: 1.1rem 1.3rem !important;
     box-shadow: 0 2px 6px var(--shadow) !important;
-    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    transition: transform 0.2s ease !important;
 }
-[data-testid="metric-container"]:hover { transform: translateY(-2px); box-shadow: 0 5px 18px var(--shadow) !important; }
-[data-testid="stMetricLabel"] { font-size: 0.72rem !important; font-weight: 600 !important; text-transform: uppercase !important; color: var(--text-3) !important; }
-[data-testid="stMetricValue"] { font-size: 1.55rem !important; font-weight: 700 !important; color: var(--c-text) !important; }
+[data-testid="metric-container"]:hover { transform: translateY(-2px); }
+[data-testid="stMetricLabel"] { color: var(--text-3) !important; text-transform: uppercase !important; font-size: 0.72rem !important; }
+[data-testid="stMetricValue"] { color: var(--c-text) !important; font-weight: 700 !important; }
 
-/* DATAFRAMES */
-[data-testid="stDataFrame"] { border: 1px solid var(--border) !important; border-radius: var(--r) !important; overflow: hidden !important; }
-[data-testid="stDataFrame"] thead th { background: var(--c-surface2) !important; color: var(--text-2) !important; font-size: 0.7rem !important; font-weight: 600 !important; }
-[data-testid="stDataFrame"] tbody tr:hover td { background: var(--primary-dim) !important; }
-
-/* TABS & SEGMENTED CONTROL */
-.stTabs [data-baseweb="tab-list"], [data-testid="stSegmentedControl"] {
-    background: var(--c-surface2) !important;
-    border-radius: var(--r-s) !important;
-    padding: 3px !important;
-    border: 1px solid var(--border) !important;
+/* DATAFRAMES / TABELLEN (Fix für Lesbarkeit) */
+[data-testid="stDataFrame"] { 
+    border: 1px solid var(--border) !important; 
+    border-radius: var(--r) !important; 
+    background-color: var(--c-surface) !important;
 }
-.stTabs [aria-selected="true"], [data-testid="stSegmentedControl"] button[aria-checked="true"] {
-    background: var(--c-surface) !important;
-    color: var(--c-primary) !important;
-    font-weight: 700 !important;
+[data-testid="stDataFrame"] * { color: var(--c-text) !important; }
+[data-testid="stDataFrame"] thead th { 
+    background: var(--c-surface2) !important; 
+    font-weight: 700 !important; 
 }
 
-/* INPUTS */
+/* INPUTS & MODALS */
 [data-testid="stTextInput"] input, [data-testid="stNumberInput"] input {
     background: var(--c-surface) !important;
     border: 1px solid var(--border-s) !important;
-    border-radius: var(--r-s) !important;
     color: var(--c-text) !important;
 }
-[data-testid="stTextInput"] input:focus { border-color: var(--c-primary) !important; box-shadow: 0 0 0 3px var(--primary-dim) !important; }
-
-/* MODAL */
 [data-testid="stModal"] > div {
     background: var(--c-dialog) !important;
     border-radius: 16px !important;
-    box-shadow: 0 20px 50px var(--shadow) !important;
 }
 
-/* ALERTS */
-[data-testid="stSuccess"] { background: rgba(28,158,58,0.07) !important; border-left: 3px solid var(--value-pos) !important; border-radius: var(--r-s) !important; }
-[data-testid="stError"] { background: rgba(214,59,59,0.07) !important; border-left: 3px solid var(--value-neg) !important; border-radius: var(--r-s) !important; }
-
 /* TYPO & DIVIDER */
-h1 { font-weight: 800 !important; color: var(--c-text) !important; }
-h2 { font-weight: 700 !important; color: var(--c-text) !important; }
-hr { border: none !important; height: 1px !important; background: var(--border) !important; }
+h1, h2, h3 { color: var(--c-text) !important; font-weight: 700 !important; }
+hr { background: var(--border) !important; }
 
 /* SCROLLBAR */
-::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-thumb { background: var(--border-s); border-radius: 3px; }
 </style>
 """, unsafe_allow_html=True)
@@ -181,7 +152,7 @@ hr { border: none !important; height: 1px !important; background: var(--border) 
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 
-# --- ROUTING (AUTOMATIC BROWSER THEMING) ---
+# --- ROUTING ---
 if not st.session_state.logged_in:
     auth_page()
 else:
@@ -219,7 +190,7 @@ else:
             </span>
         </div>""", unsafe_allow_html=True)
 
-    # PAGE ROUTING
+    # Routing
     if page == "📊 Dashboard":
         dashboard_page(conn, u_id)
     elif page == "📝 Einträge":
