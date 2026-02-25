@@ -562,15 +562,6 @@ else:
 
         st.markdown("<div style='height:0.4rem'></div>", unsafe_allow_html=True)
 
-        # Theme Toggle
-        dark = st.session_state.dark_mode
-        toggle_label = "☀️  Hell-Modus" if dark else "🌙  Dunkel-Modus"
-        if st.button(toggle_label, width='stretch'):
-            st.session_state.dark_mode = not st.session_state.dark_mode
-            st.rerun()
-
-        st.markdown("<div style='height:0.3rem'></div>", unsafe_allow_html=True)
-
         if st.button("↩  Abmelden", width='stretch'):
             for key in ['logged_in', 'user_id', 'username', 'vorname', 'conn']:
                 st.session_state.pop(key, None)
