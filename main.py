@@ -29,9 +29,7 @@ st.markdown("""
     --value-warn:   #FF9800; 
     --value-neon:   #39D353; 
 
-    --c-surface2:   #F1F3F5;
     --text-2:       #475569; 
-    --text-3:       #64748B; 
     --border:       rgba(27, 58, 107, 0.08);
     --r: 12px; --r-s: 8px;
 }
@@ -43,25 +41,26 @@ html, body, [class*="css"] {
 }
 [data-testid="stAppViewContainer"] { background: var(--c-bg) !important; }
 
-/* RADIKALER FIX FÜR ALLE LABELS & LEGENDEN (Statistik-Teil) */
+/* RADIKALER FIX FÜR TEXTE & DIAGRAMM-LEGENDEN */
+/* Dies zielt auf alle Texte ab, die Streamlit in Diagrammen (SVG) rendert */
+text, .legendtext, .xtick text, .ytick text {
+    fill: var(--c-list-text) !important;
+    font-family: 'Outfit', sans-serif !important;
+}
+
+/* Fix für alle Labels und Markdown-Texte */
 [data-testid="stMetricLabel"], 
 .stCaptionContainer, 
 small, 
 label,
 [data-testid="stText"],
-[data-testid="stWidgetLabel"] p,
 .stMarkdown p,
 .stMarkdown span {
     color: var(--c-list-text) !important;
     opacity: 1 !important;
 }
 
-/* Spezieller Fix für Diagramm-Legenden und Achsen-Beschriftungen */
-div[data-testid="stExpanderDetails"] * {
-    color: var(--c-list-text) !important;
-}
-
-/* EXPANDER DESIGN */
+/* EXPANDER DESIGN (Statistiken) */
 .stExpander {
     border: 1px solid var(--border) !important;
     border-radius: var(--r) !important;
@@ -76,9 +75,10 @@ div[data-testid="stExpanderDetails"] * {
 .stExpander summary:hover { background-color: var(--c-primary) !important; }
 .stExpander svg { fill: white !important; }
 
-/* SCHUTZ FÜR FARBIGE WERTE (Timeline) */
-span[style*="color: rgb(28, 158, 58)"], span[style*="color: green"] { color: var(--value-pos) !important; }
-span[style*="color: rgb(214, 59, 59)"], span[style*="color: red"] { color: var(--value-neg) !important; }
+/* DIAGRAMM-CONTAINER FIX */
+div[data-testid="stExpanderDetails"] * {
+    color: var(--c-list-text) !important;
+}
 
 /* SIDEBAR */
 [data-testid="stSidebar"] { background: var(--c-primary) !important; }
