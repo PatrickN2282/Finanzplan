@@ -18,19 +18,17 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    /* ── LIGHT MODE (Config Basis) ── */
-    --c-primary:  var(--primary-color, #1B3A6B); /* Marine */
+    /* ── LIGHT MODE ── */
+    --c-primary:  var(--primary-color, #1B3A6B);
     --c-bg:       var(--background-color, #F8F9FA); 
     --c-surface:  var(--secondary-background-color, #FFFFFF);
     --c-text:     var(--text-color, #1E293B);
 
-    /* Akzentfarben */
-    --value-pos:   #2BB34F; /* Neongrün */
-    --value-neg:   #F44336; /* Rot */
-    --value-warn:  #FF9800; /* Orange Akzent */
-    --value-neon:  #39D353; /* Knall-Neon für Buttons */
+    --value-pos:   #2BB34F;
+    --value-neg:   #F44336;
+    --value-warn:  #FF9800;
+    --value-neon:  #39D353;
 
-    /* Ableitungen Light Mode */
     --c-surface2:  color-mix(in srgb, var(--c-surface) 90%, var(--c-bg) 10%);
     --c-dialog:    #FFFFFF;
     --border:      rgba(27, 58, 107, 0.1);
@@ -43,44 +41,45 @@ st.markdown("""
     --r-s:  8px;
 }
 
-/* ── DARK MODE OVERRIDE (Pastel Midnight Fix) ── */
+/* ── DARK MODE OVERRIDE (Maximale Sichtbarkeit) ── */
 @media (prefers-color-scheme: dark) {
     :root {
         --c-primary:  #7DA7D9; 
-        --c-bg:       #1A1C24; /* Tiefes Dunkelgrau */
-        --c-surface:  #252833; /* Etwas helleres Grau für Karten */
-        --c-text:     #F8FAFC; /* Maximale Helligkeit für Text */
-        
-        --value-pos:   #81C784; 
-        --value-warn:  #FFB74D; 
+        --c-bg:       #1A1C24; 
+        --c-surface:  #252833; 
+        --c-text:     #F8FAFC !important; /* Strahlendes Weiß */
         
         --c-surface2:  #2D313F;
         --c-dialog:    #1F222B;
         
-        /* FIX: Diese Werte müssen im Dark Mode deutlich heller sein! */
-        --text-2:      #E2E8F0 !important; /* Für Namen wie 'Tiguan' */
-        --text-3:      #CBD5E1 !important; /* Für Details wie 'Hauptkonto' */
+        /* Hellere Grautöne für Sekundärtexte */
+        --text-2:      #E2E8F0 !important; 
+        --text-3:      #CBD5E1 !important; 
         
         --border:      rgba(255, 255, 255, 0.1);
         --border-s:    rgba(255, 255, 255, 0.2);
         --shadow:      rgba(0, 0, 0, 0.4);
     }
 
-    /* GLOBALER FIX FÜR TEXT-SICHTBARKEIT IM DARK MODE */
-    [data-testid="stMarkdownContainer"] p, 
-    [data-testid="stMarkdownContainer"] span,
-    [data-testid="stMarkdownContainer"] small,
-    [data-testid="stText"] {
+    /* RADIKALER FIX FÜR ALLE TEXTE IM DARK MODE */
+    /* Dies erzwingt die Farbe für Absätze, Spans, Labels und Divs in Containern */
+    div[data-testid="stVerticalBlock"] * {
         color: var(--text-2) !important;
     }
-    
-    h1, h2, h3, h4, b, strong {
+
+    /* Überschriften, Fettgedrucktes und Metriken extra hell */
+    h1, h2, h3, h4, h5, h6, b, strong, [data-testid="stMetricValue"] {
         color: var(--c-text) !important;
     }
 
-    /* Fix für die Timeline-Icons/Texte */
-    [data-testid="stVerticalBlock"] div {
-        color: var(--text-2);
+    /* Speziell für die Timeline-Einträge und Captions */
+    .stMarkdown p, .stMarkdown span, div[class*="st-"] p {
+        color: var(--text-2) !important;
+    }
+
+    /* Falls Captions (st.caption) genutzt werden */
+    [data-testid="captionContainer"] {
+        color: var(--text-3) !important;
     }
 }
 
@@ -110,11 +109,6 @@ html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
     color: #0A1F0D !important;
     font-weight: 700 !important;
 }
-[data-testid="stSidebar"] .stRadio label:has(input:checked) {
-    background: rgba(255,255,255,0.12) !important;
-    border-left: 3px solid var(--value-warn) !important;
-    color: white !important;
-}
 
 /* METRIKEN */
 [data-testid="metric-container"] {
@@ -123,8 +117,6 @@ html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
     border-radius: var(--r) !important;
     box-shadow: 0 4px 12px var(--shadow) !important;
 }
-[data-testid="stMetricLabel"] { color: var(--text-3) !important; font-size: 0.75rem !important; text-transform: uppercase !important; }
-[data-testid="stMetricValue"] { color: var(--c-text) !important; font-weight: 800 !important; }
 
 /* TABELLEN */
 [data-testid="stDataFrame"] { 
@@ -133,7 +125,6 @@ html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
     background-color: var(--c-surface) !important;
 }
 [data-testid="stDataFrame"] * { color: var(--c-text) !important; }
-[data-testid="stDataFrame"] thead th { background: var(--c-surface2) !important; }
 
 /* INPUTS */
 [data-testid="stTextInput"] input, [data-testid="stNumberInput"] input {
@@ -147,10 +138,6 @@ html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
     background: var(--c-dialog) !important;
     border-radius: 16px !important;
 }
-
-/* SCROLLBAR */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-thumb { background: var(--value-warn); border-radius: 10px; }
 </style>
 """, unsafe_allow_html=True)
 
