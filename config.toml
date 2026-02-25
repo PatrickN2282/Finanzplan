@@ -10,7 +10,7 @@
 # ═══════════════════════════════════════════════════
 base = "light"
 primaryColor             = "#1B3A6B"
-backgroundColor          = "#E8EBF2"
+backgroundColor          = "#87888C" #E8EBF2"
 secondaryBackgroundColor = "#F4F5F9"
 textColor                = "#1A1F2E"
 
