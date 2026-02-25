@@ -11,106 +11,104 @@ st.set_page_config(
 )
 
 # ═══════════════════════════════════════════════════════════════
-# PRECISION FINANCE – Native Adaptive CSS (v1.3.3)
+# PRECISION FINANCE – Fixed Light Design (v1.3.3)
 # ═══════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
+/* FIXIERTES DESIGN - Dark Mode Abfrage wurde entfernt */
 :root {
-    /* ── LIGHT MODE ── */
-    --c-primary:    var(--primary-color, #1B3A6B);
-    --c-bg:         var(--background-color, #F8F9FA); 
-    --c-surface:    var(--secondary-background-color, #FFFFFF);
-    --c-text:       #1E293B;
+    /* ── BASIS FARBEN ── */
+    --c-primary:    #1B3A6B; /* Marineblau */
+    --c-bg:         #F8F9FA; /* Hellgrau aus config.toml */
+    --c-surface:    #FFFFFF; /* Weiß für Karten */
+    --c-text:       #1E293B; /* Dunkles Schiefergrau */
     
-    /* Spezifische Farbe für Listeneinträge (Tiguan, Arbeitgeber) */
+    /* Listeneinträge (Tiguan, Arbeitgeber) */
     --c-list-text:  #2D3748; 
 
-    --value-pos:    #2BB34F;
-    --value-neg:    #F44336;
-    --value-warn:   #FF9800;
-    --value-neon:   #39D353;
+    /* Akzentfarben */
+    --value-pos:    #2BB34F; /* Neongrün (sanft) */
+    --value-neg:    #F44336; /* Rot */
+    --value-warn:   #FF9800; /* Orange */
+    --value-neon:   #39D353; /* Button-Neon */
 
-    --c-surface2:   color-mix(in srgb, var(--c-surface) 90%, var(--c-bg) 10%);
+    /* Ableitungen */
+    --c-surface2:   #F1F3F5;
+    --c-dialog:     #FFFFFF;
     --text-2:       rgba(30, 41, 59, 0.85);
     --text-3:       rgba(30, 41, 59, 0.6);
-    --border:       rgba(27, 58, 107, 0.1);
-    --r: 12px; --r-s: 8px;
+    --border:       rgba(27, 58, 107, 0.08);
+    --border-s:     rgba(27, 58, 107, 0.15);
+    --shadow:       rgba(27, 58, 107, 0.05);
+    
+    --r:   12px;
+    --r-s:  8px;
 }
 
-/* ── DARK MODE OVERRIDE (Pastell & Kontrast) ── */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --c-primary:    #7DA7D9; 
-        --c-bg:         #1A1C24; 
-        --c-surface:    #252833; 
-        --c-text:       #F8FAFC; 
-        
-        /* Neue Pastell-Abstufung für deine Buchungs-Namen */
-        --c-list-text:  #E2E8F0; 
-        
-        --text-2:       #CBD5E1; /* Für Unterzeilen wie 'Hauptkonto' */
-        --text-3:       #94A3B8;
-        
-        --c-surface2:   #2D313F;
-        --border:       rgba(255, 255, 255, 0.1);
-    }
-
-    /* Anwenden der neuen Listen-Farbe auf alle Buchungs-Elemente */
-    div[data-testid="stVerticalBlock"] .stMarkdown p {
-        color: var(--c-list-text) !important;
-        font-weight: 500 !important;
-    }
-
-    /* Unterzeilen (Secondary Info) etwas dezenter aber sichtbar */
-    div[data-testid="stVerticalBlock"] .stMarkdown span,
-    div[data-testid="stVerticalBlock"] .stMarkdown small {
-        color: var(--text-2) !important;
-    }
-
-    /* Überschriften bleiben im Fokus */
-    h1, h2, h3, [data-testid="stMetricValue"] {
-        color: var(--c-text) !important;
-    }
-}
-
-/* BASE */
-html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; }
+/* BASE STYLE */
+html, body, [class*="css"] { font-family: 'Outfit', sans-serif !important; color: var(--c-text); }
 [data-testid="stAppViewContainer"] { background: var(--c-bg) !important; }
 [data-testid="stHeader"] { background: transparent !important; }
 .main .block-container { padding: 1.8rem 2.8rem 3rem !important; max-width: 1500px !important; }
 
-/* SIDEBAR (Bleibt Marineblau für den Look) */
-[data-testid="stSidebar"] { background: #1B3A6B !important; border-right: none !important; }
+/* SIDEBAR - Immer Marineblau */
+[data-testid="stSidebar"] { background: var(--c-primary) !important; border-right: none !important; }
 [data-testid="stSidebar"] * { color: rgba(255,255,255,0.9) !important; }
+[data-testid="stSidebar"] .stButton > button {
+    background: rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+    border-radius: var(--r-s) !important;
+    color: white !important;
+}
+[data-testid="stSidebar"] .stButton > button:hover {
+    background: rgba(255,255,255,0.15) !important;
+    border-color: var(--value-warn) !important;
+}
 [data-testid="stSidebar"] .stButton > button[kind="primary"] {
     background: var(--value-neon) !important;
+    border-color: var(--value-neon) !important;
     color: #0A1F0D !important;
     font-weight: 700 !important;
 }
+[data-testid="stSidebar"] .stRadio label:has(input:checked) {
+    background: rgba(255,255,255,0.12) !important;
+    border-left: 3px solid var(--value-warn) !important;
+}
 
-/* METRIKEN & KARTEN */
+/* LISTENEINTRÄGE & TEXTE */
+div[data-testid="stVerticalBlock"] .stMarkdown p {
+    color: var(--c-list-text) !important;
+    font-weight: 500 !important;
+}
+div[data-testid="stVerticalBlock"] .stMarkdown span {
+    color: var(--text-2) !important;
+}
+
+/* METRIKEN & TABELLEN */
 [data-testid="metric-container"] {
     background: var(--c-surface) !important;
     border: 1px solid var(--border) !important;
     border-radius: var(--r) !important;
 }
-
-/* TABELLEN */
+[data-testid="stMetricValue"] { color: var(--c-text) !important; font-weight: 800 !important; }
 [data-testid="stDataFrame"] { 
     border: 1px solid var(--border) !important; 
     border-radius: var(--r) !important; 
     background-color: var(--c-surface) !important;
 }
-[data-testid="stDataFrame"] * { color: var(--c-text) !important; }
 
 /* INPUTS */
-[data-testid="stTextInput"] input {
+[data-testid="stTextInput"] input, [data-testid="stNumberInput"] input {
     background: var(--c-surface) !important;
+    border: 1px solid var(--border-s) !important;
     color: var(--c-text) !important;
-    border: 1px solid var(--border) !important;
 }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: var(--value-warn); border-radius: 10px; }
 </style>
 """, unsafe_allow_html=True)
 
