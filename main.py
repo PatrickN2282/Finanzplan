@@ -11,128 +11,208 @@ st.set_page_config(
 )
 
 # ═══════════════════════════════════════════════════════════════
-# PRECISION FINANCE – Unified High Contrast Design (v2.0 Stable)
+# FINANCE PRO – Marine Neon Edition (v3.0)
 # ═══════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    --c-primary:    #1B3A6B; 
-    --c-bg:         #F8F9FA; 
-    --c-surface:    #FFFFFF; 
-    --c-text:       #1E293B; 
-    --c-list-text:  #2D3748; 
+    --marine:        #0F2747;
+    --marine-light:  #1B3A6B;
+    --neon:          #39FF14;
+    --orange:        #FF8C42;
+    --bg:            #F4F6F9;
+    --surface:       #FFFFFF;
+    --surface-soft:  #F1F3F6;
+    --text:          #1E293B;
+    --text-soft:     #64748B;
 
-    --value-pos:    #2BB34F; 
-    --value-neg:    #F44336; 
-    --value-warn:   #FF9800; 
-    --value-neon:   #39D353; 
+    --value-pos:     #2BB34F;
+    --value-neg:     #F44336;
 
-    --border:       rgba(27, 58, 107, 0.08);
-    --r: 12px; 
-    --r-s: 8px;
+    --border:        rgba(15,39,71,0.08);
+    --radius:        14px;
+    --radius-small:  8px;
 }
 
-/* ─────────────────────────────────────────────
-   BASE TYPOGRAPHY
-───────────────────────────────────────────── */
+/* ───────────── Base ───────────── */
+
 html, body {
     font-family: 'Outfit', sans-serif !important;
-    color: var(--c-text);
+    color: var(--text);
 }
 
 [data-testid="stAppViewContainer"] {
-    background: var(--c-bg);
+    background: var(--bg);
 }
 
-/* Markdown & normale Texte */
+/* Typography */
+h1, h2, h3, h4 {
+    font-weight: 700 !important;
+    color: var(--marine);
+}
+
 .stMarkdown p,
-.stMarkdown span,
 label,
 small,
 [data-testid="stMetricLabel"],
 [data-testid="stWidgetLabel"] {
-    color: var(--c-list-text);
+    color: var(--text-soft);
 }
 
-/* ─────────────────────────────────────────────
-   SVG FIX FÜR DIAGRAMME (WICHTIG!)
-───────────────────────────────────────────── */
-svg text {
-    fill: var(--c-list-text) !important;
-    font-family: 'Outfit', sans-serif !important;
+/* ───────────── Sidebar ───────────── */
+
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, var(--marine), var(--marine-light));
+    box-shadow: 4px 0 20px rgba(0,0,0,0.08);
 }
 
-/* ─────────────────────────────────────────────
-   EXPANDER
-───────────────────────────────────────────── */
-.stExpander {
+[data-testid="stSidebar"] * {
+    color: rgba(255,255,255,0.95);
+}
+
+/* Primary Button (Neon CTA) */
+[data-testid="stSidebar"] .stButton > button[kind="primary"] {
+    background: var(--neon);
+    color: #05220A;
+    font-weight: 700;
+    border-radius: var(--radius-small);
+    border: none;
+    transition: all 0.2s ease;
+}
+
+[data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(57,255,20,0.4);
+}
+
+/* Secondary Button */
+.stButton > button {
+    border-radius: var(--radius-small);
+}
+
+/* ───────────── Cards / Metrics ───────────── */
+
+[data-testid="metric-container"] {
+    background: var(--surface);
+    border-radius: var(--radius);
     border: 1px solid var(--border);
-    border-radius: var(--r);
-    background: var(--c-surface);
-    margin-bottom: 1rem;
+    padding: 1rem;
+    box-shadow: 0 4px 14px rgba(15,39,71,0.05);
+}
+
+[data-testid="stMetricValue"] {
+    font-weight: 800;
+    color: var(--text);
+}
+
+/* ───────────── Expander ───────────── */
+
+.stExpander {
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.04);
 }
 
 .stExpander summary {
-    background-color: #2D3748;
+    background: var(--marine-light);
     color: white;
-    border-radius: var(--r-s);
+    border-radius: var(--radius-small);
+    font-weight: 600;
 }
 
 .stExpander summary:hover {
-    background-color: var(--c-primary);
+    background: var(--marine);
 }
 
 .stExpander svg {
     fill: white !important;
 }
 
-/* ─────────────────────────────────────────────
-   METRIKEN
-───────────────────────────────────────────── */
-[data-testid="metric-container"] { 
-    background: var(--c-surface);
+/* ───────────── Charts (SVG Fix) ───────────── */
+
+svg text {
+    fill: var(--text-soft) !important;
+    font-family: 'Outfit', sans-serif !important;
+}
+
+/* ───────────── Modal Styling ───────────── */
+
+div[data-testid="stDialogOverlay"] {
+    background: rgba(15,39,71,0.45) !important;
+}
+
+div[data-testid="stDialog"] {
+    background: var(--surface) !important;
+    border-radius: var(--radius) !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+div[data-testid="stDialog"] * {
+    color: var(--text) !important;
+}
+
+/* ───────────── Selectbox / Dropdown ───────────── */
+
+div[data-baseweb="select"] > div {
+    background: var(--surface);
+    border-radius: var(--radius-small);
     border: 1px solid var(--border);
-    border-radius: var(--r);
+    color: var(--text);
 }
 
-[data-testid="stMetricValue"] { 
-    color: var(--c-text);
-    font-weight: 800;
+div[role="listbox"] {
+    background: var(--surface);
+    border-radius: var(--radius-small);
+    border: 1px solid var(--border);
 }
 
-/* ─────────────────────────────────────────────
-   SIDEBAR
-───────────────────────────────────────────── */
-[data-testid="stSidebar"] {
-    background: var(--c-primary);
+div[role="option"] {
+    background: var(--surface);
+    color: var(--text);
 }
 
-[data-testid="stSidebar"] * {
-    color: rgba(255,255,255,0.9);
+div[role="option"]:hover {
+    background: var(--surface-soft);
 }
 
-[data-testid="stSidebar"] .stButton > button[kind="primary"] {
-    background: var(--value-neon);
-    color: #0A1F0D;
-    font-weight: 700;
+div[aria-selected="true"] {
+    background: var(--marine-light) !important;
+    color: white !important;
 }
 
-/* ─────────────────────────────────────────────
-   WERTFARBEN (FÜR TABELLEN & LISTEN)
-   → NICHT global überschrieben!
-───────────────────────────────────────────── */
+/* ───────────── Inputs ───────────── */
+
+input, textarea {
+    border-radius: var(--radius-small) !important;
+    border: 1px solid var(--border) !important;
+}
+
+/* ───────────── Value Classes (unchanged logic) ───────────── */
+
 .pos { color: var(--value-pos) !important; font-weight:600; }
 .neg { color: var(--value-neg) !important; font-weight:600; }
-.warn { color: var(--value-warn) !important; font-weight:600; }
+
+/* ───────────── Accent Elements ───────────── */
+
+.orange-accent {
+    color: var(--orange);
+    font-weight: 600;
+}
+
+.neon-accent {
+    color: var(--neon);
+    font-weight: 600;
+}
 
 </style>
 """, unsafe_allow_html=True)
 
-# ─────────────────────────────────────────────
-# ROUTING
-# ─────────────────────────────────────────────
+# ───────────── Routing ─────────────
+
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 
@@ -146,26 +226,28 @@ else:
 
     with st.sidebar:
         initials = (display_name[:2]).upper()
+
         st.markdown(f"""
-        <div style="padding:1.4rem 0.5rem 1rem;
+        <div style="padding:1.6rem 0.5rem 1rem;
                     text-align:center;
-                    border-bottom:1px solid rgba(255,255,255,0.1);
-                    margin-bottom:0.8rem;">
-            <div style="width:48px;height:48px;border-radius:12px;
-                        background:rgba(255,152,0,0.15);
-                        border:2px solid var(--value-warn);
+                    border-bottom:1px solid rgba(255,255,255,0.15);
+                    margin-bottom:1rem;">
+            <div style="width:52px;height:52px;border-radius:16px;
+                        background:rgba(57,255,20,0.15);
+                        border:2px solid var(--neon);
                         display:flex;align-items:center;
                         justify-content:center;
-                        margin:0 auto 0.7rem;
+                        margin:0 auto 0.8rem;
                         font-weight:800;
-                        color:var(--value-warn);">
+                        font-size:1.1rem;
+                        color:var(--neon);">
                 {initials}
             </div>
-            <div style="font-weight:700;color:white;">
+            <div style="font-weight:700;color:white;font-size:1.05rem;">
                 {display_name}
             </div>
-            <div style="font-size:0.72rem;
-                        color:rgba(255,255,255,0.35);">
+            <div style="font-size:0.75rem;
+                        color:rgba(255,255,255,0.45);">
                 @{username}
             </div>
         </div>
