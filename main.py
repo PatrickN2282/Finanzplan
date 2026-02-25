@@ -19,7 +19,7 @@ st.markdown("""
 
 :root {
     --c-primary:    #1B3A6B; 
-    --c-bg:         #868686; 
+    --c-bg:         #7fbfff; 
     --c-surface:    #FFFFFF; 
     --c-text:       #1E293B; 
     --c-list-text:  #2D3748; 
