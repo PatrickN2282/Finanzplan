@@ -1,7 +1,7 @@
 import streamlit as st
 from db import get_conn
 from auth import auth_page
-from ui import eintrag_dialog, dashboard_page, entries_page, settings_page
+# from ui import eintrag_dialog, dashboard_page, entries_page, settings_page
 
 st.set_page_config(
     page_title="Finanz-Master",
