@@ -243,12 +243,28 @@ def konto_dialog(conn, u_id, edit_id=None):
     existing  = None
     konten_df = pd.DataFrame()
     if edit_id:
-        _c=conn.cursor();_c.execute("SELECT * FROM konten WHERE id=%s AND user_id=%s",(int(edit_id),int(u_id)));_r=_c.fetchall();df=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
+        _c = conn.cursor()
+        _c.execute("SELECT * FROM konten WHERE id=%s AND user_id=%s", (int(edit_id), int(u_id)))
+        _r = _c.fetchall()
+        df = pd.DataFrame(_r, columns=[d[0] for d in _c.description] if _c.description else [])
+        _c.close()
         if not df.empty: existing = df.iloc[0]
 
+    # typ-Auswahl AUSSERHALB des Formulars damit Wechsel sofort re-rendert
+    typ_idx = 0 if (existing is None or existing['typ'] == "Bankkonto") else 1
+    typ = st.selectbox("Kontotyp", ["Bankkonto", "Zahldienstleister"], index=typ_idx)
+
+    # Bankkonten für Verknüpfung vorladen (nur relevant bei Zahldienstleister)
+    if typ == "Zahldienstleister":
+        _c = conn.cursor()
+        _c.execute("SELECT * FROM konten WHERE user_id=%s AND typ='Bankkonto'", (u_id,))
+        _r = _c.fetchall()
+        konten_df = pd.DataFrame(_r, columns=[d[0] for d in _c.description] if _c.description else [])
+        _c.close()
+        if konten_df.empty:
+            st.warning("Lege zuerst ein Bankkonto an.")
+
     with st.form("konto_form"):
-        typ  = st.selectbox("Kontotyp", ["Bankkonto", "Zahldienstleister"],
-                            index=0 if (existing is None or existing['typ'] == "Bankkonto") else 1)
         name = st.text_input("Name", value=existing['name'] if existing is not None else "",
                              placeholder="z.B. DKB Girokonto, PayPal…")
         iban = ""
@@ -256,18 +272,14 @@ def konto_dialog(conn, u_id, edit_id=None):
             iban = st.text_input("IBAN (optional)",
                                  value=existing['iban'] if existing is not None else "")
         parent = None
-        if typ == "Zahldienstleister":
-            _c=conn.cursor();_c.execute("SELECT * FROM konten WHERE user_id=%s AND typ='Bankkonto'",(u_id,));_r=_c.fetchall();konten_df=pd.DataFrame(_r,columns=[d[0] for d in _c.description] if _c.description else []);_c.close()
-            if not konten_df.empty:
-                bl = konten_df['name'].tolist()
-                cp = None
-                if existing is not None and existing['parent_id']:
-                    m = konten_df[konten_df['id'] == existing['parent_id']]['name']
-                    cp = m.iloc[0] if not m.empty else None
-                parent = st.selectbox("Verbundenes Konto", bl,
-                                      index=bl.index(cp) if cp in bl else 0)
-            else:
-                st.warning("Lege zuerst ein Bankkonto an.")
+        if typ == "Zahldienstleister" and not konten_df.empty:
+            bl = konten_df['name'].tolist()
+            cp = None
+            if existing is not None and existing['parent_id']:
+                m = konten_df[konten_df['id'] == existing['parent_id']]['name']
+                cp = m.iloc[0] if not m.empty else None
+            parent = st.selectbox("Verbundenes Konto", bl,
+                                  index=bl.index(cp) if cp in bl else 0)
 
         if st.form_submit_button("Speichern", width='stretch', type="primary"):
             if not name: st.error("Name erforderlich."); return
@@ -278,10 +290,10 @@ def konto_dialog(conn, u_id, edit_id=None):
             try:
                 if existing is not None:
                     c.execute("UPDATE konten SET name=%s,iban=%s,typ=%s,parent_id=%s WHERE id=%s AND user_id=%s",
-                              (name,iban,typ,parent_id,int(existing['id']),u_id))
+                              (name, iban, typ, parent_id, int(existing['id']), u_id))
                 else:
                     c.execute("INSERT INTO konten (user_id,name,iban,typ,parent_id) VALUES (%s,%s,%s,%s,%s)",
-                              (u_id,name,iban,typ,parent_id))
+                              (u_id, name, iban, typ, parent_id))
                 conn.commit(); st.rerun()
             except Exception as e:
                 conn.rollback(); st.error(f"Fehler: {e}")
