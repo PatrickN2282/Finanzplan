@@ -24,44 +24,60 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
-/* ══════════════════════════════════════════
-   TOKENS – Precision Finance
-   Hintergrund:  #ECEEF3  (seichtes Blaugrau)
-   Surface:      #F6F7FA  (helles Grau, kein Weiß)
-   Surface2:     #ECEEF3  (Tabellen-Header)
-   Dialog-BG:    #F0F2F7  (mittleres Grau, kein Weiß/Schwarz)
-   Text-Input-BG:#F6F7FA  mit dunklem Text
-   ══════════════════════════════════════════ */
+/*
+ * FARBSTEUERUNG NUR ÜBER config.toml:
+ *
+ *   primaryColor             → Sidebar, Akzente, Buttons, Hover
+ *   backgroundColor          → App-Hintergrund
+ *   secondaryBackgroundColor → Karten, Eingaben, Tabellen
+ *   textColor                → Haupttext
+ *
+ * Streamlit setzt diese als CSS-Vars:
+ *   --primary-color, --background-color,
+ *   --secondary-background-color, --text-color
+ *
+ * Wir leiten daraus alle App-Variablen ab.
+ */
 :root {
-    /* Akzentfarben */
-    --marine:      #1B3A6B;
-    --marine-l:    #254E94;
-    --marine-dim:  rgba(27,58,107,0.09);
-    --marine-dim2: rgba(27,58,107,0.05);
-    --neon:        #39D353;
-    --orange:      #F07800;
-    --red:         #D63B3B;
-    --red-dim:     rgba(214,59,59,0.08);
-    --green:       #1C9E3A;
+    /* ── Von config.toml gesteuert ─────────── */
+    --c-primary:  var(--primary-color,       #1B3A6B);
+    --c-bg:       var(--background-color,    #E8EBF2);
+    --c-surface:  var(--secondary-background-color, #F4F5F9);
+    --c-text:     var(--text-color,          #1A1F2E);
 
-    /* Hintergründe – seichtes Blaugrau-Spektrum */
-    --bg:          #E8EBF2;   /* Seichtes Grau-Blau für App-BG */
-    --surface:     #F4F5F9;   /* Karten, Eingaben – etwas heller */
-    --surface2:    #DFE2EC;   /* Tabellen-Header, dunkleres Segment */
-    --dialog-bg:   #EDF0F7;   /* Popup-Hintergrund – mittleres Grau */
+    /* ── Semantische Ableitungen ─────────────
+     * Alle anderen Farben werden aus den 4 Basis-Variablen
+     * berechnet – kein hardcodierter Wert der config.toml widerspricht.
+     */
 
-    /* Ränder & Schatten */
-    --border:      rgba(27,58,107,0.11);
-    --border-s:    rgba(27,58,107,0.2);
+    /* Semantische Wertfarben – bewusst fix, nicht theme-abhängig */
+    --value-pos:   #1C9E3A;   /* Positive Werte / Einnahmen → immer grün  */
+    --value-neg:   #D63B3B;   /* Negative Werte / Ausgaben  → immer rot   */
+    --value-warn:  #F07800;   /* Warnungen / Abos           → immer orange */
+    --value-neon:  #39D353;   /* CTA / Neon-Grün Sidebar    */
 
-    /* Text */
-    --text:        #1A1F2E;
-    --text-2:      #4A5270;
-    --text-3:      #7A84A0;
+    /* Oberflächen-Abstufungen (relativ zu --c-surface) */
+    --c-surface2:  color-mix(in srgb, var(--c-surface) 80%, var(--c-bg) 20%);
+    --c-dialog:    color-mix(in srgb, var(--c-surface) 90%, var(--c-bg) 10%);
 
-    --shadow:      rgba(27,58,107,0.07);
-    --r:           12px;
-    --r-s:         8px;
+    /* Ränder aus primaryColor */
+    --border:      color-mix(in srgb, var(--c-primary) 11%, transparent);
+    --border-s:    color-mix(in srgb, var(--c-primary) 22%, transparent);
+
+    /* Text-Abstufungen aus --c-text */
+    --text-2:      color-mix(in srgb, var(--c-text) 70%, transparent);
+    --text-3:      color-mix(in srgb, var(--c-text) 40%, transparent);
+
+    /* Schatten */
+    --shadow:      color-mix(in srgb, var(--c-primary) 8%, transparent);
+
+    /* Akzent-Dimming */
+    --primary-dim:  color-mix(in srgb, var(--c-primary) 9%, transparent);
+    --primary-dim2: color-mix(in srgb, var(--c-primary) 5%, transparent);
+
+    /* Radien */
+    --r:   12px;
+    --r-s:  8px;
 }
 
 /* ── BASE ─────────────────────────────────── */
@@ -69,7 +85,7 @@ html, body, [class*="css"] {
     font-family: 'Outfit', sans-serif !important;
 }
 [data-testid="stAppViewContainer"] {
-    background: var(--bg) !important;
+    background: var(--c-bg) !important;
 }
 [data-testid="stHeader"] {
     background: transparent !important;
@@ -81,7 +97,7 @@ html, body, [class*="css"] {
 
 /* ── SIDEBAR ──────────────────────────────── */
 [data-testid="stSidebar"] {
-    background: var(--marine) !important;
+    background: var(--c-primary) !important;
     border-right: none !important;
 }
 [data-testid="stSidebar"] * {
@@ -106,14 +122,14 @@ html, body, [class*="css"] {
     transform: translateX(2px);
 }
 [data-testid="stSidebar"] .stButton > button[kind="primary"] {
-    background: var(--neon) !important;
-    border-color: var(--neon) !important;
+    background: var(--value-neon) !important;
+    border-color: var(--value-neon) !important;
     color: #0A1F0D !important;
     font-weight: 700 !important;
     box-shadow: 0 4px 14px rgba(57,211,83,0.35);
 }
 [data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {
-    background: #47E063 !important;
+    filter: brightness(1.1);
     box-shadow: 0 6px 20px rgba(57,211,83,0.45);
     transform: translateX(2px) translateY(-1px);
 }
@@ -143,14 +159,13 @@ html, body, [class*="css"] {
     background: rgba(255,255,255,0.2) !important;
 }
 
-/* Sidebar-Toggle sichtbar auf Marine-BG */
+/* Sidebar-Toggle */
 [data-testid="stSidebarCollapseButton"] button,
 button[aria-label="Close sidebar"],
 button[aria-label="Open sidebar"] {
     background: rgba(255,255,255,0.18) !important;
     border: 1px solid rgba(255,255,255,0.32) !important;
     border-radius: 8px !important;
-    color: white !important;
 }
 [data-testid="stSidebarCollapseButton"] button svg,
 button[aria-label="Close sidebar"] svg,
@@ -158,10 +173,8 @@ button[aria-label="Open sidebar"] svg {
     fill: white !important; stroke: white !important; opacity: 1 !important;
 }
 [data-testid="collapsedControl"] {
-    background: var(--marine) !important;
+    background: var(--c-primary) !important;
     border-radius: 0 8px 8px 0 !important;
-    border: 1px solid rgba(27,58,107,0.2) !important;
-    box-shadow: 2px 0 8px rgba(27,58,107,0.15) !important;
 }
 [data-testid="collapsedControl"] button svg {
     fill: white !important; stroke: white !important;
@@ -169,7 +182,7 @@ button[aria-label="Open sidebar"] svg {
 
 /* ── METRIKEN ─────────────────────────────── */
 [data-testid="metric-container"] {
-    background: var(--surface) !important;
+    background: var(--c-surface) !important;
     border: 1px solid var(--border) !important;
     border-radius: var(--r) !important;
     padding: 1.1rem 1.3rem !important;
@@ -182,7 +195,7 @@ button[aria-label="Open sidebar"] svg {
     content: '';
     position: absolute;
     left: 0; top: 0; bottom: 0; width: 3px;
-    background: var(--marine);
+    background: var(--c-primary);
     border-radius: 3px 0 0 3px;
 }
 [data-testid="metric-container"]:hover {
@@ -202,7 +215,7 @@ button[aria-label="Open sidebar"] svg {
     font-size: 1.55rem !important;
     font-weight: 700 !important;
     letter-spacing: -0.02em !important;
-    color: var(--text) !important;
+    color: var(--c-text) !important;
 }
 [data-testid="stMetricDelta"] {
     font-size: 0.8rem !important;
@@ -216,9 +229,8 @@ button[aria-label="Open sidebar"] svg {
     overflow: hidden !important;
     box-shadow: 0 1px 4px var(--shadow) !important;
 }
-/* Header: etwas dunkler als surface, kein Schwarz */
 [data-testid="stDataFrame"] thead th {
-    background: var(--surface2) !important;
+    background: var(--c-surface2) !important;
     color: var(--text-2) !important;
     font-family: 'Outfit', sans-serif !important;
     font-size: 0.7rem !important;
@@ -228,30 +240,30 @@ button[aria-label="Open sidebar"] svg {
     border-bottom: 1px solid var(--border-s) !important;
     padding: 0.65rem 1rem !important;
 }
-/* Zeilen: surface (helles Grau), kein Weiß/Schwarz */
 [data-testid="stDataFrame"] tbody tr {
     border-bottom: 1px solid var(--border) !important;
     transition: background 0.12s !important;
 }
 [data-testid="stDataFrame"] tbody tr:nth-child(odd) td {
-    background: var(--surface) !important;
+    background: var(--c-surface) !important;
+    color: var(--c-text) !important;
 }
 [data-testid="stDataFrame"] tbody tr:nth-child(even) td {
-    background: #ECF0F6 !important;
+    background: var(--c-surface2) !important;
+    color: var(--c-text) !important;
 }
 [data-testid="stDataFrame"] tbody tr:hover td {
-    background: rgba(27,58,107,0.07) !important;
+    background: var(--primary-dim) !important;
 }
 [data-testid="stDataFrame"] tbody td {
     font-family: 'Outfit', sans-serif !important;
     font-size: 0.875rem !important;
-    color: var(--text) !important;
     padding: 0.55rem 1rem !important;
 }
 
 /* ── EXPANDER ─────────────────────────────── */
 [data-testid="stExpander"] {
-    background: var(--surface) !important;
+    background: var(--c-surface) !important;
     border: 1px solid var(--border) !important;
     border-radius: var(--r) !important;
     box-shadow: 0 1px 4px var(--shadow);
@@ -260,19 +272,18 @@ button[aria-label="Open sidebar"] svg {
 }
 [data-testid="stExpander"]:hover {
     border-color: var(--border-s) !important;
-    box-shadow: 0 3px 10px var(--shadow) !important;
 }
 [data-testid="stExpander"] summary {
     font-family: 'Outfit', sans-serif !important;
     font-weight: 600 !important;
-    color: var(--text) !important;
+    color: var(--c-text) !important;
     font-size: 0.9rem !important;
     padding: 0.85rem 1.1rem !important;
 }
 
 /* ── TABS ─────────────────────────────────── */
 .stTabs [data-baseweb="tab-list"] {
-    background: var(--surface2) !important;
+    background: var(--c-surface2) !important;
     border-radius: var(--r-s) !important;
     padding: 3px !important;
     gap: 0 !important;
@@ -291,8 +302,8 @@ button[aria-label="Open sidebar"] svg {
     transition: all 0.18s !important;
 }
 .stTabs [aria-selected="true"] {
-    background: var(--surface) !important;
-    color: var(--marine) !important;
+    background: var(--c-surface) !important;
+    color: var(--c-primary) !important;
     font-weight: 700 !important;
     box-shadow: 0 1px 4px var(--shadow) !important;
     border: 1px solid var(--border) !important;
@@ -306,31 +317,31 @@ button[aria-label="Open sidebar"] svg {
     font-size: 0.87rem !important;
     transition: all 0.18s ease !important;
     border: 1px solid var(--border-s) !important;
-    background: var(--surface) !important;
+    background: var(--c-surface) !important;
     color: var(--text-2) !important;
     box-shadow: 0 1px 3px var(--shadow) !important;
 }
 .stButton > button[kind="primary"] {
-    background: var(--marine) !important;
-    border-color: var(--marine) !important;
+    background: var(--c-primary) !important;
+    border-color: var(--c-primary) !important;
     color: white !important;
     font-weight: 600 !important;
-    box-shadow: 0 3px 10px rgba(27,58,107,0.3) !important;
+    box-shadow: 0 3px 10px var(--primary-dim) !important;
 }
 .stButton > button[kind="primary"]:hover {
-    background: var(--marine-l) !important;
-    box-shadow: 0 5px 16px rgba(27,58,107,0.4) !important;
+    filter: brightness(1.1) !important;
+    box-shadow: 0 5px 16px var(--border-s) !important;
     transform: translateY(-1px);
 }
 .stButton > button:not([kind="primary"]):hover {
-    border-color: var(--marine) !important;
-    color: var(--marine) !important;
-    background: var(--marine-dim) !important;
+    border-color: var(--c-primary) !important;
+    color: var(--c-primary) !important;
+    background: var(--primary-dim2) !important;
 }
 
 /* ── SEGMENTED CONTROL ────────────────────── */
 [data-testid="stSegmentedControl"] {
-    background: var(--surface2) !important;
+    background: var(--c-surface2) !important;
     border: 1px solid var(--border) !important;
     border-radius: var(--r-s) !important;
     padding: 3px !important;
@@ -346,127 +357,101 @@ button[aria-label="Open sidebar"] svg {
     transition: all 0.18s !important;
 }
 [data-testid="stSegmentedControl"] button[aria-checked="true"] {
-    background: var(--surface) !important;
-    color: var(--marine) !important;
+    background: var(--c-surface) !important;
+    color: var(--c-primary) !important;
     font-weight: 700 !important;
     box-shadow: 0 1px 4px var(--shadow) !important;
     border: 1px solid var(--border) !important;
 }
 
 /* ── INPUTS & SELECTBOX ───────────────────── */
-/* Hintergrund surface (helles Grau), dunkler Text */
 [data-testid="stTextInput"] input,
 [data-testid="stNumberInput"] input,
 [data-testid="stDateInput"] input {
-    background: var(--surface) !important;
+    background: var(--c-surface) !important;
     border: 1px solid var(--border-s) !important;
     border-radius: var(--r-s) !important;
-    color: var(--text) !important;
+    color: var(--c-text) !important;
     font-family: 'Outfit', sans-serif !important;
     font-size: 0.9rem !important;
     transition: border-color 0.18s, box-shadow 0.18s !important;
-    box-shadow: inset 0 1px 2px rgba(27,58,107,0.06) !important;
 }
 [data-testid="stTextInput"] input:focus,
 [data-testid="stNumberInput"] input:focus {
-    border-color: var(--marine) !important;
-    box-shadow: 0 0 0 3px var(--marine-dim), inset 0 1px 2px rgba(27,58,107,0.06) !important;
+    border-color: var(--c-primary) !important;
+    box-shadow: 0 0 0 3px var(--primary-dim) !important;
     outline: none !important;
 }
-/* Placeholder sichtbar auf hellem Hintergrund */
 [data-testid="stTextInput"] input::placeholder,
 [data-testid="stNumberInput"] input::placeholder {
     color: var(--text-3) !important;
     opacity: 1 !important;
 }
-/* "Drücke Enter zum bestätigen" und ähnliche Helper-Texte */
-[data-testid="stTextInput"] small,
-[data-testid="stTextInput"] + div small,
-[data-testid="InputInstructions"],
-[class*="InputInstructions"],
-[data-testid="stTextInput"] [data-testid="InputInstructions"],
-div[class*="instructionsContainer"] {
-    color: var(--text-3) !important;
-    background: transparent !important;
-    opacity: 1 !important;
-}
-/* Number-Input stepper buttons */
 [data-testid="stNumberInput"] button {
-    background: var(--surface2) !important;
+    background: var(--c-surface2) !important;
     border-color: var(--border) !important;
     color: var(--text-2) !important;
 }
-/* Selectbox */
 [data-testid="stSelectbox"] > div > div {
-    background: var(--surface) !important;
+    background: var(--c-surface) !important;
     border: 1px solid var(--border-s) !important;
     border-radius: var(--r-s) !important;
     font-family: 'Outfit', sans-serif !important;
     font-size: 0.9rem !important;
-    color: var(--text) !important;
+    color: var(--c-text) !important;
 }
-[data-testid="stSelectbox"] li {
-    color: var(--text) !important;
-    font-family: 'Outfit', sans-serif !important;
-}
-/* Date input */
-[data-testid="stDateInput"] input {
-    background: var(--surface) !important;
-    color: var(--text) !important;
-}
-
-/* ── MODAL / DIALOG ───────────────────────── */
-/* Mittleres Blaugrau – kein Weiß, kein Schwarz */
-[data-testid="stModal"] > div {
-    background: var(--dialog-bg) !important;
-    border: 1px solid var(--border-s) !important;
-    border-radius: 16px !important;
-    box-shadow: 0 20px 50px rgba(27,58,107,0.18), 0 4px 16px rgba(27,58,107,0.1) !important;
-}
-/* Inputs innerhalb des Dialogs auch auf dialog-bg abstimmen */
-[data-testid="stModal"] [data-testid="stTextInput"] input,
-[data-testid="stModal"] [data-testid="stNumberInput"] input,
-[data-testid="stModal"] [data-testid="stDateInput"] input,
-[data-testid="stModal"] [data-testid="stSelectbox"] > div > div {
-    background: var(--surface) !important;
-    color: var(--text) !important;
-}
-[data-testid="stModal"] [data-testid="stTextInput"] input::placeholder,
-[data-testid="stModal"] [data-testid="stNumberInput"] input::placeholder {
+[data-testid="InputInstructions"],
+[class*="InputInstructions"],
+div[class*="instructionsContainer"] {
     color: var(--text-3) !important;
     opacity: 1 !important;
 }
 
+/* ── MODAL / DIALOG ───────────────────────── */
+[data-testid="stModal"] > div {
+    background: var(--c-dialog) !important;
+    border: 1px solid var(--border-s) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 20px 50px var(--shadow), 0 4px 16px var(--primary-dim) !important;
+}
+[data-testid="stModal"] [data-testid="stTextInput"] input,
+[data-testid="stModal"] [data-testid="stNumberInput"] input,
+[data-testid="stModal"] [data-testid="stDateInput"] input,
+[data-testid="stModal"] [data-testid="stSelectbox"] > div > div {
+    background: var(--c-surface) !important;
+    color: var(--c-text) !important;
+}
+
 /* ── ALERTS ───────────────────────────────── */
 [data-testid="stInfo"] {
-    background: rgba(27,58,107,0.07) !important;
-    border: 1px solid rgba(27,58,107,0.18) !important;
-    border-left: 3px solid var(--marine) !important;
+    background: var(--primary-dim2) !important;
+    border: 1px solid var(--border) !important;
+    border-left: 3px solid var(--c-primary) !important;
     border-radius: var(--r-s) !important;
-    color: var(--marine) !important;
+    color: var(--c-primary) !important;
 }
 [data-testid="stSuccess"] {
-    background: rgba(57,211,83,0.08) !important;
-    border: 1px solid rgba(57,211,83,0.22) !important;
-    border-left: 3px solid var(--neon) !important;
+    background: rgba(28,158,58,0.07) !important;
+    border: 1px solid rgba(28,158,58,0.2) !important;
+    border-left: 3px solid var(--value-pos) !important;
     border-radius: var(--r-s) !important;
 }
 [data-testid="stError"] {
-    background: var(--red-dim) !important;
+    background: rgba(214,59,59,0.07) !important;
     border: 1px solid rgba(214,59,59,0.2) !important;
-    border-left: 3px solid var(--red) !important;
+    border-left: 3px solid var(--value-neg) !important;
     border-radius: var(--r-s) !important;
 }
 [data-testid="stWarning"] {
     background: rgba(240,120,0,0.07) !important;
     border: 1px solid rgba(240,120,0,0.2) !important;
-    border-left: 3px solid var(--orange) !important;
+    border-left: 3px solid var(--value-warn) !important;
     border-radius: var(--r-s) !important;
 }
 
 /* ── PLOTLY ───────────────────────────────── */
 [data-testid="stPlotlyChart"] {
-    background: var(--surface) !important;
+    background: var(--c-surface) !important;
     border: 1px solid var(--border) !important;
     border-radius: var(--r) !important;
     box-shadow: 0 1px 4px var(--shadow) !important;
@@ -478,12 +463,12 @@ h1 {
     font-family: 'Outfit', sans-serif !important;
     font-weight: 800 !important;
     letter-spacing: -0.03em !important;
-    color: var(--text) !important;
+    color: var(--c-text) !important;
 }
 h2 {
     font-family: 'Outfit', sans-serif !important;
     font-weight: 700 !important;
-    color: var(--text) !important;
+    color: var(--c-text) !important;
     font-size: 1.15rem !important;
     letter-spacing: -0.015em !important;
 }
@@ -506,8 +491,7 @@ hr {
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-s); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--marine); }
-
+::-webkit-scrollbar-thumb:hover { background: var(--c-primary); }
 </style>
 """, unsafe_allow_html=True)
 
