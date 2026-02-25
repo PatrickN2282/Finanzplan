@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 # ═══════════════════════════════════════════════════════════════
-# PRECISION FINANCE – Fixed High Contrast Design (v1.3.3)
+# PRECISION FINANCE – Unified Light Design (v1.3.3)
 # ═══════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
@@ -23,62 +23,57 @@ st.markdown("""
     --c-surface:    #FFFFFF; 
     --c-text:       #1E293B; 
     --c-list-text:  #2D3748; 
-
-    --value-pos:    #2BB34F; 
-    --value-neg:    #F44336; 
-    --value-warn:   #FF9800; 
-    --value-neon:   #39D353; 
-
-    --text-2:       #475569; 
-    --border:       rgba(27, 58, 107, 0.08);
-    --r: 12px; --r-s: 8px;
+    --value-neon:   #39D353;
+    --value-warn:   #FF9800;
+    --border:       rgba(27, 58, 107, 0.1);
+    --r: 12px;
 }
 
-/* BASE STYLE */
-html, body, [class*="css"] { 
+/* GLOBAL LIGHT OVERRIDE */
+html, body, [class*="css"], [data-testid="stAppViewContainer"] { 
     font-family: 'Outfit', sans-serif !important; 
-    color: var(--c-text) !important; 
+    color: var(--c-text) !important;
+    background-color: var(--c-bg) !important;
 }
-[data-testid="stAppViewContainer"] { background: var(--c-bg) !important; }
 
-/* RADIKALER FIX FÜR TEXTE & DIAGRAMM-LEGENDEN */
-/* Dies zielt auf alle Texte ab, die Streamlit in Diagrammen (SVG) rendert */
+/* FIX FÜR MODALS / POP-UPS (Eintrag bearbeiten) */
+div[data-testid="stModal"] > div:first-child > div:first-child {
+    background-color: var(--c-surface) !important;
+    border: 1px solid var(--border) !important;
+}
+div[data-testid="stModal"] h1, div[data-testid="stModal"] h2, div[data-testid="stModal"] p {
+    color: var(--c-text) !important;
+}
+
+/* FIX FÜR INPUT FIELDS (Text, Number, Date, Select) */
+input, div[data-baseweb="select"] > div, div[data-baseweb="input"] > div {
+    background-color: #F1F4F9 !important;
+    color: var(--c-text) !important;
+    border: 1px solid var(--border) !important;
+}
+
+/* FIX FÜR DROPDOWN-LISTEN (Die schwebenden Menüs) */
+div[data-baseweb="menu"] {
+    background-color: #FFFFFF !important;
+    border: 1px solid var(--border) !important;
+}
+div[data-baseweb="menu"] li {
+    color: var(--c-text) !important;
+    background-color: transparent !important;
+}
+div[data-baseweb="menu"] li:hover {
+    background-color: #EDF2F7 !important;
+}
+
+/* DIAGRAMM-TEXTE (SVG) */
 text, .legendtext, .xtick text, .ytick text {
     fill: var(--c-list-text) !important;
-    font-family: 'Outfit', sans-serif !important;
 }
 
-/* Fix für alle Labels und Markdown-Texte */
-[data-testid="stMetricLabel"], 
-.stCaptionContainer, 
-small, 
-label,
-[data-testid="stText"],
-.stMarkdown p,
-.stMarkdown span {
-    color: var(--c-list-text) !important;
-    opacity: 1 !important;
-}
-
-/* EXPANDER DESIGN (Statistiken) */
-.stExpander {
-    border: 1px solid var(--border) !important;
-    border-radius: var(--r) !important;
-    background: var(--c-surface) !important;
-    margin-bottom: 1rem !important;
-}
-.stExpander summary {
-    background-color: #2D3748 !important;
-    color: white !important;
-    border-radius: var(--r-s) !important;
-}
-.stExpander summary:hover { background-color: var(--c-primary) !important; }
+/* EXPANDER (Grafiken) */
+.stExpander { border: 1px solid var(--border) !important; background: var(--c-surface) !important; }
+.stExpander summary { background-color: #2D3748 !important; color: white !important; }
 .stExpander svg { fill: white !important; }
-
-/* DIAGRAMM-CONTAINER FIX */
-div[data-testid="stExpanderDetails"] * {
-    color: var(--c-list-text) !important;
-}
 
 /* SIDEBAR */
 [data-testid="stSidebar"] { background: var(--c-primary) !important; }
@@ -86,15 +81,15 @@ div[data-testid="stExpanderDetails"] * {
 [data-testid="stSidebar"] .stButton > button[kind="primary"] {
     background: var(--value-neon) !important;
     color: #0A1F0D !important;
-    font-weight: 700 !important;
+}
+
+/* BUTTONS IM MODAL */
+div[data-testid="stModal"] button {
+    border-radius: 8px !important;
 }
 
 /* METRIKEN */
-[data-testid="metric-container"] { 
-    background: var(--c-surface) !important; 
-    border: 1px solid var(--border) !important; 
-}
-[data-testid="stMetricValue"] { color: var(--c-text) !important; font-weight: 800 !important; }
+[data-testid="metric-container"] { background: var(--c-surface) !important; border: 1px solid var(--border) !important; }
 </style>
 """, unsafe_allow_html=True)
 
