@@ -1,18 +1,10 @@
 [theme]
-# ═══════════════════════════════════════════════════
-#  FARBSTEUERUNG – alle 4 Werte werden direkt ins CSS
-#  übernommen. Einfach anpassen und neu laden.
-#
-#  primaryColor             → Sidebar, Buttons, Akzente
-#  backgroundColor          → App-Hintergrund
-#  secondaryBackgroundColor → Karten, Eingaben, Tabellen
-#  textColor                → Haupttext
-# ═══════════════════════════════════════════════════
-base = "light"
-primaryColor             = "#1B3A6B"
-backgroundColor          = "#87888C" #E8EBF2"
-secondaryBackgroundColor = "#F4F5F9"
-textColor                = "#1A1F2E"
+# SANFTES HELL-LAYOUT (Basis)
+primaryColor = "#1B3A6B"
+backgroundColor = "#F0F2F5"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#1E293B"
+font = "sans serif"
 
 [server]
 headless = true
@@ -21,9 +13,3 @@ enableXsrfProtection = true
 
 [browser]
 gatherUsageStats = false
-
-[theme.dark]
-primaryColor = "#3A6FBF"
-backgroundColor = "#1E2132"
-secondaryBackgroundColor = "#262B40"
-textColor = "#DDE2F0"
