@@ -258,34 +258,35 @@ st.markdown("""
 --c-pill-neg-border:    #C99A9A;
 
 /* ═════════════════════════════════════════════
-   BASEWEB MODAL FIX (Dark-Mode Safe)
+   STREAMLIT MODAL – DARKMODE STABIL
 ═════════════════════════════════════════════ */
 
-/* Portal Layer – verhindert Dark-Mode Hintergrund */
-div[data-baseweb="modal"],
-div[data-baseweb="layer"],
-div[role="dialog"] {
-    background-color: var(--c-modal-bg) !important;
-    color: var(--c-modal-text) !important;
-}
-
-/* Innerer Dialog Container */
-div[data-baseweb="modal"] > div {
-    background-color: var(--c-modal-bg) !important;
-    border: 1px solid var(--c-modal-border) !important;
-    box-shadow: 0 20px 60px var(--c-modal-shadow) !important;
-    border-radius: var(--r) !important;
-}
-
-/* Backdrop Fix */
-div[data-baseweb="modal"]::before,
-div[data-baseweb="layer"]::before {
+/* Backdrop (Abdunklung außerhalb des Dialogs) */
+div[data-baseweb="modal"] {
     background: var(--c-modal-backdrop) !important;
 }
 
-/* Verhindert Dark-Mode Textvererbung */
-div[data-baseweb="modal"] *,
-div[role="dialog"] * {
+/* Modal Wrapper */
+div[data-baseweb="modal"] > div {
+    background: transparent !important;
+}
+
+/* Eigentliches Dialogfenster */
+div[role="dialog"] {
+    background: var(--c-modal-bg) !important;
+    color: var(--c-modal-text) !important;
+    border: 1px solid var(--c-modal-border) !important;
+    border-radius: var(--r) !important;
+    box-shadow: 0 20px 60px var(--c-modal-shadow) !important;
+}
+
+/* NUR Text-Elemente im Dialog, nicht alles */
+div[role="dialog"] p,
+div[role="dialog"] span,
+div[role="dialog"] label,
+div[role="dialog"] h1,
+div[role="dialog"] h2,
+div[role="dialog"] h3 {
     color: var(--c-modal-text) !important;
 }
 
