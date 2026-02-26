@@ -965,6 +965,58 @@ hr,
     border-radius: var(--r-s) !important;
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   RADIO BUTTONS (horizontal, z.B. Monatsumschaltung Dashboard)
+══════════════════════════════════════════════════════════════════ */
+
+/* Wrapper */
+[data-testid="stRadio"] > div {
+    background: var(--c-surface-2) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--r) !important;
+    padding: 4px 6px !important;
+    gap: 4px !important;
+    display: inline-flex !important;
+}
+
+/* Jede einzelne Radio-Option als Pill */
+[data-testid="stRadio"] label {
+    background: transparent !important;
+    color: var(--c-seg-inactive-text) !important;
+    font-family: var(--font) !important;
+    font-weight: 500 !important;
+    font-size: var(--font-size-sm) !important;
+    border-radius: var(--r-s) !important;
+    padding: 0.25rem 0.9rem !important;
+    cursor: pointer !important;
+    transition: background 0.15s ease !important;
+}
+
+[data-testid="stRadio"] label:hover {
+    background: var(--c-surface) !important;
+    color: var(--c-text) !important;
+}
+
+/* Ausgewählte Option */
+[data-testid="stRadio"] label:has(input:checked) {
+    background: var(--c-seg-active-bg) !important;
+    color: var(--c-seg-active-text) !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 8px var(--c-seg-active-shadow) !important;
+}
+
+/* Natives Radio-Kreis verstecken */
+[data-testid="stRadio"] input[type="radio"] {
+    display: none !important;
+}
+
+/* Text-Span in Label erbt Farbe */
+[data-testid="stRadio"] label p,
+[data-testid="stRadio"] label span {
+    color: inherit !important;
+    font-family: var(--font) !important;
+}
+
 /* Tertiary BaseWeb-Buttons (allgemeiner Fallback) */
 button[kind="tertiary"],
 [data-baseweb="button"][kind="tertiary"] {
