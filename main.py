@@ -715,17 +715,14 @@ div[class*="Modal"] {
     box-shadow: 0 20px 60px var(--c-modal-shadow) !important;
 }
 
-/* Alle Texte im Dialog */
-[data-testid="stModal"] *,
+/* Texte im Dialog – gezielt, kein * */
 [data-testid="stModal"] p,
 [data-testid="stModal"] label,
-[data-testid="stModal"] span:not(.pos):not(.neg):not(.warn),
-[data-testid="stModal"] div {
+[data-testid="stModal"] span:not(.pos):not(.neg):not(.warn) {
     color: var(--c-modal-text) !important;
     font-family: var(--font) !important;
 }
 
-/* Überschriften im Dialog */
 [data-testid="stModal"] h1,
 [data-testid="stModal"] h2,
 [data-testid="stModal"] h3 {
@@ -738,9 +735,30 @@ div[class*="Modal"] {
     background: transparent !important;
 }
 
+/* X-Schließen-Button: heller Hintergrund, dunkles Icon */
+[data-testid="stModal"] button[aria-label="Close"],
+[data-testid="stModal"] button[title="Close"],
+div[role="dialog"] button[aria-label="Close"],
+div[role="dialog"] button[title="Close"] {
+    background: var(--c-surface-2) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 6px !important;
+    color: var(--c-text) !important;
+}
+
+[data-testid="stModal"] button[aria-label="Close"] svg,
+[data-testid="stModal"] button[title="Close"] svg,
+div[role="dialog"] button[aria-label="Close"] svg,
+div[role="dialog"] button[title="Close"] svg {
+    fill: var(--c-text) !important;
+    stroke: var(--c-text) !important;
+}
+
 /* Primär-Button im Dialog */
 [data-testid="stModal"] .stButton > button[kind="primary"],
-[data-testid="stModal"] button[data-testid="stFormSubmitButton"][kind="primary"] {
+[data-testid="stModal"] button[data-testid="stFormSubmitButton"][kind="primary"],
+div[role="dialog"] .stButton > button[kind="primary"],
+div[role="dialog"] button[data-testid="stFormSubmitButton"][kind="primary"] {
     background: var(--c-btn-primary-bg) !important;
     color: var(--c-btn-primary-text) !important;
     border: none !important;
@@ -748,13 +766,17 @@ div[class*="Modal"] {
     border-radius: var(--r-s) !important;
 }
 
-[data-testid="stModal"] .stButton > button[kind="primary"]:hover {
+[data-testid="stModal"] .stButton > button[kind="primary"]:hover,
+div[role="dialog"] .stButton > button[kind="primary"]:hover {
     background: var(--c-btn-primary-hover) !important;
     box-shadow: 0 4px 14px var(--c-btn-primary-shadow) !important;
 }
 
 /* Sekundär-Button (Abbrechen) im Dialog */
-[data-testid="stModal"] .stButton > button:not([kind="primary"]) {
+[data-testid="stModal"] .stButton > button:not([kind="primary"]),
+[data-testid="stModal"] button[data-testid="stFormSubmitButton"]:not([kind="primary"]),
+div[role="dialog"] .stButton > button:not([kind="primary"]),
+div[role="dialog"] button[data-testid="stFormSubmitButton"]:not([kind="primary"]) {
     background: var(--c-btn-secondary-bg) !important;
     color: var(--c-btn-secondary-text) !important;
     border: 1px solid var(--c-btn-secondary-border) !important;
@@ -762,7 +784,8 @@ div[class*="Modal"] {
 }
 
 /* Trennlinie im Dialog */
-[data-testid="stModal"] hr {
+[data-testid="stModal"] hr,
+div[role="dialog"] hr {
     border-color: var(--c-divider) !important;
 }
 
