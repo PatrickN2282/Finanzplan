@@ -39,7 +39,7 @@ _CHART_GRID = "rgba(0,0,0,0.06)"
 _PLOT_LAYOUT = dict(
     paper_bgcolor='rgba(0,0,0,0)',
     plot_bgcolor='rgba(0,0,0,0)',
-    font=dict(family='Outfit, sans-serif', color=_CHART_TEXT, size=12),
+    font=dict(family='Ubuntu, sans-serif', color=_CHART_TEXT, size=12),
     margin=dict(t=44, b=52, l=8, r=8),
     legend=dict(orientation="h", yanchor="bottom", y=-0.32,
                 font=dict(size=11)),
