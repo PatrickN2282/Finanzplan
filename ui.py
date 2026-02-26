@@ -255,7 +255,10 @@ def eintrag_dialog(conn, u_id, edit_id=None):
 
         cs, cc = st.columns([3, 1])
         with cs: save = st.form_submit_button("Speichern", width='stretch', type="primary")
-        with cc: st.form_submit_button("Abbrechen", width='stretch')
+        with cc: cancel = st.form_submit_button("Abbrechen", width='stretch')
+
+        if cancel and not save:
+            st.rerun()
 
         if save:
             if not zweck:   st.error("Bitte Zweck eingeben."); return
