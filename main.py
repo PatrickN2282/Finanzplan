@@ -621,16 +621,24 @@ li[role="option"]:hover,
     background: var(--c-seg-bg) !important;
     border-radius: var(--r) !important;
     padding: 3px !important;
+    border: 1px solid var(--border) !important;
 }
 
-/* Inaktive Segmente */
+/* Inaktive Segmente – explizit var(--c-seg-bg) statt transparent,
+   damit kein dunkler Theme-Hintergrund durchscheint */
 [data-testid="stSegmentedControl"] button {
-    background: transparent !important;
+    background: var(--c-seg-bg) !important;
     color: var(--c-seg-inactive-text) !important;
     border-radius: var(--r-s) !important;
     font-weight: 500 !important;
     border: none !important;
     font-family: var(--font) !important;
+}
+
+/* Alle Text-Nodes im Button explizit hell färben */
+[data-testid="stSegmentedControl"] button p,
+[data-testid="stSegmentedControl"] button span {
+    color: var(--c-seg-inactive-text) !important;
 }
 
 /* Aktives / ausgewähltes Segment */
@@ -640,6 +648,13 @@ li[role="option"]:hover,
     color: var(--c-seg-active-text) !important;
     font-weight: 700 !important;
     box-shadow: 0 2px 8px var(--c-seg-active-shadow) !important;
+}
+
+[data-testid="stSegmentedControl"] button[aria-checked="true"] p,
+[data-testid="stSegmentedControl"] button[aria-checked="true"] span,
+[data-testid="stSegmentedControl"] button[data-active="true"] p,
+[data-testid="stSegmentedControl"] button[data-active="true"] span {
+    color: var(--c-seg-active-text) !important;
 }
 
 /* ══════════════════════════════════════════════════════════════════
