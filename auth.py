@@ -7,17 +7,17 @@ def auth_page():
     with col_m:
         # Logo-Block im neuen Design
         st.markdown("""
-        <div style="text-align:center;padding:2.5rem 0 1.5rem;">
+        <div style="text-align:center;padding:2.5rem 0 1.8rem;">
             <div style="
                 display:inline-flex;align-items:center;justify-content:center;
-                width:56px;height:56px;border-radius:14px;
-                background:#1B3A6B;
-                box-shadow:0 6px 20px rgba(27,58,107,0.35);
-                margin-bottom:1rem;font-size:1.5rem;
+                width:60px;height:60px;border-radius:14px;
+                background:#0D7EA8;
+                box-shadow:0 8px 24px rgba(13,126,168,0.35);
+                margin-bottom:1.1rem;font-size:1.6rem;
             ">📊</div>
-            <h1 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:1.6rem;
-                       letter-spacing:-0.035em;margin:0;color:#1A1F2E;">Finanz-Master</h1>
-            <p style="color:#8892AA;margin:0.2rem 0 0;font-size:0.82rem;font-weight:400;">
+            <h1 style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.9rem;
+                       letter-spacing:0.06em;text-transform:uppercase;margin:0;color:#0D1526;">Finanz-Master</h1>
+            <p style="color:#5A6A8A;margin:0.25rem 0 0;font-size:0.82rem;font-weight:400;font-family:'DM Sans',sans-serif;">
                 Deine persönliche Finanzplanung · v1.5
             </p>
         </div>
