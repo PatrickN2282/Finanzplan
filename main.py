@@ -866,6 +866,61 @@ hr,
 .neg  { color: var(--value-neg) !important; font-weight: 600; }
 .warn { color: var(--value-warn) !important; font-weight: 600; }
 
+/* ══════════════════════════════════════════════════════════════════
+   TABS (st.tabs)
+══════════════════════════════════════════════════════════════════ */
+
+/* Tab-Leiste Hintergrund */
+[data-testid="stTabs"] [role="tablist"] {
+    background: var(--c-surface-2) !important;
+    border-radius: var(--r) var(--r) 0 0 !important;
+    padding: 4px 4px 0 !important;
+    border-bottom: 2px solid var(--border) !important;
+    gap: 2px !important;
+}
+
+/* Einzelner inaktiver Tab */
+[data-testid="stTabs"] button[role="tab"] {
+    background: transparent !important;
+    color: var(--c-text-muted) !important;
+    font-family: var(--font) !important;
+    font-weight: 500 !important;
+    font-size: var(--font-size-sm) !important;
+    border: none !important;
+    border-radius: var(--r-s) var(--r-s) 0 0 !important;
+    padding: 0.5rem 1.2rem !important;
+}
+
+/* Hover */
+[data-testid="stTabs"] button[role="tab"]:hover {
+    background: var(--c-surface) !important;
+    color: var(--c-text) !important;
+}
+
+/* Aktiver Tab */
+[data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
+    background: var(--c-surface) !important;
+    color: var(--c-primary) !important;
+    font-weight: 700 !important;
+    border-bottom: 2px solid var(--c-primary) !important;
+}
+
+/* Tab-Text-Spans explizit färben */
+[data-testid="stTabs"] button[role="tab"] p,
+[data-testid="stTabs"] button[role="tab"] span {
+    color: inherit !important;
+    font-family: var(--font) !important;
+}
+
+/* Tab-Inhalt-Bereich */
+[data-testid="stTabs"] [role="tabpanel"] {
+    background: var(--c-surface) !important;
+    border: 1px solid var(--border) !important;
+    border-top: none !important;
+    border-radius: 0 0 var(--r) var(--r) !important;
+    padding: 1.2rem !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
