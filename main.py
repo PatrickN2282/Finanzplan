@@ -1010,17 +1010,9 @@ hr,
     box-shadow: 0 2px 8px var(--c-seg-active-shadow) !important;
 }
 
-/* Radio-Kreis im Hauptbereich vollständig verstecken */
+/* Radio-Kreis im Hauptbereich verstecken */
 [data-testid="stMain"] [data-testid="stRadio"] input[type="radio"],
 [data-testid="stMainBlockContainer"] [data-testid="stRadio"] input[type="radio"] {
-    display: none !important;
-}
-
-/* Streamlit rendert einen custom div-Kreis neben dem input – auch verstecken */
-[data-testid="stMain"] [data-testid="stRadio"] label > div:first-child,
-[data-testid="stMainBlockContainer"] [data-testid="stRadio"] label > div:first-child,
-[data-testid="stMain"] [data-testid="stRadio"] [data-baseweb="radio"] > div,
-[data-testid="stMainBlockContainer"] [data-testid="stRadio"] [data-baseweb="radio"] > div:first-child {
     display: none !important;
 }
 
@@ -1029,7 +1021,7 @@ hr,
 [data-testid="stMain"] [data-testid="stRadio"] label span,
 [data-testid="stMainBlockContainer"] [data-testid="stRadio"] label p,
 [data-testid="stMainBlockContainer"] [data-testid="stRadio"] label span {
-    color: inherit !important;
+    color: var(--c-text) !important;
     font-family: var(--font) !important;
 }
 
