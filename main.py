@@ -257,6 +257,38 @@ st.markdown("""
 --c-pill-neg-bg:        #F3D6D6;
 --c-pill-neg-border:    #C99A9A;
 
+/* ═════════════════════════════════════════════
+   BASEWEB MODAL FIX (Dark-Mode Safe)
+═════════════════════════════════════════════ */
+
+/* Portal Layer – verhindert Dark-Mode Hintergrund */
+div[data-baseweb="modal"],
+div[data-baseweb="layer"],
+div[role="dialog"] {
+    background-color: var(--c-modal-bg) !important;
+    color: var(--c-modal-text) !important;
+}
+
+/* Innerer Dialog Container */
+div[data-baseweb="modal"] > div {
+    background-color: var(--c-modal-bg) !important;
+    border: 1px solid var(--c-modal-border) !important;
+    box-shadow: 0 20px 60px var(--c-modal-shadow) !important;
+    border-radius: var(--r) !important;
+}
+
+/* Backdrop Fix */
+div[data-baseweb="modal"]::before,
+div[data-baseweb="layer"]::before {
+    background: var(--c-modal-backdrop) !important;
+}
+
+/* Verhindert Dark-Mode Textvererbung */
+div[data-baseweb="modal"] *,
+div[role="dialog"] * {
+    color: var(--c-modal-text) !important;
+}
+
 }
 
 /* ══════════════════════════════════════════════════════════════════
