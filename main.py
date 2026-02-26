@@ -966,11 +966,13 @@ hr,
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   RADIO BUTTONS (horizontal, z.B. Monatsumschaltung Dashboard)
+   RADIO BUTTONS – HAUPTBEREICH (Pill-Style, z.B. Monatsumschaltung)
+   Nur außerhalb der Sidebar aktiv
 ══════════════════════════════════════════════════════════════════ */
 
-/* Wrapper */
-[data-testid="stRadio"] > div {
+/* Wrapper als Pill-Leiste – nur im Hauptbereich */
+[data-testid="stMain"] [data-testid="stRadio"] > div,
+[data-testid="stMainBlockContainer"] [data-testid="stRadio"] > div {
     background: var(--c-surface-2) !important;
     border: 1px solid var(--border) !important;
     border-radius: var(--r) !important;
@@ -979,8 +981,9 @@ hr,
     display: inline-flex !important;
 }
 
-/* Jede einzelne Radio-Option als Pill */
-[data-testid="stRadio"] label {
+/* Labels im Hauptbereich */
+[data-testid="stMain"] [data-testid="stRadio"] label,
+[data-testid="stMainBlockContainer"] [data-testid="stRadio"] label {
     background: transparent !important;
     color: var(--c-seg-inactive-text) !important;
     font-family: var(--font) !important;
@@ -992,27 +995,82 @@ hr,
     transition: background 0.15s ease !important;
 }
 
-[data-testid="stRadio"] label:hover {
+[data-testid="stMain"] [data-testid="stRadio"] label:hover,
+[data-testid="stMainBlockContainer"] [data-testid="stRadio"] label:hover {
     background: var(--c-surface) !important;
     color: var(--c-text) !important;
 }
 
-/* Ausgewählte Option */
-[data-testid="stRadio"] label:has(input:checked) {
+/* Aktive Option im Hauptbereich */
+[data-testid="stMain"] [data-testid="stRadio"] label:has(input:checked),
+[data-testid="stMainBlockContainer"] [data-testid="stRadio"] label:has(input:checked) {
     background: var(--c-seg-active-bg) !important;
     color: var(--c-seg-active-text) !important;
     font-weight: 700 !important;
     box-shadow: 0 2px 8px var(--c-seg-active-shadow) !important;
 }
 
-/* Natives Radio-Kreis verstecken */
-[data-testid="stRadio"] input[type="radio"] {
+/* Radio-Kreis im Hauptbereich verstecken */
+[data-testid="stMain"] [data-testid="stRadio"] input[type="radio"],
+[data-testid="stMainBlockContainer"] [data-testid="stRadio"] input[type="radio"] {
     display: none !important;
 }
 
-/* Text-Span in Label erbt Farbe */
-[data-testid="stRadio"] label p,
-[data-testid="stRadio"] label span {
+/* Text-Spans erben Farbe */
+[data-testid="stMain"] [data-testid="stRadio"] label p,
+[data-testid="stMain"] [data-testid="stRadio"] label span,
+[data-testid="stMainBlockContainer"] [data-testid="stRadio"] label p,
+[data-testid="stMainBlockContainer"] [data-testid="stRadio"] label span {
+    color: inherit !important;
+    font-family: var(--font) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   RADIO BUTTONS – SIDEBAR (Navigation, kein Pill-Wrapper)
+══════════════════════════════════════════════════════════════════ */
+
+/* Kein Pill-Wrapper in der Sidebar */
+[data-testid="stSidebar"] [data-testid="stRadio"] > div {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stRadio"] label {
+    background: transparent !important;
+    color: var(--c-sidebar-text) !important;
+    font-family: var(--font) !important;
+    font-weight: 500 !important;
+    font-size: var(--font-size-sm) !important;
+    border-radius: var(--r-s) !important;
+    padding: 0.4rem 0.75rem !important;
+    cursor: pointer !important;
+    transition: background 0.15s ease !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stRadio"] label:hover {
+    background: rgba(255,255,255,0.08) !important;
+    color: var(--c-sidebar-text) !important;
+}
+
+/* Aktiver Nav-Eintrag */
+[data-testid="stSidebar"] [data-testid="stRadio"] label:has(input:checked) {
+    background: var(--c-sidebar-btn-cta-bg) !important;
+    color: var(--c-sidebar-btn-cta-text) !important;
+    font-weight: 700 !important;
+    box-shadow: none !important;
+}
+
+/* Radio-Kreis in Sidebar verstecken */
+[data-testid="stSidebar"] [data-testid="stRadio"] input[type="radio"] {
+    display: none !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stRadio"] label p,
+[data-testid="stSidebar"] [data-testid="stRadio"] label span {
     color: inherit !important;
     font-family: var(--font) !important;
 }
