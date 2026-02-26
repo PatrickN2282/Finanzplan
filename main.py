@@ -921,6 +921,58 @@ hr,
     padding: 1.2rem !important;
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   INTERNE WIDGET-BUTTONS
+   Passwort-Auge, +/- Spinner, Abbrechen (form_submit_button)
+   haben gemeinsam: kein .stButton-Wrapper oder kind=tertiary
+══════════════════════════════════════════════════════════════════ */
+
+/* Passwort-Sichtbarkeits-Toggle */
+[data-testid="stTextInput"] button {
+    background: var(--c-input-bg) !important;
+    color: var(--c-text-muted) !important;
+    border: none !important;
+    border-radius: 0 var(--r-s) var(--r-s) 0 !important;
+}
+[data-testid="stTextInput"] button:hover {
+    background: var(--c-surface-2) !important;
+    color: var(--c-text) !important;
+}
+[data-testid="stTextInput"] button svg {
+    fill: var(--c-text-muted) !important;
+    stroke: var(--c-text-muted) !important;
+}
+
+/* Number-Input +/- Spinner */
+[data-testid="stNumberInput"] button {
+    background: var(--c-surface-2) !important;
+    color: var(--c-text) !important;
+    border: 1px solid var(--border) !important;
+}
+[data-testid="stNumberInput"] button:hover {
+    background: var(--c-btn-secondary-bg) !important;
+}
+[data-testid="stNumberInput"] button svg {
+    fill: var(--c-text) !important;
+    stroke: var(--c-text) !important;
+}
+
+/* form_submit_button ohne type=primary (Abbrechen-Button) */
+[data-testid="stFormSubmitButton"] > button:not([kind="primary"]) {
+    background: var(--c-btn-secondary-bg) !important;
+    color: var(--c-btn-secondary-text) !important;
+    border: 1px solid var(--c-btn-secondary-border) !important;
+    border-radius: var(--r-s) !important;
+}
+
+/* Tertiary BaseWeb-Buttons (allgemeiner Fallback) */
+button[kind="tertiary"],
+[data-baseweb="button"][kind="tertiary"] {
+    background: var(--c-surface-2) !important;
+    color: var(--c-text) !important;
+    border: 1px solid var(--border) !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
