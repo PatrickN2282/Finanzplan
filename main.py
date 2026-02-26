@@ -290,6 +290,39 @@ div[role="dialog"] h3 {
     color: var(--c-modal-text) !important;
 }
 
+/* ═════════════════════════════════════════════
+   PILL / TAG FIX – DARKMODE SAFE
+═════════════════════════════════════════════ */
+
+/* Alle BaseWeb Tags */
+div[data-baseweb="tag"],
+span[data-baseweb="tag"] {
+    background-color: var(--c-surface-2) !important;
+    color: var(--c-text) !important;
+    border: 1px solid var(--border) !important;
+}
+
+/* Positive Pills */
+.pos {
+    background-color: var(--c-pill-pos-bg) !important;
+    border: 1px solid var(--c-pill-pos-border) !important;
+    color: var(--value-pos) !important;
+}
+
+/* Negative Pills */
+.neg {
+    background-color: var(--c-pill-neg-bg) !important;
+    border: 1px solid var(--c-pill-neg-border) !important;
+    color: var(--value-neg) !important;
+}
+
+/* Warn Pills */
+.warn {
+    background-color: #F8E7C9 !important;
+    border: 1px solid #D6B47A !important;
+    color: var(--value-warn) !important;
+}
+
 }
 
 /* ══════════════════════════════════════════════════════════════════
