@@ -36,297 +36,153 @@ st.markdown("""
 ══════════════════════════════════════════════════════════════════ */
 :root {
 
-    /* ── HAUPTFARBEN ────────────────────────────────────────────
-       --c-primary   : Akzentfarbe für Buttons, Links, aktive Elemente
-       --c-bg        : Hintergrundfarbe der gesamten App
-       --c-surface   : Hintergrund für Karten, Panels, Eingabefelder
-       --c-surface-2 : Leicht abgehobene Fläche (Listenzeilen, Tabellen-BG)
-    ──────────────────────────────────────────────────────────── */
-    --c-primary:        #1B3A6B;
-    --c-bg:             #F8F9FA;
-    --c-surface:        #FFFFFF;
-    --c-surface-2:      #F4F5F9;
+    /* ── HAUPTFARBEN ──────────────────────────────────────────── */
+    --c-primary:        #2F4F6F;   /* Gedämpftes Stahlblau – Hauptakzent */
+    --c-bg:             #F3F5F8;   /* Sehr helles Blaugrau – App Hintergrund */
+    --c-surface:        #FFFFFF;   /* Karten / Panels – reines Weiß */
+    --c-surface-2:      #EEF1F6;   /* Sekundäre Flächen – leicht grau-blau */
 
-    /* ── TEXTFARBEN ─────────────────────────────────────────────
-       --c-text        : Haupttext (Überschriften, Werte, Labels)
-       --c-text-2      : Sekundärtext (Unterzeilen, Beschreibungen)
-       --c-text-muted  : Gedimmter Text (Metainfos, Zeitstempel)
-       --c-heading     : Seitenüberschriften (h1)
-       --c-subheading  : Untertitel unter Seitenüberschriften
-    ──────────────────────────────────────────────────────────── */
-    --c-text:           #1E293B;
-    --c-text-2:         #2D3748;
-    --c-text-muted:     #7A84A0;
-    --c-heading:        #1A1F2E;
-    --c-subheading:     #8892AA;
+    /* ── TEXTFARBEN ───────────────────────────────────────────── */
+    --c-text:           #1F2933;   /* Haupttext – dunkles Slate */
+    --c-text-2:         #334155;   /* Sekundärtext */
+    --c-text-muted:     #7C8799;   /* Gedimmter Text */
+    --c-heading:        #111827;   /* Überschriften – fast schwarz */
+    --c-subheading:     #6B7280;   /* Untertitel */
 
-    /* ── STATUSFARBEN ───────────────────────────────────────────
-       --value-pos  : Einnahmen, positive Salden, Erfolgsmeldungen
-       --value-neg  : Ausgaben, negative Salden, Fehlermeldungen
-       --value-warn : Warnungen, ausstehende Posten, Avatar-Rahmen
-       --value-neon : CTA-Button in der Sidebar ("Neuer Eintrag")
-    ──────────────────────────────────────────────────────────── */
-    --value-pos:        #2BB34F;
-    --value-neg:        #F44336;
-    --value-warn:       #FF9800;
-    --value-neon:       #39D353;
+    /* ── STATUSFARBEN ─────────────────────────────────────────── */
+    --value-pos:        #2E7D32;   /* Gedämpftes Grün */
+    --value-neg:        #C0392B;   /* Dunkles Ziegelrot */
+    --value-warn:       #C77700;   /* Gedämpftes Orange */
+    --value-neon:       #3A7CA5;   /* CTA Sidebar – ruhiges Blau */
 
-    /* ── RAHMEN & RADIEN ────────────────────────────────────────
-       --border        : Standard-Rahmenfarbe (subtil, für Trennlinien)
-       --border-strong : Stärkerer Rahmen (Inputs im Fokus, Karten)
-       --r             : Großer Border-Radius (Karten, Dialoge, Panels)
-       --r-s           : Kleiner Border-Radius (Buttons, Inputs, Badges)
-    ──────────────────────────────────────────────────────────── */
-    --border:           rgba(27, 58, 107, 0.08);
-    --border-strong:    rgba(27, 58, 107, 0.20);
-    --r:                12px;
-    --r-s:              8px;
+    /* ── RAHMEN & RADIEN ──────────────────────────────────────── */
+    --border:           rgba(47, 79, 111, 0.08);  /* Subtile Linien */
+    --border-strong:    rgba(47, 79, 111, 0.22);  /* Stärkere Linien */
+    --r:                12px;   /* Karten Radius */
+    --r-s:              8px;    /* Buttons / Inputs */
 
-    /* ── TYPOGRAFIE ─────────────────────────────────────────────
-       --font          : Schriftart der gesamten App
-       --font-size-base: Basisgröße für Fließtext
-       --font-size-sm  : Kleine Texte (Labels, Badges, Metainfos)
-       --font-size-xs  : Sehr kleine Texte (Zeitstempel, Einheiten)
-    ──────────────────────────────────────────────────────────── */
+    /* ── TYPOGRAFIE ───────────────────────────────────────────── */
     --font:             'Outfit', sans-serif;
     --font-size-base:   0.9rem;
     --font-size-sm:     0.82rem;
     --font-size-xs:     0.72rem;
 
-    /* ── SIDEBAR ────────────────────────────────────────────────
-       --c-sidebar-bg          : Hintergrund der linken Navigationsleiste
-       --c-sidebar-text        : Textfarbe aller Elemente in der Sidebar
-       --c-sidebar-text-muted  : Gedimmter Text (z.B. @username)
-       --c-sidebar-divider     : Trennlinie unter dem User-Avatar-Block
-       --c-sidebar-avatar-bg   : Hintergrund des Initialen-Quadrats
-       --c-sidebar-avatar-border: Rahmen des Initialen-Quadrats
-       --c-sidebar-avatar-text : Textfarbe der Initialen
-       --c-sidebar-btn-cta-bg  : Hintergrund "Neuer Eintrag"-Button
-       --c-sidebar-btn-cta-text: Textfarbe "Neuer Eintrag"-Button
-    ──────────────────────────────────────────────────────────── */
-    --c-sidebar-bg:             #1B3A6B;
-    --c-sidebar-text:           rgba(255, 255, 255, 0.90);
-    --c-sidebar-text-muted:     rgba(255, 255, 255, 0.35);
-    --c-sidebar-divider:        rgba(255, 255, 255, 0.10);
-    --c-sidebar-avatar-bg:      rgba(255, 152, 0, 0.15);
-    --c-sidebar-avatar-border:  #FF9800;
-    --c-sidebar-avatar-text:    #FF9800;
-    --c-sidebar-btn-cta-bg:     #39D353;
-    --c-sidebar-btn-cta-text:   #0A1F0D;
+    /* ── SIDEBAR ──────────────────────────────────────────────── */
+    --c-sidebar-bg:             #1E293B;   /* Dunkles Slate */
+    --c-sidebar-text:           rgba(255,255,255,0.92); /* Sidebar Text */
+    --c-sidebar-text-muted:     rgba(255,255,255,0.45); /* Gedimmt */
+    --c-sidebar-divider:        rgba(255,255,255,0.10); /* Divider */
+    --c-sidebar-avatar-bg:      rgba(199,119,0,0.15);   /* Warmes Akzentfeld */
+    --c-sidebar-avatar-border:  #C77700;   /* Avatar Rahmen */
+    --c-sidebar-avatar-text:    #C77700;   /* Avatar Text */
+    --c-sidebar-btn-cta-bg:     #3A7CA5;   /* CTA Button */
+    --c-sidebar-btn-cta-text:   #FFFFFF;   /* CTA Text */
 
-    /* ── EXPANDER ───────────────────────────────────────────────
-       --c-expander-bg          : Hintergrund des aufgeklappten Inhaltsbereichs
-       --c-expander-header-bg   : Hintergrund der Titelzeile (eingeklappt)
-       --c-expander-header-hover: Hintergrund beim Hover über die Titelzeile
-       --c-expander-header-text : Textfarbe der Titelzeile
-       --c-expander-border      : Rahmen des gesamten Expanders
-    ──────────────────────────────────────────────────────────── */
-    --c-expander-bg:            #FFFFFF;
-    --c-expander-header-bg:     #2D3748;
-    --c-expander-header-hover:  #1B3A6B;
-    --c-expander-header-text:   #FFFFFF;
-    --c-expander-border:        rgba(27, 58, 107, 0.08);
+    /* ── EXPANDER ─────────────────────────────────────────────── */
+    --c-expander-bg:            #FFFFFF;   /* Expander Body */
+    --c-expander-header-bg:     #334155;   /* Expander Header */
+    --c-expander-header-hover:  #2F4F6F;   /* Hover */
+    --c-expander-header-text:   #FFFFFF;   /* Header Text */
+    --c-expander-border:        rgba(47,79,111,0.08);
 
-    /* ── METRIKEN / KPI-CARDS ───────────────────────────────────
-       --c-metric-bg      : Kartenhintergrund der KPI-Kacheln
-       --c-metric-border  : Rahmen der KPI-Kacheln
-       --c-metric-value   : Farbe des großen Zahlenwerts
-       --c-metric-label   : Farbe des Beschriftungstexts über dem Wert
-       --c-metric-delta-pos: Deltafarbe wenn positiv (Pfeil + Zahl)
-       --c-metric-delta-neg: Deltafarbe wenn negativ
-    ──────────────────────────────────────────────────────────── */
+    /* ── METRIKEN / KPI ───────────────────────────────────────── */
     --c-metric-bg:          #FFFFFF;
-    --c-metric-border:      rgba(27, 58, 107, 0.08);
-    --c-metric-value:       #1E293B;
-    --c-metric-label:       #2D3748;
-    --c-metric-delta-pos:   #2BB34F;
-    --c-metric-delta-neg:   #F44336;
+    --c-metric-border:      rgba(47,79,111,0.08);
+    --c-metric-value:       #111827;
+    --c-metric-label:       #334155;
+    --c-metric-delta-pos:   #2E7D32;
+    --c-metric-delta-neg:   #C0392B;
 
-    /* ── INPUTS & FORMFELDER ────────────────────────────────────
-       --c-input-bg          : Hintergrund von Textfeldern, Number-Inputs
-       --c-input-bg-focus    : Hintergrund wenn das Feld aktiv ist
-       --c-input-text        : Eingabetext-Farbe
-       --c-input-border      : Rahmen im Normalzustand
-       --c-input-border-focus: Rahmen wenn aktiv (Fokus)
-       --c-input-focus-ring  : Leuchtring um aktives Eingabefeld
-       --c-input-label       : Farbe der Feldbezeichnung über dem Input
-    ──────────────────────────────────────────────────────────── */
-    --c-input-bg:           #F8F9FA;
-    --c-input-bg-focus:     #FFFFFF;
-    --c-input-text:         #1E293B;
-    --c-input-border:       rgba(27, 58, 107, 0.20);
-    --c-input-border-focus: #1B3A6B;
-    --c-input-focus-ring:   rgba(27, 58, 107, 0.12);
-    --c-input-label:        #4A5270;
+    /* ── INPUTS ───────────────────────────────────────────────── */
+    --c-input-bg:           #F3F5F8;   /* Input Hintergrund */
+    --c-input-bg-focus:     #FFFFFF;   /* Fokus */
+    --c-input-text:         #1F2933;
+    --c-input-border:       rgba(47,79,111,0.25);
+    --c-input-border-focus: #2F4F6F;
+    --c-input-focus-ring:   rgba(47,79,111,0.15);
+    --c-input-label:        #475569;
 
-    /* ── DROPDOWNS / SELECTBOX ──────────────────────────────────
-       --c-dropdown-bg              : Hintergrund des geschlossenen Dropdowns
-       --c-dropdown-text            : Text im geschlossenen Dropdown
-       --c-dropdown-border          : Rahmen des geschlossenen Dropdowns
-       --c-dropdown-list-bg         : Hintergrund der aufgeklappten Optionsliste
-       --c-dropdown-list-border     : Rahmen der aufgeklappten Optionsliste
-       --c-dropdown-list-shadow     : Schatten der aufgeklappten Liste
-       --c-dropdown-option-text     : Textfarbe einer einzelnen Option
-       --c-dropdown-option-hover-bg : Hintergrund beim Hover über eine Option
-       --c-dropdown-option-hover-text: Textfarbe beim Hover
-       --c-dropdown-option-sel-bg   : Hintergrund der ausgewählten Option
-    ──────────────────────────────────────────────────────────── */
-    --c-dropdown-bg:                #F8F9FA;
-    --c-dropdown-text:              #1E293B;
-    --c-dropdown-border:            rgba(27, 58, 107, 0.20);
+    /* ── DROPDOWNS ────────────────────────────────────────────── */
+    --c-dropdown-bg:                #F3F5F8;
+    --c-dropdown-text:              #1F2933;
+    --c-dropdown-border:            rgba(47,79,111,0.25);
     --c-dropdown-list-bg:           #FFFFFF;
-    --c-dropdown-list-border:       rgba(27, 58, 107, 0.15);
-    --c-dropdown-list-shadow:       rgba(0, 0, 0, 0.12);
-    --c-dropdown-option-text:       #1E293B;
-    --c-dropdown-option-hover-bg:   rgba(27, 58, 107, 0.08);
-    --c-dropdown-option-hover-text: #1B3A6B;
-    --c-dropdown-option-sel-bg:     rgba(27, 58, 107, 0.10);
+    --c-dropdown-list-border:       rgba(47,79,111,0.18);
+    --c-dropdown-list-shadow:       rgba(0,0,0,0.10);
+    --c-dropdown-option-text:       #1F2933;
+    --c-dropdown-option-hover-bg:   rgba(47,79,111,0.08);
+    --c-dropdown-option-hover-text: #2F4F6F;
+    --c-dropdown-option-sel-bg:     rgba(47,79,111,0.12);
 
-    /* ── SEGMENTED CONTROL ──────────────────────────────────────
-       --c-seg-bg           : Hintergrund der gesamten Schalterleiste
-       --c-seg-active-bg    : Hintergrund des aktiven/gewählten Segments
-       --c-seg-active-text  : Textfarbe des aktiven Segments
-       --c-seg-active-shadow: Schatten unter dem aktiven Segment
-       --c-seg-inactive-text: Textfarbe der inaktiven Segmente
-    ──────────────────────────────────────────────────────────── */
-    --c-seg-bg:             rgba(27, 58, 107, 0.06);
-    --c-seg-active-bg:      #1B3A6B;
+    /* ── SEGMENTED CONTROL ────────────────────────────────────── */
+    --c-seg-bg:             rgba(47,79,111,0.06);
+    --c-seg-active-bg:      #2F4F6F;
     --c-seg-active-text:    #FFFFFF;
-    --c-seg-active-shadow:  rgba(27, 58, 107, 0.25);
-    --c-seg-inactive-text:  #4A5270;
+    --c-seg-active-shadow:  rgba(47,79,111,0.25);
+    --c-seg-inactive-text:  #475569;
 
-    /* ── BUTTONS ────────────────────────────────────────────────
-       --c-btn-primary-bg      : Hintergrund primärer Button (Speichern etc.)
-       --c-btn-primary-text    : Textfarbe primärer Button
-       --c-btn-primary-hover   : Hintergrund beim Hover
-       --c-btn-primary-shadow  : Schatten beim Hover
-       --c-btn-secondary-bg    : Hintergrund sekundärer Button (Abbrechen etc.)
-       --c-btn-secondary-text  : Textfarbe sekundärer Button
-       --c-btn-secondary-border: Rahmen sekundärer Button
-    ──────────────────────────────────────────────────────────── */
-    --c-btn-primary-bg:         #1B3A6B;
+    /* ── BUTTONS ──────────────────────────────────────────────── */
+    --c-btn-primary-bg:         #2F4F6F;   /* Primärbutton */
     --c-btn-primary-text:       #FFFFFF;
-    --c-btn-primary-hover:      #142D54;
-    --c-btn-primary-shadow:     rgba(27, 58, 107, 0.35);
-    --c-btn-secondary-bg:       #F1F3F7;
-    --c-btn-secondary-text:     #4A5270;
-    --c-btn-secondary-border:   rgba(27, 58, 107, 0.15);
+    --c-btn-primary-hover:      #243B55;   /* Dunkler Hover */
+    --c-btn-primary-shadow:     rgba(47,79,111,0.35);
+    --c-btn-secondary-bg:       #E8EDF3;   /* Sekundär hell */
+    --c-btn-secondary-text:     #475569;
+    --c-btn-secondary-border:   rgba(47,79,111,0.20);
 
-    /* ── MODAL / DIALOG ─────────────────────────────────────────
-       --c-modal-bg       : Hintergrund des Dialog-Fensters
-       --c-modal-text     : Textfarbe im Dialog
-       --c-modal-border   : Rahmen des Dialog-Fensters
-       --c-modal-shadow   : Schatten hinter dem Dialog
-       --c-modal-backdrop : Abdunklungsfarbe hinter dem Dialog
-    ──────────────────────────────────────────────────────────── */
+    /* ── MODAL ───────────────────────────────────────────────── */
     --c-modal-bg:       #FFFFFF;
-    --c-modal-text:     #1E293B;
-    --c-modal-border:   rgba(27, 58, 107, 0.12);
-    --c-modal-shadow:   rgba(0, 0, 0, 0.18);
-    --c-modal-backdrop: rgba(10, 20, 50, 0.55);
+    --c-modal-text:     #1F2933;
+    --c-modal-border:   rgba(47,79,111,0.15);
+    --c-modal-shadow:   rgba(0,0,0,0.18);
+    --c-modal-backdrop: rgba(15,23,42,0.55); /* Dunkle Abdunklung */
 
-    /* ── LISTEN-ZEILEN (Banking-Style) ──────────────────────────
-       --c-list-bg          : Hintergrund des gesamten Listen-Containers
-       --c-list-border      : Außenrahmen des Listen-Containers
-       --c-list-row-divider : Trennlinie zwischen einzelnen Zeilen
-       --c-list-text-primary: Haupttext einer Zeile (Name, Zweck)
-       --c-list-text-sub    : Unterzeile (Konto, Kategorie, Datum)
-    ──────────────────────────────────────────────────────────── */
-    --c-list-bg:            #F4F5F9;
-    --c-list-border:        rgba(27, 58, 107, 0.11);
-    --c-list-row-divider:   rgba(27, 58, 107, 0.08);
-    --c-list-text-primary:  #1A1F2E;
-    --c-list-text-sub:      #7A84A0;
+    /* ── LISTEN ───────────────────────────────────────────────── */
+    --c-list-bg:            #EEF1F6;
+    --c-list-border:        rgba(47,79,111,0.12);
+    --c-list-row-divider:   rgba(47,79,111,0.08);
+    --c-list-text-primary:  #111827;
+    --c-list-text-sub:      #6B7280;
 
-    /* ── BADGES / PILLS ─────────────────────────────────────────
-       --c-badge-turnus-bg    : Hintergrund Turnus-Badge (z.B. "Quartalsweise")
-       --c-badge-turnus-text  : Textfarbe Turnus-Badge
-       --c-badge-turnus-border: Rahmen Turnus-Badge
-       --c-badge-konto-bg     : Hintergrund Kontotyp-Badge ("Bankkonto")
-       --c-badge-konto-text   : Textfarbe Kontotyp-Badge
-       --c-badge-konto-border : Rahmen Kontotyp-Badge
-       --c-badge-count-bg     : Hintergrund Zähl-Badge bei Section-Labels
-       --c-badge-count-text   : Textfarbe Zähl-Badge
-    ──────────────────────────────────────────────────────────── */
-    --c-badge-turnus-bg:        rgba(240, 120, 0, 0.12);
-    --c-badge-turnus-text:      #F07800;
-    --c-badge-turnus-border:    rgba(240, 120, 0, 0.25);
-    --c-badge-konto-bg:         rgba(27, 58, 107, 0.10);
-    --c-badge-konto-text:       #1B3A6B;
-    --c-badge-konto-border:     rgba(27, 58, 107, 0.20);
-    --c-badge-count-bg:         rgba(27, 58, 107, 0.10);
-    --c-badge-count-text:       #1B3A6B;
+    /* ── BADGES ───────────────────────────────────────────────── */
+    --c-badge-turnus-bg:     rgba(199,119,0,0.12);
+    --c-badge-turnus-text:   #C77700;
+    --c-badge-turnus-border: rgba(199,119,0,0.30);
+    --c-badge-konto-bg:      rgba(47,79,111,0.10);
+    --c-badge-konto-text:    #2F4F6F;
+    --c-badge-konto-border:  rgba(47,79,111,0.20);
+    --c-badge-count-bg:      rgba(47,79,111,0.10);
+    --c-badge-count-text:    #2F4F6F;
 
-    /* ── ALERT / INFO-BOXEN ─────────────────────────────────────
-       --c-alert-info-bg    : Hintergrund blauer Info-Hinweis
-       --c-alert-info-border: Linker Akzentstreifen Info-Hinweis
-       --c-alert-info-text  : Textfarbe Info-Hinweis
-       --c-alert-warn-bg    : Hintergrund gelbe Warnmeldung
-       --c-alert-warn-border: Linker Akzentstreifen Warnmeldung
-       --c-alert-err-bg     : Hintergrund rote Fehlermeldung
-       --c-alert-err-border : Linker Akzentstreifen Fehlermeldung
-    ──────────────────────────────────────────────────────────── */
-    --c-alert-info-bg:      rgba(27, 58, 107, 0.07);
-    --c-alert-info-border:  #1B3A6B;
-    --c-alert-info-text:    #1A1F2E;
-    --c-alert-warn-bg:      rgba(255, 152, 0, 0.08);
-    --c-alert-warn-border:  #FF9800;
-    --c-alert-err-bg:       rgba(244, 67, 54, 0.07);
-    --c-alert-err-border:   #F44336;
+    /* ── ALERTS ───────────────────────────────────────────────── */
+    --c-alert-info-bg:      rgba(47,79,111,0.07);
+    --c-alert-info-border:  #2F4F6F;
+    --c-alert-info-text:    #1F2933;
+    --c-alert-warn-bg:      rgba(199,119,0,0.08);
+    --c-alert-warn-border:  #C77700;
+    --c-alert-err-bg:       rgba(192,57,43,0.08);
+    --c-alert-err-border:   #C0392B;
 
-    /* ── SEITEN-HEADER & SECTION-LABELS ─────────────────────────
-       --c-page-header-border : Trennlinie unter dem Seitentitel
-       --c-section-dot        : Farbpunkt vor Section-Überschriften
-                                (wird in ui.py per Parameter übergeben,
-                                 dieser Wert ist der globale Fallback)
-    ──────────────────────────────────────────────────────────── */
-    --c-page-header-border: rgba(27, 58, 107, 0.12);
-    --c-section-dot:        #1B3A6B;
+    /* ── DIVIDER ─────────────────────────────────────────────── */
+    --c-divider:        rgba(47,79,111,0.12);
 
-    /* ── LEERER ZUSTAND (Empty State) ───────────────────────────
-       --c-empty-bg    : Hintergrund der "Keine Einträge"-Box
-       --c-empty-border: Gestrichelter Rahmen der Empty-State-Box
-       --c-empty-text  : Textfarbe der Meldung
-    ──────────────────────────────────────────────────────────── */
-    --c-empty-bg:       rgba(27, 58, 107, 0.04);
-    --c-empty-border:   rgba(27, 58, 107, 0.18);
-    --c-empty-text:     #4A5270;
-
-    /* ── DIVIDER / TRENNLINIEN ──────────────────────────────────
-       --c-divider : Farbe horizontaler Trennlinien (st.divider())
-    ──────────────────────────────────────────────────────────── */
-    --c-divider:        rgba(27, 58, 107, 0.10);
-
-    /* ── TABELLEN (st.dataframe) ────────────────────────────────
-       --c-table-header-bg  : Hintergrund der Kopfzeile
-       --c-table-header-text: Textfarbe der Kopfzeile
-       --c-table-row-even   : Hintergrund gerader Zeilen
-       --c-table-row-odd    : Hintergrund ungerader Zeilen
-       --c-table-row-hover  : Hintergrund beim Hover über eine Zeile
-    ──────────────────────────────────────────────────────────── */
-    --c-table-header-bg:    rgba(27, 58, 107, 0.06);
-    --c-table-header-text:  #1B3A6B;
+    /* ── TABELLEN ────────────────────────────────────────────── */
+    --c-table-header-bg:    rgba(47,79,111,0.06);
+    --c-table-header-text:  #2F4F6F;
     --c-table-row-even:     #FFFFFF;
-    --c-table-row-odd:      #F8F9FA;
-    --c-table-row-hover:    rgba(27, 58, 107, 0.04);
+    --c-table-row-odd:      #F3F5F8;
+    --c-table-row-hover:    rgba(47,79,111,0.05);
 
-    /* ── SELECTIONS-BALKEN ──────────────────────────────────────
-       --c-selection-text   : "Ausgewählt"-Label rechts im Balken
-       (Vorder- und Hintergrundfarbe des Balkens selbst werden
-        dynamisch aus der jeweiligen Akzentfarbe berechnet)
-    ──────────────────────────────────────────────────────────── */
-    --c-selection-text:     #8892AA;
+    /* ── EMPTY STATE ─────────────────────────────────────────── */
+    --c-empty-bg:       rgba(47,79,111,0.04);
+    --c-empty-border:   rgba(47,79,111,0.20);
+    --c-empty-text:     #6B7280;
 
-    /* ── WERT-PILLS (Dashboard inline) ─────────────────────────
-       --c-pill-pos-bg    : Hintergrund positiver Wert-Pill
-       --c-pill-pos-border: Rahmen positiver Wert-Pill
-       --c-pill-neg-bg    : Hintergrund negativer Wert-Pill
-       --c-pill-neg-border: Rahmen negativer Wert-Pill
-    ──────────────────────────────────────────────────────────── */
-    --c-pill-pos-bg:        rgba(28, 158, 58, 0.10);
-    --c-pill-pos-border:    rgba(28, 158, 58, 0.25);
-    --c-pill-neg-bg:        rgba(214, 59, 59, 0.10);
-    --c-pill-neg-border:    rgba(214, 59, 59, 0.20);
+    /* ── VALUE PILLS ─────────────────────────────────────────── */
+    --c-pill-pos-bg:        rgba(46,125,50,0.10);
+    --c-pill-pos-border:    rgba(46,125,50,0.25);
+    --c-pill-neg-bg:        rgba(192,57,43,0.10);
+    --c-pill-neg-border:    rgba(192,57,43,0.25);
 
 }
 
