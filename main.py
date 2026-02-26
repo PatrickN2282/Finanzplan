@@ -257,6 +257,17 @@ st.markdown("""
 --c-pill-neg-bg:        #F3D6D6;
 --c-pill-neg-border:    #C99A9A;
 
+/* Dialog Register */
+--c-dialog-seg-bg: #E9E6E1;          /* Container */
+--c-dialog-seg-hover: #DCD7CF;       /* Hover */
+--c-dialog-seg-active: #C7BDAF;      /* Active Hintergrund */
+--c-dialog-seg-active-text: #3F3A33; /* Active Text */
+
+/* Dialog Buttons */
+--c-dialog-btn-bg: #4A5560;          /* Primärbutton */
+--c-dialog-btn-text: #FFFFFF;
+--c-dialog-btn-hover: #3C4650;
+
 /* ═════════════════════════════════════════════
    STREAMLIT MODAL – DARKMODE STABIL
 ═════════════════════════════════════════════ */
@@ -289,6 +300,7 @@ div[role="dialog"] h2,
 div[role="dialog"] h3 {
     color: var(--c-modal-text) !important;
 }
+
 
 /* ═════════════════════════════════════════════
    PILL / TAG FIX – DARKMODE SAFE
@@ -324,33 +336,34 @@ span[data-baseweb="tag"] {
 }
 
 /* ═════════════════════════════════════════════
-   DIALOG REGISTER / TAB BUTTON FIX
+   DIALOG REGISTER – SLATE STYLE
 ═════════════════════════════════════════════ */
 
-/* Button Group Container */
 div[role="dialog"] [data-baseweb="button-group"] {
-    background: var(--c-surface) !important;
-    border-radius: var(--r) !important;
+    background: var(--c-dialog-seg-bg) !important;
+    border-radius: 10px !important;
     padding: 4px !important;
+    border: 1px solid #D2CCC3 !important;
 }
 
-/* Einzelne Register-Buttons */
+/* Buttons */
 div[role="dialog"] [data-baseweb="button-group"] button {
     background: transparent !important;
-    color: var(--c-text) !important;
-    border: none !important;
+    color: #4B4B4B !important;
+    border-radius: 8px !important;
+    transition: all 0.15s ease;
 }
 
 /* Hover */
 div[role="dialog"] [data-baseweb="button-group"] button:hover {
-    background: var(--c-surface-2) !important;
+    background: var(--c-dialog-seg-hover) !important;
 }
 
-/* Aktiver Button */
+/* Active */
 div[role="dialog"] [data-baseweb="button-group"] button[aria-pressed="true"],
 div[role="dialog"] [data-baseweb="button-group"] button[data-selected="true"] {
-    background: var(--c-accent-soft) !important;
-    color: var(--c-accent) !important;
+    background: var(--c-dialog-seg-active) !important;
+    color: var(--c-dialog-seg-active-text) !important;
     font-weight: 600;
 }
 
