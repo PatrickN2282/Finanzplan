@@ -387,8 +387,8 @@ def dashboard_page(conn, u_id):
 
     _page_header("Dashboard", "Deine Finanzübersicht auf einen Blick")
 
-    zeitraum = st.segmented_control("Vorschau", [3, 6, 12], default=3,
-                                    format_func=lambda x: f"{x} Monate")
+    zeitraum_label = st.radio("Vorschau", ["3 Monate", "6 Monate", "12 Monate"], index=0, horizontal=True, label_visibility="collapsed")
+    zeitraum = int(zeitraum_label.split()[0])
 
     f_df, t_df, m_ein, m_aus_ist, m_aus_ant, kat_dist = get_forecast_detailed(conn, u_id, zeitraum)
 
