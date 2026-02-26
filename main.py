@@ -15,7 +15,7 @@ st.set_page_config(
 # ═══════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
 
 /* ══════════════════════════════════════════════════════════════════
    DARKMODE KOMPLETT DEAKTIVIEREN
@@ -25,6 +25,44 @@ st.markdown("""
 ══════════════════════════════════════════════════════════════════ */
 :root, html, body, * {
     color-scheme: light only !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   FORCE LIGHT MODE – Streamlit Dark-Theme komplett überschreiben
+══════════════════════════════════════════════════════════════════ */
+.stApp,
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"],
+[data-testid="stMainBlockContainer"],
+section[data-testid="stSidebarContent"],
+[data-theme="dark"] .stApp,
+[data-theme="dark"] [data-testid="stAppViewContainer"],
+[data-theme="dark"] [data-testid="stMain"] {
+    background-color: var(--c-bg) !important;
+    color: var(--c-text) !important;
+}
+
+[data-theme="dark"] [data-testid="metric-container"] {
+    background-color: var(--c-metric-bg) !important;
+    color: var(--c-metric-value) !important;
+}
+
+[data-theme="dark"] [data-testid="stDataFrame"],
+[data-theme="dark"] [data-testid="stDataFrame"] * {
+    background-color: var(--c-surface) !important;
+    color: var(--c-text) !important;
+}
+
+[data-theme="dark"] .stExpander > div:last-child {
+    background-color: var(--c-expander-bg) !important;
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+    background-color: var(--c-input-bg) !important;
+    color: var(--c-input-text) !important;
+    border-color: var(--c-input-border) !important;
 }
 
 
@@ -40,44 +78,45 @@ st.markdown("""
    HAUPTFARBEN
 ═════════════════════════════════════════════ */
 
---c-primary:        #1F6F78;   /* Petrol – Hauptakzent */
---c-bg:             #F4F1EA;   /* Warmes Off-White – App Hintergrund */
+--c-primary:        #0D7EA8;   /* Cyan-Teal – Hauptakzent */
+--c-bg:             #F0F2F5;   /* Kühles Hellgrau – App Hintergrund */
 --c-surface:        #FFFFFF;   /* Karten / Panels */
---c-surface-2:      #EAE5DC;   /* Sekundäre Flächen */
+--c-surface-2:      #E4E8EE;   /* Sekundäre Flächen */
 
 /* ═════════════════════════════════════════════
    TEXT
 ═════════════════════════════════════════════ */
 
---c-text:           #2C2A28;   /* Haupttext – warmes Anthrazit */
---c-text-2:         #3A3733;   /* Sekundärtext */
---c-text-muted:     #8A8278;   /* Gedimmter Text */
---c-heading:        #1E1C19;   /* Überschriften */
---c-subheading:     #6F675E;   /* Untertitel */
+--c-text:           #1A2035;   /* Haupttext – dunkles Navy */
+--c-text-2:         #2D3A52;   /* Sekundärtext */
+--c-text-muted:     #7B8AAB;   /* Gedimmter Text */
+--c-heading:        #0D1526;   /* Überschriften */
+--c-subheading:     #5A6A8A;   /* Untertitel */
 
 /* ═════════════════════════════════════════════
    STATUS
 ═════════════════════════════════════════════ */
 
---value-pos:        #4C7A3F;   /* Moosgrün */
---value-neg:        #8E2F2F;   /* Bordeaux */
---value-warn:       #B7791F;   /* Warmes Ocker */
---value-neon:       #1F6F78;   /* CTA – Petrol */
+--value-pos:        #0E8A5F;   /* Smaragdgrün */
+--value-neg:        #C0392B;   /* Klares Rot */
+--value-warn:       #D4860A;   /* Sattes Amber */
+--value-neon:       #0D7EA8;   /* CTA – Cyan-Teal */
 
 /* ═════════════════════════════════════════════
    RAHMEN
 ═════════════════════════════════════════════ */
 
---border:           #D9D2C7;   /* Weicher Steinrahmen */
---border-strong:    #BFB6A8;   /* Stärkerer Rahmen */
---r:                12px;
---r-s:              8px;
+--border:           #CDD4E0;   /* Kühler Graurahmen */
+--border-strong:    #AAB5C8;   /* Stärkerer Rahmen */
+--r:                10px;
+--r-s:              7px;
 
 /* ═════════════════════════════════════════════
    TYPO
 ═════════════════════════════════════════════ */
 
---font: 'Inter', 'Roboto', sans-serif;
+--font:         'DM Sans', sans-serif;
+--font-heading: 'Rajdhani', sans-serif;
 --font-size-base:   0.9rem;
 --font-size-sm:     0.82rem;
 --font-size-xs:     0.72rem;
@@ -86,14 +125,14 @@ st.markdown("""
    SIDEBAR
 ═════════════════════════════════════════════ */
 
---c-sidebar-bg:             #2B2622;   /* Dunkles Espresso */
---c-sidebar-text:           #F4F1EA;   /* Heller Kontrast */
---c-sidebar-text-muted:     #B7AEA3;   /* Gedimmtes Beige */
---c-sidebar-divider:        #3B342E;   /* Dunkler Divider */
---c-sidebar-avatar-bg:      #3A332D;   /* Avatar Hintergrund */
---c-sidebar-avatar-border:  #B7791F;   /* Ocker Rahmen */
---c-sidebar-avatar-text:    #D6A756;   /* Goldener Text */
---c-sidebar-btn-cta-bg:     #1F6F78;   /* Petrol CTA */
+--c-sidebar-bg:             #111827;   /* Tiefes Midnight Navy */
+--c-sidebar-text:           #E8EDF5;   /* Helles Blau-Weiß */
+--c-sidebar-text-muted:     #7B8AAB;   /* Gedimmtes Slate */
+--c-sidebar-divider:        #1E2D45;   /* Dunkler Divider */
+--c-sidebar-avatar-bg:      #1A2A42;   /* Avatar Hintergrund */
+--c-sidebar-avatar-border:  #0D7EA8;   /* Cyan Rahmen */
+--c-sidebar-avatar-text:    #38C4E8;   /* Helles Cyan */
+--c-sidebar-btn-cta-bg:     #0D7EA8;   /* Cyan CTA */
 --c-sidebar-btn-cta-text:   #FFFFFF;   /* Weißer Text */
 
 /* ═════════════════════════════════════════════
@@ -101,172 +140,172 @@ st.markdown("""
 ═════════════════════════════════════════════ */
 
 --c-expander-bg:            #FFFFFF;
---c-expander-header-bg:     #3A3733;   /* Warmes Dunkel */
---c-expander-header-hover:  #1F6F78;   /* Petrol Hover */
+--c-expander-header-bg:     #1A2035;   /* Navy Dunkel */
+--c-expander-header-hover:  #0D7EA8;   /* Cyan Hover */
 --c-expander-header-text:   #FFFFFF;
---c-expander-border:        #D9D2C7;
+--c-expander-border:        #CDD4E0;
 
 /* ═════════════════════════════════════════════
    METRICS
 ═════════════════════════════════════════════ */
 
 --c-metric-bg:          #FFFFFF;
---c-metric-border:      #D9D2C7;
---c-metric-value:       #1E1C19;
---c-metric-label:       #6F675E;
---c-metric-delta-pos:   #4C7A3F;
---c-metric-delta-neg:   #8E2F2F;
+--c-metric-border:      #CDD4E0;
+--c-metric-value:       #0D1526;
+--c-metric-label:       #5A6A8A;
+--c-metric-delta-pos:   #0E8A5F;
+--c-metric-delta-neg:   #C0392B;
 
 /* ═════════════════════════════════════════════
    INPUTS
 ═════════════════════════════════════════════ */
 
---c-input-bg:           #F8F6F1;
+--c-input-bg:           #F7F9FC;
 --c-input-bg-focus:     #FFFFFF;
---c-input-text:         #2C2A28;
---c-input-border:       #CFC6B8;
---c-input-border-focus: #1F6F78;
---c-input-focus-ring:   #CDE3E6;   /* Helles Petrol */
---c-input-label:        #5C544C;
+--c-input-text:         #1A2035;
+--c-input-border:       #C5CEDC;
+--c-input-border-focus: #0D7EA8;
+--c-input-focus-ring:   #BAE0ED;   /* Helles Cyan */
+--c-input-label:        #4A5870;
 
 /* ═════════════════════════════════════════════
    DROPDOWN
 ═════════════════════════════════════════════ */
 
---c-dropdown-bg:                #F8F6F1;
---c-dropdown-text:              #2C2A28;
---c-dropdown-border:            #CFC6B8;
+--c-dropdown-bg:                #F7F9FC;
+--c-dropdown-text:              #1A2035;
+--c-dropdown-border:            #C5CEDC;
 --c-dropdown-list-bg:           #FFFFFF;
---c-dropdown-list-border:       #D9D2C7;
---c-dropdown-list-shadow:       rgba(0,0,0,0.12);
---c-dropdown-option-text:       #2C2A28;
---c-dropdown-option-hover-bg:   #E6F0F1;
---c-dropdown-option-hover-text: #1F6F78;
---c-dropdown-option-sel-bg:     #DCEBED;
+--c-dropdown-list-border:       #CDD4E0;
+--c-dropdown-list-shadow:       rgba(13,21,38,0.14);
+--c-dropdown-option-text:       #1A2035;
+--c-dropdown-option-hover-bg:   #E0F2FA;
+--c-dropdown-option-hover-text: #0D7EA8;
+--c-dropdown-option-sel-bg:     #C8E8F5;
 
 /* ═════════════════════════════════════════════
    SEGMENTED CONTROL
 ═════════════════════════════════════════════ */
 
---c-seg-bg:             #EAE5DC;
---c-seg-active-bg:      #1F6F78;
+--c-seg-bg:             #E4E8EE;
+--c-seg-active-bg:      #0D7EA8;
 --c-seg-active-text:    #FFFFFF;
---c-seg-active-shadow:  rgba(0,0,0,0.18);
---c-seg-inactive-text:  #5C544C;
+--c-seg-active-shadow:  rgba(13,126,168,0.30);
+--c-seg-inactive-text:  #4A5870;
 
 /* ═════════════════════════════════════════════
    BUTTONS
 ═════════════════════════════════════════════ */
 
---c-btn-primary-bg:         #1F6F78;
+--c-btn-primary-bg:         #0D7EA8;
 --c-btn-primary-text:       #FFFFFF;
---c-btn-primary-hover:      #16555C;
---c-btn-primary-shadow:     rgba(0,0,0,0.20);
---c-btn-secondary-bg:       #EAE5DC;
---c-btn-secondary-text:     #5C544C;
---c-btn-secondary-border:   #CFC6B8;
+--c-btn-primary-hover:      #0A6288;
+--c-btn-primary-shadow:     rgba(13,126,168,0.30);
+--c-btn-secondary-bg:       #E4E8EE;
+--c-btn-secondary-text:     #4A5870;
+--c-btn-secondary-border:   #C5CEDC;
 
 /* ═════════════════════════════════════════════
    MODAL
 ═════════════════════════════════════════════ */
 
 --c-modal-bg:       #FFFFFF;
---c-modal-text:     #2C2A28;
---c-modal-border:   #D9D2C7;
---c-modal-shadow:   rgba(0,0,0,0.25);
---c-modal-backdrop: rgba(0,0,0,0.55);
+--c-modal-text:     #1A2035;
+--c-modal-border:   #CDD4E0;
+--c-modal-shadow:   rgba(13,21,38,0.28);
+--c-modal-backdrop: rgba(13,21,38,0.60);
 
 /* ═════════════════════════════════════════════
    LISTEN
 ═════════════════════════════════════════════ */
 
---c-list-bg:            #F1ECE3;
---c-list-border:        #D9D2C7;
---c-list-row-divider:   #E0D9CF;
---c-list-text-primary:  #1E1C19;
---c-list-text-sub:      #6F675E;
+--c-list-bg:            #F7F9FC;
+--c-list-border:        #CDD4E0;
+--c-list-row-divider:   #DDE3EC;
+--c-list-text-primary:  #0D1526;
+--c-list-text-sub:      #5A6A8A;
 
 /* ═════════════════════════════════════════════
    BADGES
 ═════════════════════════════════════════════ */
 
---c-badge-turnus-bg:        #F3E3C8;
---c-badge-turnus-text:      #B7791F;
---c-badge-turnus-border:    #D6B47A;
---c-badge-konto-bg:         #DCEBED;
---c-badge-konto-text:       #1F6F78;
---c-badge-konto-border:     #A8CDD1;
---c-badge-count-bg:         #EAE5DC;
---c-badge-count-text:       #5C544C;
+--c-badge-turnus-bg:        #FEF3E0;
+--c-badge-turnus-text:      #B36A00;
+--c-badge-turnus-border:    #F0C070;
+--c-badge-konto-bg:         #E0F4FA;
+--c-badge-konto-text:       #0D7EA8;
+--c-badge-konto-border:     #90CEDE;
+--c-badge-count-bg:         #E4E8EE;
+--c-badge-count-text:       #4A5870;
 
 /* ═════════════════════════════════════════════
    ALERTS
 ═════════════════════════════════════════════ */
 
---c-alert-info-bg:      #E6F0F1;
---c-alert-info-border:  #1F6F78;
---c-alert-info-text:    #2C2A28;
---c-alert-warn-bg:      #F8E7C9;
---c-alert-warn-border:  #B7791F;
---c-alert-err-bg:       #F3D6D6;
---c-alert-err-border:   #8E2F2F;
+--c-alert-info-bg:      #E0F4FA;
+--c-alert-info-border:  #0D7EA8;
+--c-alert-info-text:    #1A2035;
+--c-alert-warn-bg:      #FEF3E0;
+--c-alert-warn-border:  #D4860A;
+--c-alert-err-bg:       #FDECEA;
+--c-alert-err-border:   #C0392B;
 
 /* ═════════════════════════════════════════════
    HEADER / SECTION
 ═════════════════════════════════════════════ */
 
---c-page-header-border: #D9D2C7;
---c-section-dot:        #1F6F78;
+--c-page-header-border: #CDD4E0;
+--c-section-dot:        #0D7EA8;
 
 /* ═════════════════════════════════════════════
    EMPTY STATE
 ═════════════════════════════════════════════ */
 
---c-empty-bg:       #F1ECE3;
---c-empty-border:   #CFC6B8;
---c-empty-text:     #6F675E;
+--c-empty-bg:       #F0F2F5;
+--c-empty-border:   #C5CEDC;
+--c-empty-text:     #5A6A8A;
 
 /* ═════════════════════════════════════════════
    DIVIDER
 ═════════════════════════════════════════════ */
 
---c-divider:        #D9D2C7;
+--c-divider:        #CDD4E0;
 
 /* ═════════════════════════════════════════════
    TABLE
 ═════════════════════════════════════════════ */
 
---c-table-header-bg:    #EAE5DC;
---c-table-header-text:  #3A3733;
+--c-table-header-bg:    #E4E8EE;
+--c-table-header-text:  #1A2035;
 --c-table-row-even:     #FFFFFF;
---c-table-row-odd:      #F4F1EA;
---c-table-row-hover:    #E6F0F1;
+--c-table-row-odd:      #F7F9FC;
+--c-table-row-hover:    #E0F2FA;
 
 /* ═════════════════════════════════════════════
    SELECTION BAR
 ═════════════════════════════════════════════ */
 
---c-selection-text:     #6F675E;
+--c-selection-text:     #5A6A8A;
 
 /* ═════════════════════════════════════════════
    VALUE PILLS
 ═════════════════════════════════════════════ */
 
---c-pill-pos-bg:        #E4F0E1;
---c-pill-pos-border:    #A7C59F;
---c-pill-neg-bg:        #F3D6D6;
---c-pill-neg-border:    #C99A9A;
+--c-pill-pos-bg:        #D6F0E6;
+--c-pill-pos-border:    #82CBA8;
+--c-pill-neg-bg:        #FDECEA;
+--c-pill-neg-border:    #E8A09A;
 
 /* Dialog Register */
---c-dialog-seg-bg: #E9E6E1;          /* Container */
---c-dialog-seg-hover: #DCD7CF;       /* Hover */
---c-dialog-seg-active: #C7BDAF;      /* Active Hintergrund */
---c-dialog-seg-active-text: #3F3A33; /* Active Text */
+--c-dialog-seg-bg: #E4E8EE;          /* Container */
+--c-dialog-seg-hover: #D5DCE8;       /* Hover */
+--c-dialog-seg-active: #C2CEDF;      /* Active Hintergrund */
+--c-dialog-seg-active-text: #1A2035; /* Active Text */
 
 /* Dialog Buttons */
---c-dialog-btn-bg: #4A5560;          /* Primärbutton */
+--c-dialog-btn-bg: #0D7EA8;          /* Primärbutton */
 --c-dialog-btn-text: #FFFFFF;
---c-dialog-btn-hover: #3C4650;
+--c-dialog-btn-hover: #0A6288;
 
 /* ═════════════════════════════════════════════
    STREAMLIT MODAL – DARKMODE STABIL
@@ -466,8 +505,8 @@ svg text {
 
 [data-testid="stMetricValue"] {
     color: var(--c-metric-value);
-    font-weight: 800;
-    font-family: var(--font) !important;
+    font-weight: 700;
+    font-family: var(--font-heading) !important;
 }
 
 [data-testid="stMetricLabel"] {
