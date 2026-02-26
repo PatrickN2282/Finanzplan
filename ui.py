@@ -16,30 +16,30 @@ from forecast import calculate_months
 # ══════════════════════════════════════════════════════════════════
 
 # Hauptakzentfarbe (--c-primary)
-_MARINE  = "#1B3A6B"
+_MARINE  = "#0D7EA8"
 
-# CTA / Neon-Grün (--value-neon) – für Saldo-Linie im Chart
-_NEON    = "#39D353"
+# CTA / Cyan (--value-neon) – für Saldo-Linie im Chart
+_NEON    = "#38C4E8"
 
-# Akzent Orange (--value-warn) – für Abos, Turnus-Badges
-_ORANGE  = "#F07800"
+# Akzent Amber (--value-warn) – für Abos, Turnus-Badges
+_ORANGE  = "#D4860A"
 
 # Statusfarben (--value-neg / --value-pos)
-_RED     = "#D63B3B"
-_GREEN   = "#1C9E3A"
+_RED     = "#C0392B"
+_GREEN   = "#0E8A5F"
 
 # Sekundäre Textfarbe für Chart-Achsen (--c-text-muted)
-_CHART_TEXT = "#4A5270"
+_CHART_TEXT = "#5A6A8A"
 
 # Gitterlinien-Farbe in Charts
-_CHART_GRID = "rgba(0,0,0,0.06)"
+_CHART_GRID = "rgba(13,21,38,0.07)"
 
 # ── Plotly-Layout-Basis ──────────────────────────────────────────
 # paper_bgcolor / plot_bgcolor transparent → App-Hintergrund scheint durch
 _PLOT_LAYOUT = dict(
     paper_bgcolor='rgba(0,0,0,0)',
     plot_bgcolor='rgba(0,0,0,0)',
-    font=dict(family='Ubuntu, sans-serif', color=_CHART_TEXT, size=12),
+    font=dict(family='DM Sans, sans-serif', color=_CHART_TEXT, size=12),
     margin=dict(t=44, b=52, l=8, r=8),
     legend=dict(orientation="h", yanchor="bottom", y=-0.32,
                 font=dict(size=11)),
@@ -80,8 +80,8 @@ def _page_header(title: str, subtitle: str = ""):
     st.markdown(f"""
     <div style="margin-bottom:1.4rem;padding-bottom:1rem;
                 border-bottom:1px solid var(--c-page-header-border);">
-        <h1 style="font-family:var(--font);font-weight:800;font-size:1.75rem;
-                   letter-spacing:-0.03em;margin:0;color:var(--c-heading);">{title}</h1>
+        <h1 style="font-family:var(--font-heading);font-weight:700;font-size:2rem;
+                   letter-spacing:0.04em;text-transform:uppercase;margin:0;color:var(--c-heading);">{title}</h1>
         {sub_html}
     </div>""", unsafe_allow_html=True)
 
@@ -106,8 +106,8 @@ def _section_label(text: str, color: str = _MARINE, count: int = None):
     <div style="display:flex;align-items:center;gap:0.5rem;margin:1.1rem 0 0.55rem;">
         <span style="display:inline-block;width:8px;height:8px;border-radius:50%;
                      background:{color};flex-shrink:0;"></span>
-        <span style="font-family:var(--font);font-weight:700;font-size:var(--font-size-base);
-                     color:var(--c-heading);letter-spacing:-0.005em;">{text}</span>
+        <span style="font-family:var(--font-heading);font-weight:700;font-size:1.05rem;
+                     color:var(--c-heading);letter-spacing:0.05em;text-transform:uppercase;">{text}</span>
         {badge}
     </div>""", unsafe_allow_html=True)
 
@@ -422,8 +422,8 @@ def dashboard_page(conn, u_id):
         with co1:
             if kat_dist:
                 # Orange-Marine Palette für Kategorien
-                kat_colors = [_MARINE,'#254E94','#2E60B0','#F07800','#FF9A30',
-                              '#FFB860','#39D353','#2AB544','#1C9E3A','#17823A']
+                kat_colors = [_MARINE,'#1A9EC8','#2BBAE0','#D4860A','#F0A830',
+                              '#FAC060','#0E8A5F','#18B07A','#38D49A','#7AE8C2']
                 fig = go.Figure(go.Pie(
                     labels=list(kat_dist.keys()),
                     values=list(kat_dist.values()),
@@ -438,10 +438,10 @@ def dashboard_page(conn, u_id):
                 fig.update_layout(
                     **_PLOT_LAYOUT,
                     title=dict(text="Ausgaben nach Kategorie",
-                               font=dict(family='Outfit', size=13, color=_CHART_TEXT), x=0.02),
+                               font=dict(family='Rajdhani', size=13, color=_CHART_TEXT), x=0.02),
                     annotations=[dict(text=f"<b>{format_euro(total_aus)}</b>",
                                       x=0.5, y=0.5, font_size=12, showarrow=False,
-                                      font=dict(color=_CHART_TEXT, family='Outfit'))]
+                                      font=dict(color=_CHART_TEXT, family='Rajdhani'))]
                 )
                 st.plotly_chart(fig, width='stretch')
 
@@ -472,7 +472,7 @@ def dashboard_page(conn, u_id):
             fig2.update_layout(
                 **_PLOT_LAYOUT,
                 title=dict(text=f"Cashflow – {zeitraum} Monate",
-                           font=dict(family='Outfit', size=13, color=_CHART_TEXT), x=0.02),
+                           font=dict(family='Rajdhani', size=13, color=_CHART_TEXT), x=0.02),
                 barmode='group', bargap=0.22, bargroupgap=0.06,
             )
             st.plotly_chart(fig2, width='stretch')
@@ -494,8 +494,9 @@ def dashboard_page(conn, u_id):
         # Monatstrenner
         st.markdown(f"""
         <div style="display:flex;align-items:center;gap:0.8rem;margin:{'1.4rem' if i>0 else '0.4rem'} 0 0.6rem;">
-            <div style="font-family:var(--font);font-weight:700;font-size:var(--font-size-base);
-                        color:var(--c-heading);letter-spacing:-0.01em;white-space:nowrap;">
+            <div style="font-family:var(--font-heading);font-weight:700;font-size:1rem;
+                        letter-spacing:0.06em;text-transform:uppercase;
+                        color:var(--c-heading);white-space:nowrap;">
                 📅 {monat}
             </div>
             <div style="flex:1;height:1px;background:var(--c-list-border);"></div>
