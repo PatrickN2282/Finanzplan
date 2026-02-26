@@ -15,7 +15,7 @@ st.set_page_config(
 # ═══════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;600;700;800&display=swap');
 
 /* ══════════════════════════════════════════════════════════════════
    DARKMODE KOMPLETT DEAKTIVIEREN
