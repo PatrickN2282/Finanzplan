@@ -77,7 +77,7 @@ st.markdown("""
    TYPO
 ═════════════════════════════════════════════ */
 
---font:             'Silkscreen', sans-serif;
+--font: 'Inter', 'Roboto', sans-serif;
 --font-size-base:   0.9rem;
 --font-size-sm:     0.82rem;
 --font-size-xs:     0.72rem;
