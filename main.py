@@ -323,6 +323,37 @@ span[data-baseweb="tag"] {
     color: var(--value-warn) !important;
 }
 
+/* ═════════════════════════════════════════════
+   DIALOG REGISTER / TAB BUTTON FIX
+═════════════════════════════════════════════ */
+
+/* Button Group Container */
+div[role="dialog"] [data-baseweb="button-group"] {
+    background: var(--c-surface) !important;
+    border-radius: var(--r) !important;
+    padding: 4px !important;
+}
+
+/* Einzelne Register-Buttons */
+div[role="dialog"] [data-baseweb="button-group"] button {
+    background: transparent !important;
+    color: var(--c-text) !important;
+    border: none !important;
+}
+
+/* Hover */
+div[role="dialog"] [data-baseweb="button-group"] button:hover {
+    background: var(--c-surface-2) !important;
+}
+
+/* Aktiver Button */
+div[role="dialog"] [data-baseweb="button-group"] button[aria-pressed="true"],
+div[role="dialog"] [data-baseweb="button-group"] button[data-selected="true"] {
+    background: var(--c-accent-soft) !important;
+    color: var(--c-accent) !important;
+    font-weight: 600;
+}
+
 }
 
 /* ══════════════════════════════════════════════════════════════════
