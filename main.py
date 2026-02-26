@@ -984,8 +984,8 @@ hr,
 /* Labels im Hauptbereich */
 [data-testid="stMain"] [data-testid="stRadio"] label,
 [data-testid="stMainBlockContainer"] [data-testid="stRadio"] label {
-    background: transparent !important;
-    color: var(--c-seg-inactive-text) !important;
+    background: var(--c-surface-2) !important;
+    color: var(--c-text) !important;
     font-family: var(--font) !important;
     font-weight: 500 !important;
     font-size: var(--font-size-sm) !important;
