@@ -36,153 +36,226 @@ st.markdown("""
 ══════════════════════════════════════════════════════════════════ */
 :root {
 
-    /* ── HAUPTFARBEN ──────────────────────────────────────────── */
-    --c-primary:        #2F4F6F;   /* Gedämpftes Stahlblau – Hauptakzent */
-    --c-bg:             #F3F5F8;   /* Sehr helles Blaugrau – App Hintergrund */
-    --c-surface:        #FFFFFF;   /* Karten / Panels – reines Weiß */
-    --c-surface-2:      #EEF1F6;   /* Sekundäre Flächen – leicht grau-blau */
+/* ═════════════════════════════════════════════
+   HAUPTFARBEN
+═════════════════════════════════════════════ */
 
-    /* ── TEXTFARBEN ───────────────────────────────────────────── */
-    --c-text:           #1F2933;   /* Haupttext – dunkles Slate */
-    --c-text-2:         #334155;   /* Sekundärtext */
-    --c-text-muted:     #7C8799;   /* Gedimmter Text */
-    --c-heading:        #111827;   /* Überschriften – fast schwarz */
-    --c-subheading:     #6B7280;   /* Untertitel */
+--c-primary:        #1F6F78;   /* Petrol – Hauptakzent */
+--c-bg:             #F4F1EA;   /* Warmes Off-White – App Hintergrund */
+--c-surface:        #FFFFFF;   /* Karten / Panels */
+--c-surface-2:      #EAE5DC;   /* Sekundäre Flächen */
 
-    /* ── STATUSFARBEN ─────────────────────────────────────────── */
-    --value-pos:        #2E7D32;   /* Gedämpftes Grün */
-    --value-neg:        #C0392B;   /* Dunkles Ziegelrot */
-    --value-warn:       #C77700;   /* Gedämpftes Orange */
-    --value-neon:       #3A7CA5;   /* CTA Sidebar – ruhiges Blau */
+/* ═════════════════════════════════════════════
+   TEXT
+═════════════════════════════════════════════ */
 
-    /* ── RAHMEN & RADIEN ──────────────────────────────────────── */
-    --border:           rgba(47, 79, 111, 0.08);  /* Subtile Linien */
-    --border-strong:    rgba(47, 79, 111, 0.22);  /* Stärkere Linien */
-    --r:                12px;   /* Karten Radius */
-    --r-s:              8px;    /* Buttons / Inputs */
+--c-text:           #2C2A28;   /* Haupttext – warmes Anthrazit */
+--c-text-2:         #3A3733;   /* Sekundärtext */
+--c-text-muted:     #8A8278;   /* Gedimmter Text */
+--c-heading:        #1E1C19;   /* Überschriften */
+--c-subheading:     #6F675E;   /* Untertitel */
 
-    /* ── TYPOGRAFIE ───────────────────────────────────────────── */
-    --font:             'Outfit', sans-serif;
-    --font-size-base:   0.9rem;
-    --font-size-sm:     0.82rem;
-    --font-size-xs:     0.72rem;
+/* ═════════════════════════════════════════════
+   STATUS
+═════════════════════════════════════════════ */
 
-    /* ── SIDEBAR ──────────────────────────────────────────────── */
-    --c-sidebar-bg:             #1E293B;   /* Dunkles Slate */
-    --c-sidebar-text:           rgba(255,255,255,0.92); /* Sidebar Text */
-    --c-sidebar-text-muted:     rgba(255,255,255,0.45); /* Gedimmt */
-    --c-sidebar-divider:        rgba(255,255,255,0.10); /* Divider */
-    --c-sidebar-avatar-bg:      rgba(199,119,0,0.15);   /* Warmes Akzentfeld */
-    --c-sidebar-avatar-border:  #C77700;   /* Avatar Rahmen */
-    --c-sidebar-avatar-text:    #C77700;   /* Avatar Text */
-    --c-sidebar-btn-cta-bg:     #3A7CA5;   /* CTA Button */
-    --c-sidebar-btn-cta-text:   #FFFFFF;   /* CTA Text */
+--value-pos:        #4C7A3F;   /* Moosgrün */
+--value-neg:        #8E2F2F;   /* Bordeaux */
+--value-warn:       #B7791F;   /* Warmes Ocker */
+--value-neon:       #1F6F78;   /* CTA – Petrol */
 
-    /* ── EXPANDER ─────────────────────────────────────────────── */
-    --c-expander-bg:            #FFFFFF;   /* Expander Body */
-    --c-expander-header-bg:     #334155;   /* Expander Header */
-    --c-expander-header-hover:  #2F4F6F;   /* Hover */
-    --c-expander-header-text:   #FFFFFF;   /* Header Text */
-    --c-expander-border:        rgba(47,79,111,0.08);
+/* ═════════════════════════════════════════════
+   RAHMEN
+═════════════════════════════════════════════ */
 
-    /* ── METRIKEN / KPI ───────────────────────────────────────── */
-    --c-metric-bg:          #FFFFFF;
-    --c-metric-border:      rgba(47,79,111,0.08);
-    --c-metric-value:       #111827;
-    --c-metric-label:       #334155;
-    --c-metric-delta-pos:   #2E7D32;
-    --c-metric-delta-neg:   #C0392B;
+--border:           #D9D2C7;   /* Weicher Steinrahmen */
+--border-strong:    #BFB6A8;   /* Stärkerer Rahmen */
+--r:                12px;
+--r-s:              8px;
 
-    /* ── INPUTS ───────────────────────────────────────────────── */
-    --c-input-bg:           #F3F5F8;   /* Input Hintergrund */
-    --c-input-bg-focus:     #FFFFFF;   /* Fokus */
-    --c-input-text:         #1F2933;
-    --c-input-border:       rgba(47,79,111,0.25);
-    --c-input-border-focus: #2F4F6F;
-    --c-input-focus-ring:   rgba(47,79,111,0.15);
-    --c-input-label:        #475569;
+/* ═════════════════════════════════════════════
+   TYPO
+═════════════════════════════════════════════ */
 
-    /* ── DROPDOWNS ────────────────────────────────────────────── */
-    --c-dropdown-bg:                #F3F5F8;
-    --c-dropdown-text:              #1F2933;
-    --c-dropdown-border:            rgba(47,79,111,0.25);
-    --c-dropdown-list-bg:           #FFFFFF;
-    --c-dropdown-list-border:       rgba(47,79,111,0.18);
-    --c-dropdown-list-shadow:       rgba(0,0,0,0.10);
-    --c-dropdown-option-text:       #1F2933;
-    --c-dropdown-option-hover-bg:   rgba(47,79,111,0.08);
-    --c-dropdown-option-hover-text: #2F4F6F;
-    --c-dropdown-option-sel-bg:     rgba(47,79,111,0.12);
+--font:             'Outfit', sans-serif;
+--font-size-base:   0.9rem;
+--font-size-sm:     0.82rem;
+--font-size-xs:     0.72rem;
 
-    /* ── SEGMENTED CONTROL ────────────────────────────────────── */
-    --c-seg-bg:             rgba(47,79,111,0.06);
-    --c-seg-active-bg:      #2F4F6F;
-    --c-seg-active-text:    #FFFFFF;
-    --c-seg-active-shadow:  rgba(47,79,111,0.25);
-    --c-seg-inactive-text:  #475569;
+/* ═════════════════════════════════════════════
+   SIDEBAR
+═════════════════════════════════════════════ */
 
-    /* ── BUTTONS ──────────────────────────────────────────────── */
-    --c-btn-primary-bg:         #2F4F6F;   /* Primärbutton */
-    --c-btn-primary-text:       #FFFFFF;
-    --c-btn-primary-hover:      #243B55;   /* Dunkler Hover */
-    --c-btn-primary-shadow:     rgba(47,79,111,0.35);
-    --c-btn-secondary-bg:       #E8EDF3;   /* Sekundär hell */
-    --c-btn-secondary-text:     #475569;
-    --c-btn-secondary-border:   rgba(47,79,111,0.20);
+--c-sidebar-bg:             #2B2622;   /* Dunkles Espresso */
+--c-sidebar-text:           #F4F1EA;   /* Heller Kontrast */
+--c-sidebar-text-muted:     #B7AEA3;   /* Gedimmtes Beige */
+--c-sidebar-divider:        #3B342E;   /* Dunkler Divider */
+--c-sidebar-avatar-bg:      #3A332D;   /* Avatar Hintergrund */
+--c-sidebar-avatar-border:  #B7791F;   /* Ocker Rahmen */
+--c-sidebar-avatar-text:    #D6A756;   /* Goldener Text */
+--c-sidebar-btn-cta-bg:     #1F6F78;   /* Petrol CTA */
+--c-sidebar-btn-cta-text:   #FFFFFF;   /* Weißer Text */
 
-    /* ── MODAL ───────────────────────────────────────────────── */
-    --c-modal-bg:       #FFFFFF;
-    --c-modal-text:     #1F2933;
-    --c-modal-border:   rgba(47,79,111,0.15);
-    --c-modal-shadow:   rgba(0,0,0,0.18);
-    --c-modal-backdrop: rgba(15,23,42,0.55); /* Dunkle Abdunklung */
+/* ═════════════════════════════════════════════
+   EXPANDER
+═════════════════════════════════════════════ */
 
-    /* ── LISTEN ───────────────────────────────────────────────── */
-    --c-list-bg:            #EEF1F6;
-    --c-list-border:        rgba(47,79,111,0.12);
-    --c-list-row-divider:   rgba(47,79,111,0.08);
-    --c-list-text-primary:  #111827;
-    --c-list-text-sub:      #6B7280;
+--c-expander-bg:            #FFFFFF;
+--c-expander-header-bg:     #3A3733;   /* Warmes Dunkel */
+--c-expander-header-hover:  #1F6F78;   /* Petrol Hover */
+--c-expander-header-text:   #FFFFFF;
+--c-expander-border:        #D9D2C7;
 
-    /* ── BADGES ───────────────────────────────────────────────── */
-    --c-badge-turnus-bg:     rgba(199,119,0,0.12);
-    --c-badge-turnus-text:   #C77700;
-    --c-badge-turnus-border: rgba(199,119,0,0.30);
-    --c-badge-konto-bg:      rgba(47,79,111,0.10);
-    --c-badge-konto-text:    #2F4F6F;
-    --c-badge-konto-border:  rgba(47,79,111,0.20);
-    --c-badge-count-bg:      rgba(47,79,111,0.10);
-    --c-badge-count-text:    #2F4F6F;
+/* ═════════════════════════════════════════════
+   METRICS
+═════════════════════════════════════════════ */
 
-    /* ── ALERTS ───────────────────────────────────────────────── */
-    --c-alert-info-bg:      rgba(47,79,111,0.07);
-    --c-alert-info-border:  #2F4F6F;
-    --c-alert-info-text:    #1F2933;
-    --c-alert-warn-bg:      rgba(199,119,0,0.08);
-    --c-alert-warn-border:  #C77700;
-    --c-alert-err-bg:       rgba(192,57,43,0.08);
-    --c-alert-err-border:   #C0392B;
+--c-metric-bg:          #FFFFFF;
+--c-metric-border:      #D9D2C7;
+--c-metric-value:       #1E1C19;
+--c-metric-label:       #6F675E;
+--c-metric-delta-pos:   #4C7A3F;
+--c-metric-delta-neg:   #8E2F2F;
 
-    /* ── DIVIDER ─────────────────────────────────────────────── */
-    --c-divider:        rgba(47,79,111,0.12);
+/* ═════════════════════════════════════════════
+   INPUTS
+═════════════════════════════════════════════ */
 
-    /* ── TABELLEN ────────────────────────────────────────────── */
-    --c-table-header-bg:    rgba(47,79,111,0.06);
-    --c-table-header-text:  #2F4F6F;
-    --c-table-row-even:     #FFFFFF;
-    --c-table-row-odd:      #F3F5F8;
-    --c-table-row-hover:    rgba(47,79,111,0.05);
+--c-input-bg:           #F8F6F1;
+--c-input-bg-focus:     #FFFFFF;
+--c-input-text:         #2C2A28;
+--c-input-border:       #CFC6B8;
+--c-input-border-focus: #1F6F78;
+--c-input-focus-ring:   #CDE3E6;   /* Helles Petrol */
+--c-input-label:        #5C544C;
 
-    /* ── EMPTY STATE ─────────────────────────────────────────── */
-    --c-empty-bg:       rgba(47,79,111,0.04);
-    --c-empty-border:   rgba(47,79,111,0.20);
-    --c-empty-text:     #6B7280;
+/* ═════════════════════════════════════════════
+   DROPDOWN
+═════════════════════════════════════════════ */
 
-    /* ── VALUE PILLS ─────────────────────────────────────────── */
-    --c-pill-pos-bg:        rgba(46,125,50,0.10);
-    --c-pill-pos-border:    rgba(46,125,50,0.25);
-    --c-pill-neg-bg:        rgba(192,57,43,0.10);
-    --c-pill-neg-border:    rgba(192,57,43,0.25);
+--c-dropdown-bg:                #F8F6F1;
+--c-dropdown-text:              #2C2A28;
+--c-dropdown-border:            #CFC6B8;
+--c-dropdown-list-bg:           #FFFFFF;
+--c-dropdown-list-border:       #D9D2C7;
+--c-dropdown-list-shadow:       rgba(0,0,0,0.12);
+--c-dropdown-option-text:       #2C2A28;
+--c-dropdown-option-hover-bg:   #E6F0F1;
+--c-dropdown-option-hover-text: #1F6F78;
+--c-dropdown-option-sel-bg:     #DCEBED;
+
+/* ═════════════════════════════════════════════
+   SEGMENTED CONTROL
+═════════════════════════════════════════════ */
+
+--c-seg-bg:             #EAE5DC;
+--c-seg-active-bg:      #1F6F78;
+--c-seg-active-text:    #FFFFFF;
+--c-seg-active-shadow:  rgba(0,0,0,0.18);
+--c-seg-inactive-text:  #5C544C;
+
+/* ═════════════════════════════════════════════
+   BUTTONS
+═════════════════════════════════════════════ */
+
+--c-btn-primary-bg:         #1F6F78;
+--c-btn-primary-text:       #FFFFFF;
+--c-btn-primary-hover:      #16555C;
+--c-btn-primary-shadow:     rgba(0,0,0,0.20);
+--c-btn-secondary-bg:       #EAE5DC;
+--c-btn-secondary-text:     #5C544C;
+--c-btn-secondary-border:   #CFC6B8;
+
+/* ═════════════════════════════════════════════
+   MODAL
+═════════════════════════════════════════════ */
+
+--c-modal-bg:       #FFFFFF;
+--c-modal-text:     #2C2A28;
+--c-modal-border:   #D9D2C7;
+--c-modal-shadow:   rgba(0,0,0,0.25);
+--c-modal-backdrop: rgba(0,0,0,0.55);
+
+/* ═════════════════════════════════════════════
+   LISTEN
+═════════════════════════════════════════════ */
+
+--c-list-bg:            #F1ECE3;
+--c-list-border:        #D9D2C7;
+--c-list-row-divider:   #E0D9CF;
+--c-list-text-primary:  #1E1C19;
+--c-list-text-sub:      #6F675E;
+
+/* ═════════════════════════════════════════════
+   BADGES
+═════════════════════════════════════════════ */
+
+--c-badge-turnus-bg:        #F3E3C8;
+--c-badge-turnus-text:      #B7791F;
+--c-badge-turnus-border:    #D6B47A;
+--c-badge-konto-bg:         #DCEBED;
+--c-badge-konto-text:       #1F6F78;
+--c-badge-konto-border:     #A8CDD1;
+--c-badge-count-bg:         #EAE5DC;
+--c-badge-count-text:       #5C544C;
+
+/* ═════════════════════════════════════════════
+   ALERTS
+═════════════════════════════════════════════ */
+
+--c-alert-info-bg:      #E6F0F1;
+--c-alert-info-border:  #1F6F78;
+--c-alert-info-text:    #2C2A28;
+--c-alert-warn-bg:      #F8E7C9;
+--c-alert-warn-border:  #B7791F;
+--c-alert-err-bg:       #F3D6D6;
+--c-alert-err-border:   #8E2F2F;
+
+/* ═════════════════════════════════════════════
+   HEADER / SECTION
+═════════════════════════════════════════════ */
+
+--c-page-header-border: #D9D2C7;
+--c-section-dot:        #1F6F78;
+
+/* ═════════════════════════════════════════════
+   EMPTY STATE
+═════════════════════════════════════════════ */
+
+--c-empty-bg:       #F1ECE3;
+--c-empty-border:   #CFC6B8;
+--c-empty-text:     #6F675E;
+
+/* ═════════════════════════════════════════════
+   DIVIDER
+═════════════════════════════════════════════ */
+
+--c-divider:        #D9D2C7;
+
+/* ═════════════════════════════════════════════
+   TABLE
+═════════════════════════════════════════════ */
+
+--c-table-header-bg:    #EAE5DC;
+--c-table-header-text:  #3A3733;
+--c-table-row-even:     #FFFFFF;
+--c-table-row-odd:      #F4F1EA;
+--c-table-row-hover:    #E6F0F1;
+
+/* ═════════════════════════════════════════════
+   SELECTION BAR
+═════════════════════════════════════════════ */
+
+--c-selection-text:     #6F675E;
+
+/* ═════════════════════════════════════════════
+   VALUE PILLS
+═════════════════════════════════════════════ */
+
+--c-pill-pos-bg:        #E4F0E1;
+--c-pill-pos-border:    #A7C59F;
+--c-pill-neg-bg:        #F3D6D6;
+--c-pill-neg-border:    #C99A9A;
 
 }
 
